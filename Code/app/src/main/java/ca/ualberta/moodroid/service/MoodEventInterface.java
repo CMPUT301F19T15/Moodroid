@@ -11,7 +11,7 @@ public interface MoodEventInterface {
 
     public List<MoodEventModel> getMyMoods();
 
-    public List<MoodEventModel> getFollowingMoods();
+    public List<MoodEventModel> getAllFollowingMoods();
 
     public void createNewMoodEvent(MoodEventModel moodEvent);
 

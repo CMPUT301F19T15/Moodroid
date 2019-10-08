@@ -9,4 +9,7 @@ package ca.ualberta.moodroid.model;
  * @version v1
  */
 public interface ModelInterface {
+
+
+    public String toJSON();
 }
