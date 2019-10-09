@@ -1,9 +1,6 @@
 package ca.ualberta.moodroid.service;
 
-public class MoodEventService {
 
-
-
-
+public class GeolocationService {
 
 }

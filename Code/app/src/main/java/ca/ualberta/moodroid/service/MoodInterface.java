@@ -6,5 +6,10 @@ import ca.ualberta.moodroid.model.MoodModel;
 
 public interface MoodInterface {
 
-    public List<MoodModel> getMoods();
+    /**
+     * Get a list of all the moods in the application
+     *
+     * @return
+     */
+    public List<MoodModel> getAllMoods();
 }
