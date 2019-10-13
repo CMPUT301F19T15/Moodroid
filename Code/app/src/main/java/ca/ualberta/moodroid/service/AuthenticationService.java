@@ -1,14 +1,29 @@
 package ca.ualberta.moodroid.service;
 
-import ca.ualberta.moodroid.model.UserModel;
+import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * This is the implementation of authenticating a user
- *
- * @author Taylor Christie
- * @version v1
- */
-public class AuthenticationService {
+public class AuthenticationService implements AuthenticationInterface {
 
 
+    private FirebaseAuth auth;
+
+    public AuthenticationService(FirebaseAuth auth) {
+
+        this.auth = auth;
+    }
+
+    public boolean login() {
+        return true;
+    }
+
+    public boolean isLoggedIn() {
+
+        return true;
+    }
+
+    public boolean isNewUser() {
+        return true;
+    }
 }
+
+

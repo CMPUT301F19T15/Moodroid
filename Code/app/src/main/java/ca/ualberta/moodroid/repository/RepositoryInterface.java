@@ -1,5 +1,10 @@
 package ca.ualberta.moodroid.repository;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.Query;
+
 import java.util.List;
 
 import ca.ualberta.moodroid.model.ModelInterface;
@@ -17,18 +22,18 @@ public interface RepositoryInterface {
     // Query provider
     public List<ModelInterface> get();
 
-    // somehow return a streaming/callback or something to always send new data
+    public void getAlways(EventListener<DocumentSnapshot> listener);
 
     // Query provider
-    public ModelInterface one();
+    public ModelInterface one(String id);
 
     // query filtering
-    public void where(String field, String operator, String value);
+    public RepositoryInterface where(String field, String value);
 
     public ModelInterface update(ModelInterface model);
 
     public ModelInterface create(ModelInterface model);
 
-    public void delete(ModelInterface model);
+    public boolean delete(ModelInterface model);
 
 }

@@ -37,7 +37,7 @@ public interface MoodEventInterface {
      *
      * @param moodEvent
      */
-    public void creatEvent(MoodEventModel moodEvent);
+    public void createEvent(MoodEventModel moodEvent);
 
     /**
      * Update an existing mood event for the current user

@@ -1,4 +1,4 @@
 package ca.ualberta.moodroid.model;
 
-public class BaseModel {
+public class BaseModel implements ModelInterface {
 }

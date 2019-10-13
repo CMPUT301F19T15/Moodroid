@@ -1,4 +1,24 @@
 package ca.ualberta.moodroid.service;
 
-public class MoodService {
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.ualberta.moodroid.model.FollowRequestModel;
+import ca.ualberta.moodroid.model.MoodModel;
+import ca.ualberta.moodroid.repository.MoodRepository;
+
+public class MoodService implements MoodInterface {
+
+
+    private MoodRepository moods;
+
+    public MoodService(MoodRepository moods) {
+        this.moods = moods;
+    }
+
+    public List<MoodModel> getAllMoods() {
+        final List<MoodModel> returning = new ArrayList<>();
+
+        return returning;
+    }
 }
