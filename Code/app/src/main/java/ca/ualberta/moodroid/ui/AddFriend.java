@@ -9,7 +9,13 @@ import ca.ualberta.moodroid.service.UserService;
 
 public class AddFriend extends AppCompatActivity {
 
-    protected void onCreate(Bundle savedInstanceState, UserService userService) {
+    UserService users;
+
+    public AddFriend(UserService userService) {
+        this.users = userService;
+    }
+
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
     }

@@ -9,8 +9,16 @@ import ca.ualberta.moodroid.service.UserService;
 
 public class Notifications extends AppCompatActivity {
 
+    UserService users;
+
+
+    public Notifications(UserService userService) {
+        this.users = userService;
+
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState, UserService userService) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
     }

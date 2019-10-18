@@ -12,8 +12,18 @@ import ca.ualberta.moodroid.service.ValidationService;
 
 public class AddMood extends AppCompatActivity {
 
+    MoodEventService moodEvents;
+    GeolocationService geolocation;
+    ValidationService validation;
+
+    public AddMood(MoodEventService moodEventService, GeolocationService geolocationService, ValidationService validationService) {
+        this.moodEvents = moodEventService;
+        this.geolocation = geolocationService;
+        this.validation = validationService;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState, MoodEventService moodEventService, GeolocationService geolocationService, ValidationService validationService) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_mood);
     }

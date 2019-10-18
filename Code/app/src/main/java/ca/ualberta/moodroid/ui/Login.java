@@ -10,8 +10,16 @@ import ca.ualberta.moodroid.service.UserService;
 
 public class Login extends AppCompatActivity {
 
+    AuthenticationService auth;
+    UserService users;
+
+    public Login(AuthenticationService authenticationService, UserService userService) {
+        this.auth = authenticationService;
+        this.users = userService;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState, AuthenticationService authenticationService, UserService userService) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
     }
