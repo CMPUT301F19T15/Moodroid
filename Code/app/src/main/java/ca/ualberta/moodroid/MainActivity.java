@@ -1,13 +1,16 @@
 package ca.ualberta.moodroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -26,12 +29,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 
 import ca.ualberta.moodroid.ui.BottomNavView;
+import ca.ualberta.moodroid.ui.MoodHistory;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +43,34 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+     //   FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     }
     // Bottom Navigation view for each activity
     private void bottomNavigationView(){
 
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
-        BottomNavView.setupBottomNavView(bottomNavigationViewEx);
+     //   BottomNavView.setupBottomNavView(bottomNavigationViewEx);
 
+        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch(menuItem.getItemId()){
+                    case R.id.ic_friends:
+                        break;
+                    case R.id.ic_moods:
+                        intent = new Intent(MainActivity.this, MoodHistory.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.ic_notif:
+
+                        break;
+                    case R.id.ic_profile:
+                        break;
+                }
+            return false;
+            }
+        });
     }
 
 }
