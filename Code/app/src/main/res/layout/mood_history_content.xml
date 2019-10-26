@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="2dp"
+        android:id="@+id/list_item_background"
         android:background="@color/colorPrimary"
         android:src="@drawable/mood_list_custom_shape">
     </ImageView>
@@ -60,7 +61,6 @@
             android:layout_alignParentTop="true"
             android:text="02/02/19">
         </TextView>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

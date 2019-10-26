@@ -49,6 +49,7 @@ public class FriendsMoods extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()){
                     case R.id.ic_friends:
+                        //in friends rn...
                         break;
                     case R.id.ic_moods:
                         intent = new Intent(FriendsMoods.this, MoodHistory.class);
@@ -59,6 +60,7 @@ public class FriendsMoods extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.ic_profile:
+                        //don't have profile activity yet
                         break;
                 }
                 return false;

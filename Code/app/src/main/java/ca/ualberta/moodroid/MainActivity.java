@@ -29,7 +29,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 
 import ca.ualberta.moodroid.ui.BottomNavView;
+import ca.ualberta.moodroid.ui.FriendsMoods;
 import ca.ualberta.moodroid.ui.MoodHistory;
+import ca.ualberta.moodroid.ui.Notifications;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView();
-
      //   FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     }
@@ -57,15 +58,18 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()){
                     case R.id.ic_friends:
-                        break;
+                        intent = new Intent(MainActivity.this,  FriendsMoods.class);
+                        startActivity(intent);
                     case R.id.ic_moods:
                         intent = new Intent(MainActivity.this, MoodHistory.class);
                         startActivity(intent);
                         break;
                     case R.id.ic_notif:
-
+                        intent = new Intent(MainActivity.this, Notifications.class);
+                        startActivity(intent);
                         break;
                     case R.id.ic_profile:
+                        //don't have profile activity yet
                         break;
                 }
             return false;
