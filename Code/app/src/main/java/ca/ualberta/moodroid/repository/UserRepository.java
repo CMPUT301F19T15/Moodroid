@@ -1,6 +1,7 @@
 package ca.ualberta.moodroid.repository;
 
 import ca.ualberta.moodroid.model.FollowRequestModel;
+import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.model.UserModel;
 
 /**
@@ -9,7 +10,11 @@ import ca.ualberta.moodroid.model.UserModel;
  */
 public class UserRepository extends BaseRepository {
 
-    protected String collectionName = "users";
     protected Class modelClass = UserModel.class;
+
+    public UserRepository() {
+        super("mood", MoodModel.class);
+
+    }
 
 }

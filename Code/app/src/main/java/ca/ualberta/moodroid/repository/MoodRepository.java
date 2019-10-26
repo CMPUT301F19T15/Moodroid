@@ -5,7 +5,9 @@ import ca.ualberta.moodroid.model.MoodModel;
 
 public class MoodRepository extends BaseRepository {
 
-    protected String collectionName = "mood";
-    protected Class modelClass = MoodModel.class;
+
+    public MoodRepository() {
+        super("mood", MoodModel.class);
+    }
 
 }

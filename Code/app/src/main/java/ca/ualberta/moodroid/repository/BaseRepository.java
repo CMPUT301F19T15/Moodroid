@@ -4,9 +4,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,38 +20,52 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
+import ca.ualberta.moodroid.callback.Callback;
+import ca.ualberta.moodroid.exception.repository.MissingCollectionNameException;
+import ca.ualberta.moodroid.exception.repository.NoDataException;
 import ca.ualberta.moodroid.model.BaseModel;
 import ca.ualberta.moodroid.model.ModelInterface;
 
-public class BaseRepository implements RepositoryInterface {
+abstract class BaseRepository implements RepositoryInterface {
 
     /**
      * These are configurable things
      */
     protected String collectionName;
-    protected Class modelClass = BaseModel.class;
+    protected Class modelClass = ModelInterface.class;
 
 
     protected CollectionReference collection;
     protected Query query;
     protected FirebaseFirestore db;
 
-    public void BaseRepository(FirebaseFirestore db) {
-        this.db = db;
-        this.collection = this.db.collection(this.collectionName);
-        if (this.collectionName == null) {
-            Log.i("REPOSITORY", "Note, there is no collection name defined.");
-        }
+    public BaseRepository(String collectionName, Class cls) {
+        this.db = FirebaseFirestore.getInstance();
+        this.collectionName = collectionName;
+        this.modelClass = cls;
+        this.collection = this.db.collection(collectionName);
+
     }
 
     /**
      * This will reset the query class
      */
-    protected void reset() {
+    public void reset() {
         this.query = null;
         this.collection = this.db.collection(this.collectionName);
 
+
+    }
+
+    protected Query getQuery() {
+        if (this.query == null) {
+            // CollectionReference extends Query, so this is fine.
+            this.query = this.collection;
+        }
+        return this.query;
     }
 
     /**
@@ -57,66 +75,83 @@ public class BaseRepository implements RepositoryInterface {
      * @param value
      * @return BaseRepository
      */
-    public BaseRepository whereEqual(String field, String value) {
-        if (this.query == null) {
-            this.query = this.collection.whereEqualTo(field, value);
-        } else {
-            this.query.whereEqualTo(field, value);
-        }
+    public RepositoryInterface where(String field, String value) {
+
+        this.getQuery().whereEqualTo(field, value);
+
+        return this;
+    }
+
+    public RepositoryInterface limit(int i) {
+        this.getQuery().limit(i);
+
         return this;
     }
 
 
-    public List<ModelInterface> get() {
-        Task<QuerySnapshot> result;
-        if (this.query == null) {
-            result = this.collection.get();
-        } else {
-            result = this.query.get();
-        }
+    public Task<List<ModelInterface>> get() {
 
-        final List<ModelInterface> returning = new ArrayList<>();
+        final Class<ModelInterface> modelClass = this.getModelClass();
 
-        result.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        return this.getQuery().get().continueWith(new Continuation<QuerySnapshot, List<ModelInterface>>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        ModelInterface data = (ModelInterface) document.toObject(modelClass);
-                        returning.add(data);
-                        Log.d("REPOSITORY", document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.d("REPOSITORY", "Error getting documents: ", task.getException());
+            public List<ModelInterface> then(@NonNull Task<QuerySnapshot> task) throws Exception {
+                List<ModelInterface> ret = new ArrayList<ModelInterface>();
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    ModelInterface m = doc.toObject(modelClass);
+                    m.setInternalId(doc.getId());
+                    ret.add(m);
                 }
+
+                return ret;
             }
         });
 
-        return returning;
-    }
 
-    public void getAlways(EventListener<DocumentSnapshot> listener) {
-        Log.d("REP", "NOT IMPLEMENTED");
-    }
-
-    public ModelInterface one(String id) {
-        return new BaseModel();
     }
 
 
-    public RepositoryInterface where(String field, String value) {
-        return this;
+    public Task<ModelInterface> update(final ModelInterface model) {
+        return this.collection.document(model.getInternalId()).set(model).continueWith(new Continuation<Void, ModelInterface>() {
+            @Override
+            public ModelInterface then(@NonNull Task<Void> task) throws Exception {
+                return model;
+            }
+        });
     }
 
-    public ModelInterface update(ModelInterface model) {
-        return model;
-    }
-
-    public ModelInterface create(ModelInterface model) {
-        return model;
+    public Task<String> create(final ModelInterface model) {
+        System.out.println("CREATE:" + this.db);
+        System.out.println("CREATE:" + this.collection);
+        return this.collection.add(model)
+                .continueWith(new Continuation<DocumentReference, String>() {
+                    @Override
+                    public String then(@NonNull Task<DocumentReference> task) {
+                        DocumentReference doc = task.getResult();
+                        return doc.getId();
+                    }
+                });
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d("REPOSITORY", "Document written with ID: " + documentReference.getId());
+//                        model.setInternalId(documentReference.getId());
+//
+//                    }
+//                });
+        // ensure the internalId is set
     }
 
     public boolean delete(ModelInterface model) {
         return true;
+//        return this.collection.document(model.getInternalId()).delete();
+    }
+
+    public Class getModelClass() {
+        return this.modelClass;
+    }
+
+    public void setModelClass(Class modelClass) {
+        this.modelClass = modelClass;
     }
 }

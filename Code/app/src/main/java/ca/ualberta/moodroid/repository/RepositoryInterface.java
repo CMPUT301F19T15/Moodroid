@@ -7,6 +7,7 @@ import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
+import ca.ualberta.moodroid.exception.repository.NoDataException;
 import ca.ualberta.moodroid.model.ModelInterface;
 
 /**
@@ -20,20 +21,22 @@ import ca.ualberta.moodroid.model.ModelInterface;
 public interface RepositoryInterface {
 
     // Query provider
-    public List<ModelInterface> get();
+//    public List<ModelInterface> get();
 
-    public void getAlways(EventListener<DocumentSnapshot> listener);
+//    public void getAlways(EventListener<DocumentSnapshot> listener) throws UnsupportedOperationException;
 
     // Query provider
-    public ModelInterface one(String id);
+//    public ModelInterface one(String id) throws NoDataException;
 
     // query filtering
     public RepositoryInterface where(String field, String value);
 
-    public ModelInterface update(ModelInterface model);
+    public RepositoryInterface limit(int i);
 
-    public ModelInterface create(ModelInterface model);
+//    public ModelInterface update(ModelInterface model);
 
-    public boolean delete(ModelInterface model);
+//    public ModelInterface create(ModelInterface model);
+
+//    public boolean delete(ModelInterface model);
 
 }

@@ -10,4 +10,7 @@ package ca.ualberta.moodroid.model;
  */
 public interface ModelInterface {
 
+    public String getInternalId();
+
+    public void setInternalId(String internalId);
 }
