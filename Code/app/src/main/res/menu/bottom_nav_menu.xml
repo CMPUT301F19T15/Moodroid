@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:id="@+id/ic_notif"
+        android:icon="@drawable/ic_notification"
+        android:title=""/>
+    <item
+        android:id="@+id/ic_moods"
+        android:icon="@drawable/ic_moods"
+        android:title=""/>
+    <item
+        android:id="@+id/ic_friends"
+        android:icon="@drawable/ic_friends"
+        android:title=""/>
+    <item
+        android:id="@+id/ic_profile"
+        android:icon="@drawable/ic_profile"
+        android:title=""/>
+</menu>
