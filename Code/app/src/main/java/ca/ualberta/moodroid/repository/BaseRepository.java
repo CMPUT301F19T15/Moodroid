@@ -120,15 +120,17 @@ abstract class BaseRepository implements RepositoryInterface {
         });
     }
 
-    public Task<String> create(final ModelInterface model) {
+    public Task<ModelInterface> create(final ModelInterface model) {
         System.out.println("CREATE:" + this.db);
         System.out.println("CREATE:" + this.collection);
         return this.collection.add(model)
-                .continueWith(new Continuation<DocumentReference, String>() {
+                .continueWith(new Continuation<DocumentReference, ModelInterface>() {
                     @Override
-                    public String then(@NonNull Task<DocumentReference> task) {
+                    public ModelInterface then(@NonNull Task<DocumentReference> task) {
                         DocumentReference doc = task.getResult();
-                        return doc.getId();
+                        model.setInternalId(doc.getId());
+
+                        return model;
                     }
                 });
 //                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -142,9 +144,9 @@ abstract class BaseRepository implements RepositoryInterface {
         // ensure the internalId is set
     }
 
-    public boolean delete(ModelInterface model) {
-        return true;
-//        return this.collection.document(model.getInternalId()).delete();
+    public Task<Void> delete(ModelInterface model) {
+        Log.d("TEST", model.getInternalId());
+        return this.collection.document(model.getInternalId()).delete();
     }
 
     public Class getModelClass() {

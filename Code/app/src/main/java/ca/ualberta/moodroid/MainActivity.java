@@ -62,15 +62,29 @@ public class MainActivity extends AppCompatActivity {
         mood = new MoodRepository();
 
 
-//        MoodModel model = new MoodModel();
-//        model.setColor("red");
-//        model.setEmoji(":angry:");
-//        model.setName("Angry");
+        final MoodModel model = new MoodModel();
+        model.setColor("red");
+        model.setEmoji(":angry:");
+        model.setName("Angry");
 ////
 ////
 //        System.out.println(model);
 //
-//        mood.create(model);
+        mood.create(model).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                final MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULTCREATE", m.getInternalId());
+
+                mood.delete(m).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("RESULTDELETE", m.getInternalId());
+                    }
+                });
+
+            }
+        });
 
 
         mood.get()
