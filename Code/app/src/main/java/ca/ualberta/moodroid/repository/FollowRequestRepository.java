@@ -10,7 +10,7 @@ public class FollowRequestRepository extends BaseRepository {
 
     public FollowRequestRepository() {
 
-        super("mood", MoodModel.class);
+        super("followRequest", FollowRequestModel.class);
     }
 
 }

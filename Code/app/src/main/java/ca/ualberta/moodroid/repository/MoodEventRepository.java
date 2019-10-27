@@ -9,7 +9,7 @@ public class MoodEventRepository extends BaseRepository {
     protected Class modelClass = MoodEventModel.class;
 
     public MoodEventRepository() {
-        super("mood", MoodModel.class);
+        super("moodEvent", MoodEventModel.class);
 
     }
 

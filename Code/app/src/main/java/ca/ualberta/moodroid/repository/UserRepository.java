@@ -10,10 +10,9 @@ import ca.ualberta.moodroid.model.UserModel;
  */
 public class UserRepository extends BaseRepository {
 
-    protected Class modelClass = UserModel.class;
 
     public UserRepository() {
-        super("mood", MoodModel.class);
+        super("user", UserModel.class);
 
     }
 
