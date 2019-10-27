@@ -36,13 +36,9 @@ import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import ca.ualberta.moodroid.callback.Callback;
-import ca.ualberta.moodroid.model.BaseModel;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodRepository;
-import ca.ualberta.moodroid.service.MoodEventService;
-import ca.ualberta.moodroid.service.MoodInterface;
 
 @Singleton
 public class MainActivity extends AppCompatActivity {
