@@ -1,7 +1,5 @@
 package ca.ualberta.moodroid.repository;
 
-import ca.ualberta.moodroid.model.FollowRequestModel;
-import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.model.UserModel;
 
 /**
