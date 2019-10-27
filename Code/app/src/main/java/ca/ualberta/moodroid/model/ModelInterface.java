@@ -13,4 +13,5 @@ public interface ModelInterface {
     public String getInternalId();
 
     public void setInternalId(String internalId);
+
 }

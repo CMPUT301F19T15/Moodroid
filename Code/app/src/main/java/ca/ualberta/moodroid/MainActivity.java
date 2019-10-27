@@ -55,10 +55,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-//        db = FirebaseFirestore.getInstance();
-//        collection = db.collection("test");
-
-
         mood = new MoodRepository();
 
 
@@ -74,43 +70,53 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ModelInterface modelInterface) {
                 final MoodModel m = (MoodModel) modelInterface;
-                Log.d("RESULTCREATE", m.getInternalId());
+                Log.d("RESULT/CREATE", m.getInternalId());
 
-                mood.delete(m).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mood.delete(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("RESULTDELETE", m.getInternalId());
+                        Log.d("RESULT/DELETE", model.getInternalId());
+
                     }
                 });
+            }
+        });
 
+        mood.limit(2).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+            @Override
+            public void onSuccess(List<ModelInterface> modelInterfaces) {
+                for (ModelInterface m : modelInterfaces) {
+                    MoodModel s = (MoodModel) m;
+
+                    Log.d("RESULT/GET", s.getInternalId() + s.getName());
+                }
+            }
+        });
+
+        mood.where("name", "Calm").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
             }
         });
 
 
-        mood.get()
-                // Here I am showing this as a single change to the data
-                .addOnCompleteListener(new OnCompleteListener<List<ModelInterface>>() {
-                    @Override
-                    public void onComplete(@NonNull Task<List<ModelInterface>> task) {
-                        for (ModelInterface m : task.getResult()) {
-                            MoodModel s = (MoodModel) m;
-                            Log.d("RESULT", "" + s.getInternalId() + "|" + s.getName());
-                            s.setName(new Random().nextInt() + "Angry");
-                            mood.update(s);
-                        }
-                    }
-                })
-                // Here I am showing multiple changes to the data
-                .addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
-                    @Override
-                    public void onSuccess(List<ModelInterface> modelInterfaces) {
-                        for (ModelInterface m : modelInterfaces) {
-                            MoodModel s = (MoodModel) m;
-                            Log.d("RESULT", "" + s.getInternalId() + "|" + s.getName());
-                        }
-                    }
-                });
+        mood.where("name", "Angry").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
+            }
+        });
 
+        mood.where("name", "Happy").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
+            }
+        });
 
     }
 
