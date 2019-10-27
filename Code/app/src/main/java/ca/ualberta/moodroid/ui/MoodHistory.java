@@ -49,7 +49,7 @@ import ca.ualberta.moodroid.service.MoodService;
 import static androidx.appcompat.app.AlertDialog.*;
 
 
-public class MoodHistory extends AppCompatActivity {
+public class MoodHistory extends AppCompatActivity implements MoodListAdapter.OnListListener {
 
     MoodEventService moodEvents;
     private static final int ACTIVITY_NUM=1;
@@ -59,7 +59,7 @@ public class MoodHistory extends AppCompatActivity {
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
     ArrayList<MoodEventModel> moodList;
 
-     public MoodHistory(MoodEventService moodEventService) {
+    public MoodHistory(MoodEventService moodEventService) {
         this.moodEvents = moodEventService;
     }
 
@@ -79,13 +79,13 @@ public class MoodHistory extends AppCompatActivity {
         moodListRecyclerView = findViewById(R.id.mood_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(this);
-        moodListAdapter = new MoodListAdapter(moodList, moodEvents);
+        moodListAdapter = new MoodListAdapter(moodList, moodEvents, this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
 
     private void reverseSort(){
-         //sort array on date/time in reverse order
+        //sort array on date/time in reverse order
         Collections.sort(moodList, new Comparator<MoodEventModel>() {
             @Override
             public int compare(MoodEventModel mood1, MoodEventModel mood2) {
@@ -95,7 +95,7 @@ public class MoodHistory extends AppCompatActivity {
     }
 
     private void bottomNavigationView(){
-         //set up bottom navigation bar...go to corresponding activity
+        //set up bottom navigation bar...go to corresponding activity
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
@@ -124,4 +124,13 @@ public class MoodHistory extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onListClick(int position) {
+        openEditDeleteDialog();
+    }
+    public void openEditDeleteDialog(){
+
+        EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
+        editDeleteFragment.show(getSupportFragmentManager(),"Options");
+    }
 }
