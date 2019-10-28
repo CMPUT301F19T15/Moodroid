@@ -13,6 +13,7 @@ public class AuthenticationService implements AuthenticationInterface {
     }
 
     public boolean login() {
+
         return true;
     }
 
@@ -22,6 +23,7 @@ public class AuthenticationService implements AuthenticationInterface {
     }
 
     public boolean isNewUser() {
+
         return true;
     }
 }
