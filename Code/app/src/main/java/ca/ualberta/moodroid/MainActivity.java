@@ -2,11 +2,16 @@ package ca.ualberta.moodroid;
 
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,39 +29,90 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import ca.ualberta.moodroid.model.ModelInterface;
+import ca.ualberta.moodroid.model.MoodModel;
+import ca.ualberta.moodroid.repository.MoodRepository;
+
+@Singleton
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private MoodRepository mood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+
+        mood = new MoodRepository();
+
+
+        final MoodModel model = new MoodModel();
+        model.setColor("red");
+        model.setEmoji(":angry:");
+        model.setName("Angry");
+////
+////
+//        System.out.println(model);
+//
+        mood.create(model).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onSuccess(ModelInterface modelInterface) {
+                final MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULT/CREATE", m.getInternalId());
+
+                mood.delete(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("RESULT/DELETE", model.getInternalId());
+
+                    }
+                });
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        mood.limit(2).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+            @Override
+            public void onSuccess(List<ModelInterface> modelInterfaces) {
+                for (ModelInterface m : modelInterfaces) {
+                    MoodModel s = (MoodModel) m;
+
+                    Log.d("RESULT/GET", s.getInternalId() + s.getName());
+                }
+            }
+        });
+
+        mood.where("name", "Calm").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
+            }
+        });
+
+
+        mood.where("name", "Angry").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
+            }
+        });
+
+        mood.where("name", "Happy").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                MoodModel m = (MoodModel) modelInterface;
+                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
+            }
+        });
 
     }
 

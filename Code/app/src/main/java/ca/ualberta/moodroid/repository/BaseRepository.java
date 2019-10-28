@@ -4,119 +4,221 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.ualberta.moodroid.model.BaseModel;
 import ca.ualberta.moodroid.model.ModelInterface;
 
-public class BaseRepository implements RepositoryInterface {
+/**
+ * The base repository all repositories use to query FireStore.
+ *
+ * @author Taylor Christie
+ * @version v1
+ */
+abstract class BaseRepository implements RepositoryInterface {
 
     /**
      * These are configurable things
      */
     protected String collectionName;
-    protected Class modelClass = BaseModel.class;
+    protected Class modelClass;
 
 
     protected CollectionReference collection;
     protected Query query;
     protected FirebaseFirestore db;
 
-    public void BaseRepository(FirebaseFirestore db) {
-        this.db = db;
-        this.collection = this.db.collection(this.collectionName);
-        if (this.collectionName == null) {
-            Log.i("REPOSITORY", "Note, there is no collection name defined.");
-        }
+
+    /**
+     * Build the repository by the collection/table name and the model class
+     *
+     * @param collectionName name of the firestore collection
+     * @param cls            the class of the concrete model
+     */
+    public BaseRepository(String collectionName, Class cls) {
+        this.db = FirebaseFirestore.getInstance();
+        this.collectionName = collectionName;
+        this.modelClass = cls;
+        this.collection = this.db.collection(collectionName);
+
     }
 
     /**
-     * This will reset the query class
+     * This will reset the query class so we can run multiple queries
      */
-    protected void reset() {
+    public void reset() {
         this.query = null;
         this.collection = this.db.collection(this.collectionName);
 
+
     }
 
     /**
-     * Create a whereEqual query that returns the class so it can be chainable
+     * Get the current query
      *
-     * @param field
-     * @param value
+     * @return
+     */
+    protected Query getQuery() {
+        if (this.query == null) {
+            // CollectionReference extends Query, so this is fine.
+            this.query = this.collection;
+        }
+        return this.query;
+    }
+
+    /**
+     * Set the current query
+     *
+     * @param q
+     */
+    protected void setQuery(Query q) {
+        this.query = q;
+    }
+
+    /**
+     * Create a where query that returns the class so it can be chainable
+     *
+     * @param field the field you want to search for
+     * @param value the value you want it to match
      * @return BaseRepository
      */
-    public BaseRepository whereEqual(String field, String value) {
-        if (this.query == null) {
-            this.query = this.collection.whereEqualTo(field, value);
-        } else {
-            this.query.whereEqualTo(field, value);
-        }
+    public RepositoryInterface where(String field, String value) {
+
+        this.setQuery(this.getQuery().whereEqualTo(field, value));
+
+        return this;
+    }
+
+    /**
+     * Limit the number of query results when using get
+     *
+     * @param i
+     * @return
+     */
+    public RepositoryInterface limit(int i) {
+        this.setQuery(this.getQuery().limit(i));
+
         return this;
     }
 
 
-    public List<ModelInterface> get() {
-        Task<QuerySnapshot> result;
-        if (this.query == null) {
-            result = this.collection.get();
-        } else {
-            result = this.query.get();
-        }
+    /**
+     * Get the results from your query. If no conditions set, it will return all values
+     *
+     * @return a asyncronous list of models which need to be cast to their proper model
+     */
+    public Task<List<ModelInterface>> get() {
 
-        final List<ModelInterface> returning = new ArrayList<>();
+        final Class<ModelInterface> modelClass = this.getModelClass();
 
-        result.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        final RepositoryInterface r = this;
+
+        return this.getQuery().get().continueWith(new Continuation<QuerySnapshot, List<ModelInterface>>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        ModelInterface data = (ModelInterface) document.toObject(modelClass);
-                        returning.add(data);
-                        Log.d("REPOSITORY", document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.d("REPOSITORY", "Error getting documents: ", task.getException());
+            public List<ModelInterface> then(@NonNull Task<QuerySnapshot> task) throws Exception {
+                r.reset();
+                List<ModelInterface> ret = new ArrayList<ModelInterface>();
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    Log.d("REPO/GET", doc.getId());
+                    ModelInterface m = doc.toObject(modelClass);
+                    m.setInternalId(doc.getId());
+                    ret.add(m);
                 }
+
+                return ret;
             }
         });
-
-        return returning;
     }
 
-    public void getAlways(EventListener<DocumentSnapshot> listener) {
-        Log.d("REP", "NOT IMPLEMENTED");
+    /**
+     * Get a single result from your query
+     *
+     * @return
+     */
+    public Task<ModelInterface> one() {
+        final Class<ModelInterface> modelClass = this.getModelClass();
+        final RepositoryInterface r = this;
+
+        return this.getQuery().limit(1).get().continueWith(new Continuation<QuerySnapshot, ModelInterface>() {
+            @Override
+            public ModelInterface then(@NonNull Task<QuerySnapshot> task) throws Exception {
+                r.reset();
+                DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+
+                ModelInterface m = doc.toObject(modelClass);
+                m.setInternalId(doc.getId());
+
+                return m;
+            }
+        });
     }
 
-    public ModelInterface one(String id) {
-        return new BaseModel();
+
+    /**
+     * Update an existing model.
+     * TODO: will not check if the internalId is set. It should throw an error if it is not set.
+     *
+     * @param model
+     * @return
+     */
+    public Task<ModelInterface> update(final ModelInterface model) {
+        return this.collection.document(model.getInternalId()).set(model).continueWith(new Continuation<Void, ModelInterface>() {
+            @Override
+            public ModelInterface then(@NonNull Task<Void> task) throws Exception {
+                Log.d("REPO/UPDATE", model.getInternalId());
+
+                return model;
+            }
+        });
     }
 
+    /**
+     * Create a new object in firestore from a model. It will return the model with the internalId
+     *
+     * @param model
+     * @return
+     */
+    public Task<ModelInterface> create(final ModelInterface model) {
+        return this.collection.add(model)
+                .continueWith(new Continuation<DocumentReference, ModelInterface>() {
+                    @Override
+                    public ModelInterface then(@NonNull Task<DocumentReference> task) {
+                        DocumentReference doc = task.getResult();
+                        Log.d("REPO/CREATE", doc.getId());
+                        model.setInternalId(doc.getId());
 
-    public RepositoryInterface where(String field, String value) {
-        return this;
+                        return model;
+                    }
+                });
     }
 
-    public ModelInterface update(ModelInterface model) {
-        return model;
+    /**
+     * Delete an entry in firestore
+     *
+     * @param model
+     * @return
+     */
+    public Task<Void> delete(ModelInterface model) {
+        Log.d("REPO/DELETE", model.getInternalId());
+        return this.collection.document(model.getInternalId()).delete();
     }
 
-    public ModelInterface create(ModelInterface model) {
-        return model;
+    /**
+     * Used to get the model class
+     *
+     * @return
+     */
+    public Class getModelClass() {
+        return this.modelClass;
     }
 
-    public boolean delete(ModelInterface model) {
-        return true;
-    }
 }

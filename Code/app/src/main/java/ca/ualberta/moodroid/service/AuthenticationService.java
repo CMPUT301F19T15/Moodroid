@@ -2,14 +2,20 @@ package ca.ualberta.moodroid.service;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.repository.UserRepository;
+
 public class AuthenticationService implements AuthenticationInterface {
 
 
     private FirebaseAuth auth;
+    private UserRepository users;
 
-    public AuthenticationService(FirebaseAuth auth) {
-
-        this.auth = auth;
+    @Inject
+    public AuthenticationService(UserRepository users) {
+        this.auth = FirebaseAuth.getInstance();
+        this.users = users;
     }
 
     public boolean login() {
