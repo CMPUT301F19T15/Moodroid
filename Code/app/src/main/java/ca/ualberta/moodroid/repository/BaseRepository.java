@@ -162,6 +162,17 @@ abstract class BaseRepository implements RepositoryInterface {
         });
     }
 
+    public Task<ModelInterface> find(String id) {
+        final Class<ModelInterface> modelClass = this.getModelClass();
+        return this.collection.document(id).get().continueWith(new Continuation<DocumentSnapshot, ModelInterface>() {
+            @Override
+            public ModelInterface then(@NonNull Task<DocumentSnapshot> task) throws Exception {
+                return task.getResult().toObject(modelClass);
+            }
+
+        });
+    }
+
 
     /**
      * Update an existing model.
@@ -196,6 +207,17 @@ abstract class BaseRepository implements RepositoryInterface {
                         Log.d("REPO/CREATE", doc.getId());
                         model.setInternalId(doc.getId());
 
+                        return model;
+                    }
+                });
+    }
+
+    public Task<ModelInterface> create(final ModelInterface model, final String docId) {
+        return this.collection.document(docId).set(model)
+                .continueWith(new Continuation<Void, ModelInterface>() {
+                    @Override
+                    public ModelInterface then(@NonNull Task<Void> task) {
+                        model.setInternalId(docId);
                         return model;
                     }
                 });

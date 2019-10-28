@@ -1,8 +1,13 @@
 package ca.ualberta.moodroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,7 +24,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.CollectionReference;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -29,91 +37,90 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
+
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ca.ualberta.moodroid.model.ModelInterface;
-import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodRepository;
+import ca.ualberta.moodroid.model.UserModel;
+import ca.ualberta.moodroid.repository.UserRepository;
 
 @Singleton
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private MoodRepository mood;
+    private UserRepository users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.users = new UserRepository();
 
 
-        mood = new MoodRepository();
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+        // Create and launch sign-in intent
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(),
+                123);
 
-
-        final MoodModel model = new MoodModel();
-        model.setColor("red");
-        model.setEmoji(":angry:");
-        model.setName("Angry");
-////
-////
-//        System.out.println(model);
-//
-        mood.create(model).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-            @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                final MoodModel m = (MoodModel) modelInterface;
-                Log.d("RESULT/CREATE", m.getInternalId());
-
-                mood.delete(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("RESULT/DELETE", model.getInternalId());
-
+        // sign out stuff
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
                     }
                 });
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 123) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                final UserRepository users = this.users;
+                // Successfully signed in
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Log.d("AUTH", "Signin Successful" + user.getDisplayName());
+                users.find(user.getUid()).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ModelInterface> task) {
+                        UserModel m = (UserModel) task.getResult();
+                        if (m != null) {
+                            Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+                        } else {
+                            m = new UserModel();
+                            m.setUsername("someusername123");
+                            users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                                @Override
+                                public void onSuccess(ModelInterface modelInterface) {
+                                    UserModel m = (UserModel) modelInterface;
+                                    Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
+                                    // user is now created - direct to another activity
+                                }
+                            });
+                        }
+                    }
+                });
+            } else {
+                Log.d("AUTH", "Signin failed");
             }
-        });
-
-        mood.limit(2).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
-            @Override
-            public void onSuccess(List<ModelInterface> modelInterfaces) {
-                for (ModelInterface m : modelInterfaces) {
-                    MoodModel s = (MoodModel) m;
-
-                    Log.d("RESULT/GET", s.getInternalId() + s.getName());
-                }
-            }
-        });
-
-        mood.where("name", "Calm").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-            @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                MoodModel m = (MoodModel) modelInterface;
-                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
-            }
-        });
-
-
-        mood.where("name", "Angry").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-            @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                MoodModel m = (MoodModel) modelInterface;
-                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
-            }
-        });
-
-        mood.where("name", "Happy").one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-            @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                MoodModel m = (MoodModel) modelInterface;
-                Log.d("RESULT/ONE", m.getInternalId() + m.getName());
-            }
-        });
-
+        }
     }
 
 
