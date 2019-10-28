@@ -40,6 +40,8 @@ android:
 licenses:
   - "android-sdk-license-.+"
 
+before_script: cd Code/
+
 before_install:
   # Accept sdk licenses
   - yes | sdkmanager "platforms;android-29"
