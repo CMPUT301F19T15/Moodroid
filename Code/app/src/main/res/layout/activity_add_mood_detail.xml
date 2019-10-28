@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="#673AB7">
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/Annoyed">
+
+</ImageView>
+
+    <TextView
+        android:id="@+id/mood_text"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="116dp"
+        android:layout_marginLeft="116dp"
+        android:layout_marginBottom="15dp"
+        android:fontFamily="@font/Courier_New_Bold"
+        android:text="Annoyed"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/mood_date"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="304dp"
+        android:layout_marginLeft="304dp"
+        android:layout_marginBottom="37dp"
+        android:fontFamily="@font/Courier_New"
+        android:text="01/01/19"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/mood_time"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="325dp"
+        android:layout_marginLeft="325dp"
+        android:layout_marginBottom="7dp"
+        android:fontFamily="@font/Courier_New"
+        android:text="06:11"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+
+</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B09ECF">
+
+        <Button
+            android:id="@+id/add_date_time_button"
+            android:layout_width="344dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="21dp"
+            android:layout_marginEnd="29dp"
+            android:layout_marginRight="29dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="Date and Time"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/add_date_time_button"
+            android:layout_width="341dp"
+            android:layout_height="67dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="87dp"
+            android:layout_marginEnd="27dp"
+            android:layout_marginRight="27dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="01/01/19\n06:11"
+
+
+            android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/add_reason_button"
+            android:layout_width="338dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="172dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="Reason"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/reason"
+            android:layout_width="341dp"
+            android:layout_height="67dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="233dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="People are\nannoying"
+            android:textSize="29dp">
+
+        <Button
+            android:id="@+id/add_location_button"
+            android:layout_width="344dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="310dp"
+            android:layout_marginEnd="27dp"
+            android:layout_marginRight="27dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="Location"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="341dp"
+            android:layout_height="67dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="371dp"
+            android:layout_marginEnd="29dp"
+            android:layout_marginRight="29dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="University of Alberta"
+            android:textSize="29dp">
+
+        <Button
+            android:id="@+id/add_social"
+            android:layout_width="344dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="456dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="Social Situation"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="341dp"
+            android:layout_height="67dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="515dp"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="Lonely"
+            android:textSize="29dp">
+
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="139dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="595dp"
+            android:layout_marginEnd="119dp"
+            android:layout_marginRight="119dp"
+            android:background="@drawable/add_moon_details"
+            android:fontFamily="@font/Courier_New"
+            android:gravity="center"
+            android:text="Confirm"
+            android:textSize="30dp" />
+
+    </RelativeLayout>
+
+
+
+
+
+        android:textSize="30dp" />
+</LinearLayout>
