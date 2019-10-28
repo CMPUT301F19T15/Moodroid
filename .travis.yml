@@ -1,6 +1,9 @@
 language: android
 jdk: oraclejdk8
 
+notifications:
+  slack: cmput301teamgroup:U4qrlow8zgbMj3e49uZhjAdV
+
 env:
   global:
     - ANDROID_TARGET=android-22
