@@ -40,12 +40,10 @@ android:
 licenses:
   - "android-sdk-license-.+"
 
-before_script: cd Code/
-
 before_install:
   # Accept sdk licenses
   - yes | sdkmanager "platforms;android-29"
-
+  - cd Code/
   # Get gradle
   - chmod +x gradlew
   - wget http://services.gradle.org/distributions/gradle-5.3-bin.zip
