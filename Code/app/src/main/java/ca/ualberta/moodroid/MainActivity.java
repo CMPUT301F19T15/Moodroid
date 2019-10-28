@@ -101,23 +101,20 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<ModelInterface> task) {
                         UserModel m = (UserModel) task.getResult();
-                        Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
-
-                        // User already created - direct to another activity
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        UserModel m = new UserModel();
-                        m.setUsername("someusername123");
-                        users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-                            @Override
-                            public void onSuccess(ModelInterface modelInterface) {
-                                UserModel m = (UserModel) modelInterface;
-                                Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
-                                // user is now created - direct to another activity
-                            }
-                        });
+                        if (m != null) {
+                            Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+                        } else {
+                            m = new UserModel();
+                            m.setUsername("someusername123");
+                            users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                                @Override
+                                public void onSuccess(ModelInterface modelInterface) {
+                                    UserModel m = (UserModel) modelInterface;
+                                    Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
+                                    // user is now created - direct to another activity
+                                }
+                            });
+                        }
                     }
                 });
             } else {

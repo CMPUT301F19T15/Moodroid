@@ -34,14 +34,15 @@ public class AuthenticationService implements AuthenticationInterface {
         return true;
     }
 
-    public Task<boolean> isNewUser() {
+    public boolean isNewUser() {
+        return true;
         // TODO: needs to handle no results
-        return this.users.find(this.auth.getCurrentUser().getUid()).continueWith(new Continuation<ModelInterface, boolean>() {
-            @Override
-            public boolean then(@NonNull Task<ModelInterface> task) throws Exception {
-                return true;
-            }
-        });
+//        return this.users.find(this.auth.getCurrentUser().getUid()).continueWith(new Continuation<ModelInterface, boolean>() {
+//            @Override
+//            public boolean then(@NonNull Task<ModelInterface> task) throws Exception {
+//                return true;
+//            }
+//        });
     }
 }
 
