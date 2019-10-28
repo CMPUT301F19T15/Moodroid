@@ -31,7 +31,7 @@
         android:layout_marginEnd="148dp"
         android:layout_marginRight="148dp"
         android:layout_marginBottom="-10dp"
-        android:background="@drawable/addMoodButton"
+        android:background="@drawable/addmoodbutton"
         android:text="Confirm"
         android:textSize="18dp">
 
