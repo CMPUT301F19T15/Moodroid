@@ -15,7 +15,7 @@
         android:layout_marginStart="57dp"
         android:layout_marginLeft="57dp"
         android:layout_marginTop="126dp"
-        android:fontFamily="@font/Courier_New"
+        android:fontFamily="@font/courier_new"
         android:hint="Please add social situation"
         android:textColorHint="#FFFFFF">
 
@@ -31,7 +31,7 @@
         android:layout_marginTop="283dp"
         android:layout_marginEnd="148dp"
         android:layout_marginRight="148dp"
-        android:fontFamily="@font/Courier_New_Bold"
+        android:fontFamily="@font/courier_new_bold"
         android:text="confirm" />
 
 

@@ -3,18 +3,18 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/Courier_New" />
+        android:font="@font/courier_new" />
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/Courier_New_Bold" />
+        android:font="@font/courier_new_bold" />
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/Courier_New_Bold_Italic" />
+        android:font="@font/courier_new_bold_Italic" />
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/Courier_New_Italic" />
+        android:font="@font/courier_new_Italic" />
 
 </font-family>

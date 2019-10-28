@@ -22,7 +22,7 @@
         android:layout_marginStart="17dp"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="24dp"
-        android:src="@drawable/Happy">
+        android:src="@drawable/happy">
 
     </ImageView>
 
@@ -35,7 +35,7 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="114dp"
         android:layout_marginLeft="114dp"
-        android:fontFamily="@font/Courier_New"
+        android:fontFamily="@font/courier_new"
         android:text="Happy"
         android:textColor="#FFFFFF"
         android:textSize="40dp" />
@@ -50,7 +50,7 @@
         android:layout_marginStart="274dp"
         android:layout_marginLeft="274dp"
         android:layout_marginTop="29dp"
-        android:fontFamily="@font/Courier_New"
+        android:fontFamily="@font/courier_new"
         android:text="10/15/19"
         android:textColor="#FFFFFF"
         android:textSize="20dp" />
@@ -65,7 +65,7 @@
         android:layout_marginStart="296dp"
         android:layout_marginLeft="296dp"
         android:layout_marginTop="70dp"
-        android:fontFamily="@font/Courier_New"
+        android:fontFamily="@font/courier_new"
         android:text="10:25"
         android:textColor="#FFFFFF"
         android:textSize="20dp" />

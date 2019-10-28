@@ -41,7 +41,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="119dp"
             android:background="@drawable/button_default"
-            android:src="@drawable/Annoyed" />
+            android:src="@drawable/annoyed" />
 
         <ImageButton
             android:id="@+id/Happy"
@@ -54,7 +54,7 @@
             android:layout_marginLeft="169dp"
             android:layout_marginTop="65dp"
             android:background="@drawable/button_default"
-            android:src="@drawable/Happy" />
+            android:src="@drawable/happy" />
 
         <ImageButton
             android:id="@+id/Mad"
@@ -67,7 +67,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="316dp"
             android:background="@drawable/button_default"
-            android:src="@drawable/Mad" />
+            android:src="@drawable/mad" />
 
         <ImageButton
             android:id="@+id/Sad"
@@ -80,7 +80,7 @@
             android:layout_marginLeft="166dp"
             android:layout_marginTop="389dp"
             android:background="@drawable/button_default"
-            android:src="@drawable/Sad" />
+            android:src="@drawable/sad" />
 
         <ImageButton
             android:id="@+id/Scared"
@@ -93,7 +93,7 @@
             android:layout_marginLeft="292dp"
             android:layout_marginTop="324dp"
             android:background="@drawable/button_default"
-            android:src="@drawable/Scared" />
+            android:src="@drawable/scared" />
 
         <ImageButton
             android:id="@+id/Sick"
@@ -107,7 +107,7 @@
             android:layout_marginTop="121dp"
             android:layout_marginRight="32dp"
             android:background="@drawable/button_default"
-            android:src="@drawable/Sick" />
+            android:src="@drawable/sick" />
 
     </RelativeLayout>
 

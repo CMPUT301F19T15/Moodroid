@@ -37,7 +37,7 @@
             android:layout_marginEnd="88dp"
             android:layout_marginRight="88dp"
             android:layout_marginBottom="16dp"
-            android:fontFamily="@font/Courier_New_Bold"
+            android:fontFamily="@font/courier_new_bold"
             android:text="Mood History"
             android:textColor="#FFFFFF"
             android:textSize="30dp" />
