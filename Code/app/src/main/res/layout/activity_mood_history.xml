@@ -4,6 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1A2531"
     tools:context=".ui.MoodHistory">
+
+    <RelativeLayout
+        android:layout_width="418dp"
+        android:layout_height="80dp"
+        android:background="#9795A5A6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/addMood"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="11dp"
+            android:src="@drawable/addMoodButton" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="88dp"
+            android:layout_marginRight="88dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/Courier_New_Bold"
+            android:text="Mood History"
+            android:textColor="#FFFFFF"
+            android:textSize="30dp" />
+
+        <ImageButton
+            android:id="@+id/filter"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="340dp"
+            android:layout_marginLeft="340dp"
+            android:layout_marginTop="11dp"
+            android:src="@drawable/filter_button" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
