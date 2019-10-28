@@ -6,6 +6,9 @@ import android.os.Bundle;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -21,8 +24,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,13 +41,23 @@ import java.util.Arrays;
 import java.util.List;
 
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import ca.ualberta.moodroid.model.ModelInterface;
+import ca.ualberta.moodroid.model.UserModel;
+import ca.ualberta.moodroid.repository.UserRepository;
+
+@Singleton
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private UserRepository users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.users = new UserRepository();
 
 
         // Choose authentication providers
@@ -78,10 +93,33 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
+                final UserRepository users = this.users;
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 Log.d("AUTH", "Signin Successful" + user.getDisplayName());
-                // ...
+                users.find(user.getUid()).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ModelInterface> task) {
+                        UserModel m = (UserModel) task.getResult();
+                        Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+
+                        // User already created - direct to another activity
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        UserModel m = new UserModel();
+                        m.setUsername("someusername123");
+                        users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                            @Override
+                            public void onSuccess(ModelInterface modelInterface) {
+                                UserModel m = (UserModel) modelInterface;
+                                Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
+                                // user is now created - direct to another activity
+                            }
+                        });
+                    }
+                });
             } else {
                 Log.d("AUTH", "Signin failed");
             }
