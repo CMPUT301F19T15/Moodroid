@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="117dp">
 
-        <Button
+        <ImageButton
             android:id="@+id/centerButton"
             android:layout_width="160dp"
             android:layout_height="160dp"

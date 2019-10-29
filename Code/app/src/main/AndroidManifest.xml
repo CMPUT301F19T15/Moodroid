@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.Notifications"></activity>
+        <activity android:name=".add_mood" android:exported="true"></activity>
+        <activity android:name=".ui.Notifications" />
         <activity android:name=".ui.MoodMap" />
         <activity android:name=".ui.MoodHistory" />
         <activity android:name=".ui.SignUp" />

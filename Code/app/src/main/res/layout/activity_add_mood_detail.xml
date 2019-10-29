@@ -134,7 +134,7 @@
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="People are\nannoying"
-            android:textSize="29dp">
+            android:textSize="29dp"/>
 
         <Button
             android:id="@+id/add_location_button"
@@ -168,7 +168,7 @@
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="University of Alberta"
-            android:textSize="29dp">
+            android:textSize="29dp"/>
 
         <Button
             android:id="@+id/add_social"
@@ -202,7 +202,7 @@
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="Lonely"
-            android:textSize="29dp">
+            android:textSize="29dp"/>
 
         <Button
             android:id="@+id/confirm_button"

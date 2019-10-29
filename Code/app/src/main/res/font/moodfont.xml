@@ -8,13 +8,10 @@
         android:fontStyle="normal"
         android:fontWeight="400"
         android:font="@font/courier_new_bold" />
+
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/courier_new_bold_Italic" />
-    <font
-        android:fontStyle="normal"
-        android:fontWeight="400"
-        android:font="@font/courier_new_Italic" />
+        android:font="@font/courier_new_italic" />
 
 </font-family>
