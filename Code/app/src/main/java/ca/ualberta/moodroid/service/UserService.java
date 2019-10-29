@@ -5,6 +5,8 @@ import com.google.firebase.firestore.auth.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
@@ -18,6 +20,7 @@ public class UserService implements UserInterface {
     private UserRepository users;
     private FollowRequestRepository requests;
 
+    @Inject
     public UserService(AuthenticationService auth, UserRepository repo, FollowRequestRepository requests) {
         this.auth = auth;
         this.users = repo;
