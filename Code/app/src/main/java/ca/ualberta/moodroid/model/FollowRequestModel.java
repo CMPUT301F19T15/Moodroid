@@ -3,22 +3,17 @@ package ca.ualberta.moodroid.model;
 public class FollowRequestModel extends BaseModel {
 
 
-    enum RequestState {
-        PENDING,
-        ACCEPTED,
-        DECLINED
-    }
-
     private String requesterUsername;
     private String requesteeUsername;
-    private RequestState state;
+    // Possible states: undecided, accepted, denied
+    private String state;
 
-    public RequestState getState() {
-        return state;
+    public String getState() {
+        return state.toLowerCase();
     }
 
-    public void setState(RequestState state) {
-        this.state = state;
+    public void setState(String state) {
+        this.state = state.toLowerCase();
     }
 
     public String getRequesterUsername() {
