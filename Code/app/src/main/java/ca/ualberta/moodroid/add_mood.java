@@ -49,7 +49,7 @@ public class add_mood extends AppCompatActivity {
 
         /*
         * The purpose of this code is to simply display the mood you tap in the center
-        * of the screen, and then take that mood's image and bring it to the next screen
+        * of the screen, and then take that mood's image, color, and name and bring it to the next screen
         * where you will be able to set the details. Below are a few onclick listeners for
         * each mood button in the wheel. When tapped, they access their own image from the
         * Drawable folder and draw that image in the center.
