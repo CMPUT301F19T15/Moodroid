@@ -26,6 +26,9 @@ public class add_mood extends AppCompatActivity {
     String scared_drawable_id = "@drawable/scared";
     String sick_drawable_id = "@drawable/sick";
     private boolean center_filled = false;
+    String selected_img;
+    String mood_name;
+    String hex;
 
 
 
@@ -43,6 +46,7 @@ public class add_mood extends AppCompatActivity {
         mad_button = findViewById(R.id.Mad);
         scared_button = findViewById(R.id.Scared);
         sick_button = findViewById(R.id.Sick);
+
         /*
         * The purpose of this code is to simply display the mood you tap in the center
         * of the screen, and then take that mood's image and bring it to the next screen
@@ -58,6 +62,9 @@ public class add_mood extends AppCompatActivity {
                 Drawable res = getResources().getDrawable(annoyed_imageRes);
                 center_button.setImageDrawable(res);
                 center_filled = true;
+                selected_img = annoyed_drawable_id;
+                mood_name = "Annoyed";
+                hex = "#830678";
 
 
             }
@@ -69,6 +76,9 @@ public class add_mood extends AppCompatActivity {
                 Drawable res = getResources().getDrawable(happy_imageRes);
                 center_button.setImageDrawable(res);
                 center_filled = true;
+                selected_img = happy_drawable_id;
+                mood_name = "Happy";
+                hex = "#F3CA3E";
             }
         });
         sad_button.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +88,9 @@ public class add_mood extends AppCompatActivity {
                 Drawable res = getResources().getDrawable(sad_imageRes);
                 center_button.setImageDrawable(res);
                 center_filled = true;
+                selected_img = sad_drawable_id;
+                mood_name = "Sad";
+                hex = "#1C1EEB";
             }
         });
 
@@ -88,6 +101,9 @@ public class add_mood extends AppCompatActivity {
                 Drawable res = getResources().getDrawable(mad_imageRes);
                 center_button.setImageDrawable(res);
                 center_filled = true;
+                selected_img = mad_drawable_id;
+                mood_name = "Mad";
+                hex = "#D61F1F";
             }
         });
         scared_button.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +113,9 @@ public class add_mood extends AppCompatActivity {
                 Drawable res = getResources().getDrawable(scared_imageRes);
                 center_button.setImageDrawable(res);
                 center_filled = true;
+                selected_img = scared_drawable_id;
+                mood_name = "Scared";
+                hex = "#C5FFFF";
             }
         });
 
@@ -107,6 +126,9 @@ public class add_mood extends AppCompatActivity {
                 Drawable res = getResources().getDrawable(sick_imageRes);
                 center_button.setImageDrawable(res);
                 center_filled = true;
+                selected_img = sick_drawable_id;
+                mood_name = "Sick";
+                hex = "#97BD00";
             }
         });
 
@@ -119,6 +141,10 @@ public class add_mood extends AppCompatActivity {
             public void onClick(View v) {
                if (center_filled){
                    Intent intent = new Intent(add_mood.this, add_mood_detail.class);
+
+                   intent.putExtra("image_id", selected_img);
+                   intent.putExtra("mood_name", mood_name);
+                   intent.putExtra("hex", hex);
                    startActivity(intent);
 
                }

@@ -1,70 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:background="#673AB7">
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/annoyed">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
-</ImageView>
+    <RelativeLayout
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#1A2531">
 
-    <TextView
-        android:id="@+id/mood_text"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="116dp"
-        android:layout_marginLeft="116dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/courier_new_bold"
-        android:text="Annoyed"
-        android:textColor="#FFFFFF"
-        android:textSize="30dp" />
+        <ImageView
+            android:id="@+id/mood_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/annoyed">
 
-    <TextView
-        android:id="@+id/mood_date"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="304dp"
-        android:layout_marginLeft="304dp"
-        android:layout_marginBottom="37dp"
-        android:fontFamily="@font/courier_new"
-        android:text="01/01/19"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp" />
+        </ImageView>
 
-    <TextView
-        android:id="@+id/mood_time"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="325dp"
-        android:layout_marginLeft="325dp"
-        android:layout_marginBottom="7dp"
-        android:fontFamily="@font/courier_new"
-        android:text="06:11"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp" />
+        <TextView
+            android:id="@+id/mood_text"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="116dp"
+            android:layout_marginLeft="116dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/courier_new_bold"
+            android:text="TBD"
+            android:textColor="#FFFFFF"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/mood_date"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="304dp"
+            android:layout_marginLeft="304dp"
+            android:layout_marginBottom="37dp"
+            android:fontFamily="@font/courier_new"
+            android:text="01/01/19"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/mood_time"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="325dp"
+            android:layout_marginLeft="325dp"
+            android:layout_marginBottom="7dp"
+            android:fontFamily="@font/courier_new"
+            android:text="06:11"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#B09ECF">
+        android:background="#1A2531">
 
         <Button
             android:id="@+id/add_date_time_button"
@@ -134,7 +140,7 @@
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="People are\nannoying"
-            android:textSize="29dp"/>
+            android:textSize="29dp" />
 
         <Button
             android:id="@+id/add_location_button"
@@ -168,7 +174,7 @@
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="University of Alberta"
-            android:textSize="29dp"/>
+            android:textSize="29dp" />
 
         <Button
             android:id="@+id/add_social"
@@ -202,7 +208,7 @@
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="Lonely"
-            android:textSize="29dp"/>
+            android:textSize="29dp" />
 
         <Button
             android:id="@+id/confirm_button"
