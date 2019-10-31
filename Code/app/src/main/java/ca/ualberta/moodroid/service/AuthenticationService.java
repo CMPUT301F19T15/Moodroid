@@ -1,5 +1,7 @@
 package ca.ualberta.moodroid.service;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
@@ -15,35 +17,26 @@ import ca.ualberta.moodroid.repository.UserRepository;
 
 public class AuthenticationService implements AuthenticationInterface {
 
+    private static AuthenticationService service = null;
+    private String username;
 
-    private FirebaseAuth auth;
-    private UserRepository users;
 
-    public AuthenticationService() {
-        this.auth = FirebaseAuth.getInstance();
-        this.users = new UserRepository();
+    public static synchronized AuthenticationService getInstance() {
+        if (service == null) {
+            service = new AuthenticationService();
+        }
+
+        return service;
     }
 
-    public boolean login() {
-
-        return true;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
-    public boolean isLoggedIn() {
-        FirebaseUser user = this.auth.getCurrentUser();
-        return true;
+    public String getUsername() {
+        return this.username;
     }
 
-    public boolean isNewUser() {
-        return true;
-        // TODO: needs to handle no results
-//        return this.users.find(this.auth.getCurrentUser().getUid()).continueWith(new Continuation<ModelInterface, boolean>() {
-//            @Override
-//            public boolean then(@NonNull Task<ModelInterface> task) throws Exception {
-//                return true;
-//            }
-//        });
-    }
 }
 
 

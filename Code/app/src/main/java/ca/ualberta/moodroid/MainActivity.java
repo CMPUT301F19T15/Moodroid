@@ -47,6 +47,7 @@ import javax.inject.Singleton;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
+import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.ui.AddFriend;
 
 @Singleton
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         UserModel m = (UserModel) task.getResult();
                         if (m != null) {
                             Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+                            AuthenticationService.getInstance().setUsername(m.getUsername());
                             Intent i = new Intent(MainActivity.this, AddFriend.class);
                             startActivity(i);
                         } else {

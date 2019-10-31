@@ -23,18 +23,15 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.repository.UserRepository;
+import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
 public class AddFriend extends AppCompatActivity {
 
-//    UserService users;
-//
-//    public AddFriend(UserService userService) {
-//        this.users = userService;
-//    }
 
     UserRepository users;
     FollowRequestRepository requests;
+    // TODO: Get my username and wait until it is grabbed
     String me;
 
     @BindView(R.id.username)
@@ -48,7 +45,7 @@ public class AddFriend extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend);
         this.users = new UserRepository();
         this.requests = new FollowRequestRepository();
-        this.me = "someusername123";
+        this.me = AuthenticationService.getInstance().getUsername();
 
         ButterKnife.bind(this);
     }
@@ -56,6 +53,7 @@ public class AddFriend extends AppCompatActivity {
     @OnClick(R.id.request_follow_btn)
     public void attemptUserFollow(View view) {
         statusField.setText("");
+        Log.d("ADDUSER/OUT", "I am: " + me);
         final String name = this.usernameField.getText().toString();
         users.where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
@@ -78,7 +76,7 @@ public class AddFriend extends AppCompatActivity {
                                 FollowRequestModel request = new FollowRequestModel();
                                 request.setRequesteeUsername(name);
                                 request.setRequesterUsername(me);
-                                request.setState("undecided");
+                                request.setState("requested");
                                 requests.create(request).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
                                     @Override
                                     public void onComplete(@NonNull Task<ModelInterface> task) {

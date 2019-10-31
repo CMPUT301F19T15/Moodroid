@@ -5,7 +5,7 @@ public class FollowRequestModel extends BaseModel {
 
     private String requesterUsername;
     private String requesteeUsername;
-    // Possible states: undecided, accepted, denied
+    // Possible states: requested, accepted, declined
     private String state;
 
     public String getState() {
