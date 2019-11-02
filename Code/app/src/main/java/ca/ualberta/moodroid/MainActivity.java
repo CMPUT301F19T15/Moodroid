@@ -172,15 +172,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()){
-                    case R.id.ic_friends:
-                        intent = new Intent(MainActivity.this,  FriendsMoods.class);
+                    case R.id.ic_notif:
+                        intent = new Intent(MainActivity.this, Notifications.class);
                         startActivity(intent);
+                        break;
                     case R.id.ic_moods:
                         intent = new Intent(MainActivity.this, MoodHistory.class);
                         startActivity(intent);
                         break;
-                    case R.id.ic_notif:
-                        intent = new Intent(MainActivity.this, Notifications.class);
+                    case R.id.ic_friends:
+                        intent = new Intent(MainActivity.this,  FriendsMoods.class);
                         startActivity(intent);
                         break;
                     case R.id.ic_profile:

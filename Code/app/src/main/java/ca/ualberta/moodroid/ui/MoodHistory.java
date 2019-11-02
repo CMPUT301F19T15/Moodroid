@@ -111,15 +111,15 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()){
-                    case R.id.ic_friends:
-                        intent = new Intent(MoodHistory.this,  FriendsMoods.class);
+                    case R.id.ic_notif:
+                        intent = new Intent(MoodHistory.this, Notifications.class);
                         startActivity(intent);
                         break;
                     case R.id.ic_moods:
                         //already in moods
                         break;
-                    case R.id.ic_notif:
-                        intent = new Intent(MoodHistory.this, Notifications.class);
+                    case R.id.ic_friends:
+                        intent = new Intent(MoodHistory.this,  FriendsMoods.class);
                         startActivity(intent);
                         break;
                     case R.id.ic_profile:
