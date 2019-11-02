@@ -4,76 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MoodHistory"
+    tools:context=".ui.Profile"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
         <!-- top toolbar -->
         <RelativeLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar">
-            <include layout="@layout/app_bar_main">
-            </include>
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/app_bar_main"></include>
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/profile_user_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/profile_user_name_text_view"
-            android:layout_centerHorizontal="true"
             android:layout_below="@+id/toolbar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="50sp"
             android:background="@drawable/profile_user_name_custom_shape"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:minWidth="220sp"
+            android:padding="10sp"
             android:text="User Name"
             android:textColor="@color/colorWritingDark"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="30dp"
-            android:minWidth="220sp"
-            android:gravity="center"
-            android:padding="10sp"
-            android:fontFamily="monospace"
-            android:layout_marginTop="17sp">
+            android:textStyle="bold">
+
         </TextView>
 
 
-     <Button
-         android:id="@+id/logout_button"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_centerHorizontal="true"
-         android:layout_centerVertical="true"
-         android:background="@drawable/profile_button_custom_shape"
-         android:textColor="@color/colorWriting"
-         android:text="Sign Out"
-         android:textSize="25sp"
-         android:padding="15dp"
-         android:fontFamily="monospace">
-     </Button>
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/profile_button_custom_shape"
+            android:fontFamily="monospace"
+            android:padding="15dp"
+            android:text="Sign Out"
+            android:textColor="@color/colorWriting"
+            android:textSize="25sp">
 
+        </Button>
 
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/sth"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content">
-            <!-- navigation bar -->
-            <include layout="@layout/app_bar_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </include>
-        </RelativeLayout>
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/sth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_anchorGravity="center">
+        <!-- navigation bar -->
+        <include
+            layout="@layout/app_bar_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-
-
+        </include>
+    </RelativeLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
