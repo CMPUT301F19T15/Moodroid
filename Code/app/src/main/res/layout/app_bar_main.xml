@@ -14,10 +14,12 @@
             android:background="@color/colorSecondary"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.tabs.TabLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tabs"/>
+            <ImageView
+                android:id="@+id/add_mood_button"
+                android:layout_width="66dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/ic_addmood" />
         </com.google.android.material.appbar.AppBarLayout>
     </RelativeLayout>
 </merge>

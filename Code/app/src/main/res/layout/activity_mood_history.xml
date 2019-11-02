@@ -16,7 +16,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolbar">
-            <include layout="@layout/app_bar_main"></include>
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:background="@color/colorSecondary"
+                android:layout_height="?android:attr/actionBarSize">
+
+                <Button
+                    android:id="@+id/add_mood_button"
+                    android:layout_width="66dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_addmood" />
+            </com.google.android.material.appbar.AppBarLayout>
         </RelativeLayout>
 
         <!-- middle section -->

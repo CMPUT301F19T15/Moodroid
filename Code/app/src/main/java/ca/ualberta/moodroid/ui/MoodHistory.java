@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TableLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -67,6 +68,16 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood_history);
+
+        //Add mood button and on click listener
+        Button addMoodButton = findViewById(R.id.add_mood_button);
+        addMoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // CALL ADD NEW MOOD ACTIVITY
+                // intent = new Intent(MoodHistory.this, AddMood.class);
+            }
+        });
 
         //Bottom Navigation Bar Listener
         bottomNavigationView();
