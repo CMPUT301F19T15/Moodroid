@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -45,6 +47,10 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
     ArrayList<MoodEventModel> moodList;
+    ImageButton toolBarButtonLeft;
+    ImageButton toolBarButtonRight;
+    TextView toolBarTextView;
+    String toolBarText;
 
 //    ////TO DO: fix this.
 //    public MoodHistory(MoodEventService moodEventService) {
@@ -60,6 +66,16 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
         //Bottom Navigation Bar Listener
         bottomNavigationView();
 
+        //set top toolbar text & buttons
+        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);                  //////you can just change the images for the buttons here....
+        toolBarButtonRight = findViewById(R.id.toolbar_button_right);                /////and when you do the mood map you can do the same thing, just change it to different images
+        toolBarTextView = findViewById(R.id.toolbar_text_center);                    //// if you don't a button to show, you can call toolBarButtonLeft.setVisibility(View.INVISIBLE);
+        toolBarText = "Mood History";                                                ////
+        toolBarTextView.setText(toolBarText);
+
+        //TO DO: add on click listeners for toolbar
+
+
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();
         List moods = moodEvents.getMyEvents(); //gets list of all user events
@@ -71,6 +87,7 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
         moodListAdapter = new MoodListAdapter(moodList, moodEvents, this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
+
 
     }
 

@@ -43,6 +43,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import ca.ualberta.moodroid.ui.BottomNavView;
 import ca.ualberta.moodroid.ui.FriendsMoods;
@@ -70,10 +72,25 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent;
 
+    ImageButton toolBarButtonLeft;
+    ImageButton toolBarButtonRight;
+    TextView toolBarTextView;
+    String toolBarText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //set top toolbar text & buttons
+        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);      //// here you set the images for the buttons
+        toolBarButtonRight = findViewById(R.id.toolbar_button_right);    ///
+        toolBarTextView = findViewById(R.id.toolbar_text_center);       ////
+        toolBarText = "Main Activity";                                  ////  -------change this text
+
+        toolBarTextView.setText(toolBarText);                           /// here you set the text for this activity
+        ////still need to add on click listeners for toolbar
+
 
         bottomNavigationView();
      //   FirebaseFirestore db = FirebaseFirestore.getInstance();
