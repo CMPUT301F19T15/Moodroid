@@ -70,8 +70,9 @@ import com.google.android.gms.tasks.Task;
 
         //set the top nav bar to the correct text and icon once top bar is fixed
         toolBarTextView.setText(toolBarText);
+        toolBarButtonLeft.setImageResource(R.drawable.ic_menu_camera);
         toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
-        toolBarButtonLeft.setVisibility(View.INVISIBLE);
+
 
 
         //display own username
@@ -103,6 +104,14 @@ import com.google.android.gms.tasks.Task;
                 //navigate to MoodMap Activity
                 intent = new Intent(Profile.this, MoodMap.class);
                 startActivity(intent);
+            }
+        });
+        toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to camera activity
+                //intent = new Intent(Profile.this, MoodMap.class);
+                //startActivity(intent);
             }
         });
     }
