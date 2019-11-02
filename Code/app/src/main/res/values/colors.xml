@@ -2,9 +2,11 @@
 <resources>
     <color name="colorPrimary">#1A2531</color>
     <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorTertiary">#8F9296</color>
     <color name="colorMoodTest">#2A146D15</color>
     <color name="colorMoodTest2">#2D2CB93F</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorSecondary">#566371</color>
     <color name="colorWriting">#C2CFC3</color>
+    <color name="colorWritingDark">#333741</color>
 </resources>
