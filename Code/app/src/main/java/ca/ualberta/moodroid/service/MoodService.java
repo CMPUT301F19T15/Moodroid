@@ -1,5 +1,8 @@
 package ca.ualberta.moodroid.service;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,7 @@ import javax.inject.Inject;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodRepository;
+import ca.ualberta.moodroid.repository.UserRepository;
 
 public class MoodService implements MoodInterface {
 
@@ -25,3 +29,7 @@ public class MoodService implements MoodInterface {
         return returning;
     }
 }
+
+
+
+

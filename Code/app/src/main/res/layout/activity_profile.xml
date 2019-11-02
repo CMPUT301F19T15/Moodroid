@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MoodHistory"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="match_parent">
+        <!-- top toolbar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar">
+            <include layout="@layout/app_bar_main">
+            </include>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_user_name_text_view"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/toolbar"
+            android:background="@drawable/profile_user_name_custom_shape"
+            android:text="User Name"
+            android:textColor="@color/colorWritingDark"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="30dp"
+            android:minWidth="220sp"
+            android:gravity="center"
+            android:padding="10sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="17sp">
+        </TextView>
+
+
+     <Button
+         android:id="@+id/logout_button"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:layout_centerVertical="true"
+         android:background="@drawable/profile_button_custom_shape"
+         android:textColor="@color/colorWriting"
+         android:text="Sign Out"
+         android:textSize="25sp"
+         android:padding="15dp"
+         android:fontFamily="monospace">
+     </Button>
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/sth"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+            <!-- navigation bar -->
+            <include layout="@layout/app_bar_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </include>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

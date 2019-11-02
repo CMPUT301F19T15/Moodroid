@@ -60,6 +60,7 @@ import javax.inject.Singleton;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
+import ca.ualberta.moodroid.ui.Profile;
 
 @Singleton
 public class MainActivity extends AppCompatActivity {
@@ -166,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.ic_profile:
-                        //don't have profile activity yet
+                        intent = new Intent(MainActivity.this, Profile.class);
+                        startActivity(intent);
                         break;
                 }
             return false;
