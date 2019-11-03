@@ -7,5 +7,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="mood_history_margin_top">10dp</dimen>
     <dimen name="mood_history_margin_sides">5dp</dimen>
+    <dimen name="custom_marker_image">50dp</dimen>
+    <dimen name="custom_marker_padding">2dp</dimen>
 
 </resources>
