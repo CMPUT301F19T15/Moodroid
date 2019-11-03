@@ -1,56 +1,45 @@
 package ca.ualberta.moodroid.ui;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.TableLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
+
 import java.util.List;
 
-import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.UserRepository;
-import ca.ualberta.moodroid.service.AuthenticationService;
-import ca.ualberta.moodroid.service.MoodEventService;
-import ca.ualberta.moodroid.service.MoodService;
+//import ca.ualberta.moodroid.model.ModelInterface;
+//import ca.ualberta.moodroid.model.MoodEventModel;
+//import ca.ualberta.moodroid.model.MoodModel;
 
-import static androidx.appcompat.app.AlertDialog.*;
+import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.repository.MoodRepository;
+
+import ca.ualberta.moodroid.service.MoodEventService;
 
 
 public class MoodHistory extends AppCompatActivity implements MoodListAdapter.OnListListener {
 
+    MoodRepository moods;
     MoodEventService moodEvents;
     private static final int ACTIVITY_NUM=1;
     private Intent intent;
@@ -58,10 +47,16 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
     ArrayList<MoodEventModel> moodList;
+    ImageButton toolBarButtonLeft;
+    ImageButton toolBarButtonRight;
+    TextView toolBarTextView;
+    String toolBarText;
 
-    public MoodHistory(MoodEventService moodEventService) {
-        this.moodEvents = moodEventService;
-    }
+//    ////TO DO: fix this.
+//    public MoodHistory(MoodEventService moodEventService) {
+//        this.moodEvents = moodEventService;
+//    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +65,16 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
 
         //Bottom Navigation Bar Listener
         bottomNavigationView();
+
+        //set top toolbar text & buttons
+        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);                  //////you can just change the images for the buttons here....
+        toolBarButtonRight = findViewById(R.id.toolbar_button_right);                /////and when you do the mood map you can do the same thing, just change it to different images
+        toolBarTextView = findViewById(R.id.toolbar_text_center);                    //// if you don't a button to show, you can call toolBarButtonLeft.setVisibility(View.INVISIBLE);
+        toolBarText = "Mood History";                                                ////
+        toolBarTextView.setText(toolBarText);
+
+        //TO DO: add on click listeners for toolbar
+
 
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();
@@ -82,6 +87,8 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
         moodListAdapter = new MoodListAdapter(moodList, moodEvents, this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
+
+
     }
 
     private void reverseSort(){
@@ -104,15 +111,15 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()){
-                    case R.id.ic_friends:
-                        intent = new Intent(MoodHistory.this,  FriendsMoods.class);
+                    case R.id.ic_notif:
+                        intent = new Intent(MoodHistory.this, Notifications.class);
                         startActivity(intent);
                         break;
                     case R.id.ic_moods:
                         //already in moods
                         break;
-                    case R.id.ic_notif:
-                        intent = new Intent(MoodHistory.this, Notifications.class);
+                    case R.id.ic_friends:
+                        intent = new Intent(MoodHistory.this,  FriendsMoods.class);
                         startActivity(intent);
                         break;
                     case R.id.ic_profile:
