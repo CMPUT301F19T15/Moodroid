@@ -47,6 +47,9 @@ import javax.inject.Singleton;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
+import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.ui.AddFriend;
+import ca.ualberta.moodroid.ui.SignUp;
 
 @Singleton
 public class MainActivity extends AppCompatActivity {
@@ -103,17 +106,11 @@ public class MainActivity extends AppCompatActivity {
                         UserModel m = (UserModel) task.getResult();
                         if (m != null) {
                             Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+                            AuthenticationService.getInstance().setUsername(m.getUsername());
+                            Intent i = new Intent(MainActivity.this, AddFriend.class);
+                            startActivity(i);
                         } else {
-                            m = new UserModel();
-                            m.setUsername("someusername123");
-                            users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-                                @Override
-                                public void onSuccess(ModelInterface modelInterface) {
-                                    UserModel m = (UserModel) modelInterface;
-                                    Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
-                                    // user is now created - direct to another activity
-                                }
-                            });
+                            startActivity(new Intent(MainActivity.this, SignUp.class));
                         }
                     }
                 });
