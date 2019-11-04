@@ -1,9 +1,6 @@
 package ca.ualberta.moodroid.ui;
-
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,26 +9,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
-import ca.ualberta.moodroid.service.GeolocationService;
 import ca.ualberta.moodroid.service.MoodEventService;
-import ca.ualberta.moodroid.service.MoodService;
 import ca.ualberta.moodroid.service.ValidationService;
-
 import com.google.android.gms.tasks.OnCompleteListener;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
+/**
+ * This shows the user's profile info, an option to navigate to the
+ * map view, and an option to logout of the app.
+ */
+
 
 public class Profile extends AppCompatActivity {
     MoodEventService moodEvents;
@@ -66,23 +59,23 @@ public class Profile extends AppCompatActivity {
         toolBarTextView = findViewById(R.id.toolbar_text_center);
         toolBarText = "Profile";
 
-        //Bottom Navigation Bar Listener
+        //call to bottom navigation bar listener
         bottomNavigationView();
 
-        //set the top nav bar to the correct text and icon once top bar is fixed
+        //initialize the top navigation bar with the correct text and icons
         toolBarTextView.setText(toolBarText);
         toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
         toolBarButtonLeft.setVisibility(View.INVISIBLE);
-
-
         myUserName = AuthenticationService.getInstance().getUsername();
         userNameView.setText(myUserName);
 
-        //log out button listener
+        /**
+         * When the user clicks the logout button, this finishes all open activities,
+         * logs the user out and goes back to the initial login screen.
+         */
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /////TO DO: add logout code
                 AuthUI.getInstance()
                         .signOut(Profile.this)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -97,7 +90,9 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        //map button listener
+        /**
+         * When the user clicks the map icon, this will start the MoodMap activity.
+         */
         toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,7 +103,10 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * This sets up the bottom navigation bar functionality and sends the user to
+     * the requested activity once the corresponding icon is clicked.
+     */
     private void bottomNavigationView() {
         //set up bottom navigation bar...go to corresponding activity
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
