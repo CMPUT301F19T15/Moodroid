@@ -80,7 +80,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"
             android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new"
+            android:fontFamily="@font/courier_new_bold"
             android:gravity="center"
             android:text="Date and Time"
             android:textSize="24sp" />
@@ -112,7 +112,7 @@
             android:layout_marginEnd="47dp"
             android:layout_marginRight="45dp"
             android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new"
+            android:fontFamily="@font/courier_new_bold"
             android:gravity="center"
             android:text="Reason"
             android:textSize="24dp" />
@@ -143,12 +143,11 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
             android:layout_marginTop="270dp"
             android:layout_marginEnd="45dp"
             android:layout_marginRight="45dp"
             android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new"
+            android:fontFamily="@font/courier_new_bold"
             android:gravity="center"
             android:text="Location"
             android:textSize="24dp" />
@@ -183,7 +182,7 @@
             android:layout_marginEnd="42dp"
             android:layout_marginRight="42dp"
             android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new"
+            android:fontFamily="@font/courier_new_bold"
             android:gravity="center"
             android:text="Social Situation"
             android:textSize="24dp" />
@@ -217,7 +216,7 @@
             android:layout_marginEnd="122dp"
             android:layout_marginRight="122dp"
             android:background="@drawable/add_moon_details"
-            android:fontFamily="@font/courier_new"
+            android:fontFamily="@font/courier_new_bold"
             android:gravity="center"
             android:text="Confirm"
             android:textSize="30dp" />
