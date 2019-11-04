@@ -83,14 +83,17 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 /////TO DO: add logout code
-//??                AuthUI.getInstance()
-//                        .signOut(this)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                //...
-//                            }
-//                        });
+                AuthUI.getInstance()
+                        .signOut(Profile.this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                //finish all open activities & go to Sign In Screen (MainActivity)
+                               finish();
+                                Intent intent = new Intent(Profile.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        });
             }
         });
 
