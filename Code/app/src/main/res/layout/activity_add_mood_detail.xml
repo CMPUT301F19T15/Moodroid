@@ -74,56 +74,48 @@
 
         <Button
             android:id="@+id/add_date_time_button"
-            android:layout_width="344dp"
-            android:layout_height="wrap_content"
+            android:layout_width="307dp"
+            android:layout_height="29dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="21dp"
-            android:layout_marginEnd="29dp"
-            android:layout_marginRight="29dp"
-            android:background="@drawable/add_moon_details"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/add_mood_details_field_titles"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="Date and Time"
-            android:textSize="30dp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/date_time"
             android:layout_width="341dp"
             android:layout_height="67dp"
+
+
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="87dp"
-            android:layout_marginEnd="27dp"
-            android:layout_marginRight="27dp"
+            android:layout_marginTop="55dp"
             android:background="@drawable/add_moon_details"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="01/01/19\n06:11"
-
-
             android:textSize="30dp" />
 
         <Button
             android:id="@+id/add_reason_button"
-            android:layout_width="338dp"
-            android:layout_height="wrap_content"
+            android:layout_width="307dp"
+            android:layout_height="29dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="172dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/add_moon_details"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="150dp"
+            android:layout_marginEnd="47dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/add_mood_details_field_titles"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="Reason"
-            android:textSize="30dp" />
+            android:textSize="24dp" />
 
         <TextView
             android:id="@+id/reason"
@@ -132,10 +124,11 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="233dp"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="175dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="45dp"
             android:background="@drawable/add_moon_details"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
@@ -144,20 +137,21 @@
 
         <Button
             android:id="@+id/add_location_button"
-            android:layout_width="344dp"
-            android:layout_height="wrap_content"
+            android:layout_width="307dp"
+            android:layout_height="29dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="310dp"
-            android:layout_marginEnd="27dp"
-            android:layout_marginRight="27dp"
-            android:background="@drawable/add_moon_details"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="270dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/add_mood_details_field_titles"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="Location"
-            android:textSize="30dp" />
+            android:textSize="24dp" />
 
         <TextView
             android:id="@+id/locations"
@@ -166,10 +160,11 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="371dp"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="false"
+            android:layout_marginTop="295dp"
             android:layout_marginEnd="29dp"
-            android:layout_marginRight="29dp"
+            android:layout_marginRight="45dp"
             android:background="@drawable/add_moon_details"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
@@ -178,20 +173,20 @@
 
         <Button
             android:id="@+id/add_social"
-            android:layout_width="344dp"
-            android:layout_height="wrap_content"
+            android:layout_width="307dp"
+            android:layout_height="29dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="456dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:background="@drawable/add_moon_details"
+            android:layout_marginTop="384dp"
+            android:layout_marginEnd="42dp"
+            android:layout_marginRight="42dp"
+            android:background="@drawable/add_mood_details_field_titles"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
             android:text="Social Situation"
-            android:textSize="30dp" />
+            android:textSize="24dp" />
 
         <TextView
             android:id="@+id/location"
@@ -201,7 +196,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="515dp"
+            android:layout_marginTop="410dp"
             android:layout_marginEnd="23dp"
             android:layout_marginRight="23dp"
             android:background="@drawable/add_moon_details"
@@ -218,9 +213,9 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="595dp"
-            android:layout_marginEnd="119dp"
-            android:layout_marginRight="119dp"
+            android:layout_marginTop="547dp"
+            android:layout_marginEnd="122dp"
+            android:layout_marginRight="122dp"
             android:background="@drawable/add_moon_details"
             android:fontFamily="@font/courier_new"
             android:gravity="center"
