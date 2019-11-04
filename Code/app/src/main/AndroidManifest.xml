@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key"/>
-        <activity android:name=".ui.Notifications"></activity>
+        <activity android:name=".ui.Notifications" />
         <activity android:name=".ui.MoodMap" />
         <activity android:name=".ui.MoodHistory" />
         <activity android:name=".ui.SignUp" />

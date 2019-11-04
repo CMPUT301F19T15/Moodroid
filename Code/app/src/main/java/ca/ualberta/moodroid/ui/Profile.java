@@ -26,17 +26,18 @@ import ca.ualberta.moodroid.service.GeolocationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
 import ca.ualberta.moodroid.service.ValidationService;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-    public class Profile extends AppCompatActivity{
+public class Profile extends AppCompatActivity {
     MoodEventService moodEvents;
     ValidationService validation;
 
-    private static final int ACTIVITY_NUM=3;
+    private static final int ACTIVITY_NUM = 3;
     private Intent intent;
 
     String myUserName;
@@ -46,11 +47,11 @@ import com.google.android.gms.tasks.Task;
     ImageButton toolBarButtonRight;
     TextView toolBarTextView;
     String toolBarText;
-   // public Profile(MoodEventService moodEventService, ValidationService validationService) {
-   //     this.moodEvents = moodEventService;
+    // public Profile(MoodEventService moodEventService, ValidationService validationService) {
+    //     this.moodEvents = moodEventService;
 
-   //     this.validation = validationService;
-        //     }
+    //     this.validation = validationService;
+    //     }
 
 
     @Override
@@ -74,10 +75,7 @@ import com.google.android.gms.tasks.Task;
         toolBarButtonLeft.setVisibility(View.INVISIBLE);
 
 
-        //display own username
-        //////////////TO DO: get user name from firestore
-        //myUserName = AuthenticationService.getInstance().getUsername();
-        myUserName = "MyUserName";
+        myUserName = AuthenticationService.getInstance().getUsername();
         userNameView.setText(myUserName);
 
         //log out button listener
@@ -108,41 +106,39 @@ import com.google.android.gms.tasks.Task;
     }
 
 
-        private void bottomNavigationView(){
-            //set up bottom navigation bar...go to corresponding activity
-            BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
-            Menu menu = bottomNavigationViewEx.getMenu();
-            MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-            menuItem.setChecked(true);
-            bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch(menuItem.getItemId()){
-                        case R.id.ic_friends:
-                            intent = new Intent(Profile.this,  FriendsMoods.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.ic_moods:
-                            intent = new Intent(Profile.this, MoodHistory.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.ic_notif:
-                            intent = new Intent(Profile.this, Notifications.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.ic_profile:
-                           //already in profile activity
-                            break;
-                    }
-                    return false;
+    private void bottomNavigationView() {
+        //set up bottom navigation bar...go to corresponding activity
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
+        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.ic_friends:
+                        intent = new Intent(Profile.this, FriendsMoods.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.ic_moods:
+                        intent = new Intent(Profile.this, MoodHistory.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.ic_notif:
+                        intent = new Intent(Profile.this, Notifications.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.ic_profile:
+                        //already in profile activity
+                        break;
                 }
-            });
-        }
-
-
-
-
+                return false;
+            }
+        });
     }
+
+
+}
 
 
 

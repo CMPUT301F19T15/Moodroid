@@ -3,11 +3,13 @@ package ca.ualberta.moodroid;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.MenuItem;
+
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,6 +63,9 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.ui.Profile;
+import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.ui.AddFriend;
+import ca.ualberta.moodroid.ui.SignUp;
 
 @Singleton
 public class MainActivity extends AppCompatActivity {
@@ -90,38 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         bottomNavigationView();
-     //   FirebaseFirestore db = FirebaseFirestore.getInstance();
-//=======
-//    private UserRepository users;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        this.users = new UserRepository();
-//
-//
-//        // Choose authentication providers
-//        List<AuthUI.IdpConfig> providers = Arrays.asList(
-//                new AuthUI.IdpConfig.EmailBuilder().build(),
-//                new AuthUI.IdpConfig.PhoneBuilder().build(),
-//                new AuthUI.IdpConfig.GoogleBuilder().build());
-//        // Create and launch sign-in intent
-//        startActivityForResult(
-//                AuthUI.getInstance()
-//                        .createSignInIntentBuilder()
-//                        .setAvailableProviders(providers)
-//                        .build(),
-//                123);
-//
-//        // sign out stuff
-//        AuthUI.getInstance()
-//                .signOut(this)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        // ...
-//                    }
-//                });
-//
 
 
         this.users = new UserRepository();
@@ -150,58 +123,48 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
-//
-//>>>>>>> master
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == 123) {
-//            IdpResponse response = IdpResponse.fromResultIntent(data);
-//
-//            if (resultCode == RESULT_OK) {
-//                final UserRepository users = this.users;
-//                // Successfully signed in
-//                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                Log.d("AUTH", "Signin Successful" + user.getDisplayName());
-//                users.find(user.getUid()).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<ModelInterface> task) {
-//                        UserModel m = (UserModel) task.getResult();
-//                        if (m != null) {
-//                            Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
-//                        } else {
-//                            m = new UserModel();
-//                            m.setUsername("someusername123");
-//                            users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-//                                @Override
-//                                public void onSuccess(ModelInterface modelInterface) {
-//                                    UserModel m = (UserModel) modelInterface;
-//                                    Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
-//                                    // user is now created - direct to another activity
-//                                }
-//                            });
-//                        }
-//                    }
-//                });
-//            } else {
-//                Log.d("AUTH", "Signin failed");
-//            }
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 123) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                final UserRepository users = this.users;
+                // Successfully signed in
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Log.d("AUTH", "Signin Successful" + user.getDisplayName());
+                users.find(user.getUid()).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ModelInterface> task) {
+                        UserModel m = (UserModel) task.getResult();
+                        if (m != null) {
+                            AuthenticationService.getInstance().setUsername(m.getUsername());
+                            Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+                        } else {
+                            startActivity(new Intent(MainActivity.this, SignUp.class));
+                        }
+                    }
+                });
+            } else {
+                Log.d("AUTH", "Signin failed");
+            }
+        }
+    }
     // Bottom Navigation view for each activity
 
 
-    private void bottomNavigationView(){
+    private void bottomNavigationView() {
 
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
-     //   BottomNavView.setupBottomNavView(bottomNavigationViewEx);
+        //   BottomNavView.setupBottomNavView(bottomNavigationViewEx);
 
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch(menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.ic_notif:
                         intent = new Intent(MainActivity.this, Notifications.class);
                         startActivity(intent);
@@ -211,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.ic_friends:
-                        intent = new Intent(MainActivity.this,  FriendsMoods.class);
+                        intent = new Intent(MainActivity.this, FriendsMoods.class);
                         startActivity(intent);
                         break;
                     case R.id.ic_profile:
@@ -219,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                 }
-            return false;
+                return false;
             }
         });
     }
