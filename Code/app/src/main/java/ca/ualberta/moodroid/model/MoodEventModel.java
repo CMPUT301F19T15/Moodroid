@@ -34,9 +34,7 @@ public class MoodEventModel extends BaseModel {
         this.datetime = datetime;
     }
 
-    public String getMoodName() {
-        return moodName;
-    }
+    public String getMoodName() { return moodName; }
 
     public void setMoodName(String moodName) {
         this.moodName = moodName;

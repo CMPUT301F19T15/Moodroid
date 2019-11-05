@@ -46,7 +46,7 @@ public class MyClusterManagerRenderer extends DefaultClusterRenderer<ClusterMark
 
         imageView.setImageResource(item.getEmojiPicture());
         Bitmap icon = iconGenerator.makeIcon();
-        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon)).title(item.getTitle());
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.mad));
 
     }
 

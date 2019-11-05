@@ -28,6 +28,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -49,7 +50,7 @@ import ca.ualberta.moodroid.service.GeolocationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.util.MyClusterManagerRenderer;
 
-public class MoodMap extends AppCompatActivity implements OnMapReadyCallback {
+public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
     public MoodMap() {
 
     }
@@ -174,6 +175,7 @@ public class MoodMap extends AppCompatActivity implements OnMapReadyCallback {
         }
 
         addMapMarkers();
+        setCameraView();
 
         /**
         mClusterManager = new ClusterManager<>(this, mMap);
@@ -203,8 +205,6 @@ public class MoodMap extends AppCompatActivity implements OnMapReadyCallback {
         mClusterMarkers.add(newClustrMarker);
 
         mClusterManager.cluster();**/
-
-        //addMapMarkers();
     }
 
     private void addMapMarkers(){
@@ -212,9 +212,11 @@ public class MoodMap extends AppCompatActivity implements OnMapReadyCallback {
         LatLng edmonton = new LatLng(53.631611,-113.323975);
         mEdmonton = mMap.addMarker(new MarkerOptions()
                 .position(edmonton)
-                .title("Sydney")
-                .snippet("Population: 4,627,300")
+                .title("Bryce")
+                .snippet("Angry")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.mad)));
+
+
 
         /**
         // Add a marker in Edmonton and move the camera
@@ -263,17 +265,13 @@ public class MoodMap extends AppCompatActivity implements OnMapReadyCallback {
 
     private void setCameraView(){
         // Set a boundary to start
-        double bottomBoundary = 53.523749 - .1;
-        double leftBoundary = -113.526234 - .1;
-        double topBoundary = 53.523749 + .1;
-        double rightBoundary = -113.526234 + .1;
 
-        mMapBoundary = new LatLngBounds(
-                new LatLng(bottomBoundary, leftBoundary),
-                new LatLng(topBoundary, rightBoundary)
-        );
+        CameraUpdate center=
+                CameraUpdateFactory.newLatLng(new LatLng(53.525687, -113.125607));
+        CameraUpdate zoom=CameraUpdateFactory.zoomTo(7);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 0));
+        mMap.moveCamera(center);
+        mMap.animateCamera(zoom);
     }
 
 }
