@@ -22,7 +22,7 @@ public class MoodEventModel extends BaseModel {
     private String username;
 
     public Date getDatetime() {
-        return datetime;
+        return new Date();
     }
 
     public void setDatetime(Date datetime) {

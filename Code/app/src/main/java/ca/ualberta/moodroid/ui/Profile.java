@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.service.AuthenticationService;
@@ -20,50 +22,36 @@ import ca.ualberta.moodroid.service.ValidationService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+public class Profile extends BaseUIActivity {
 /**
  * This shows the user's profile info, an option to navigate to the
  * map view, and an option to logout of the app.
  */
 
-
-public class Profile extends AppCompatActivity {
     MoodEventService moodEvents;
     ValidationService validation;
 
-    private static final int ACTIVITY_NUM = 3;
+    private int ACTIVITY_NUM = 3;
     private Intent intent;
 
     String myUserName;
-    TextView userNameView;
-    Button logOutButton;
-    ImageButton toolBarButtonLeft;
-    ImageButton toolBarButtonRight;
-    TextView toolBarTextView;
-    String toolBarText;
-    // public Profile(MoodEventService moodEventService, ValidationService validationService) {
-    //     this.moodEvents = moodEventService;
 
-    //     this.validation = validationService;
-    //     }
+    @BindView(R.id.profile_user_name_text_view)
+    TextView userNameView;
+    @BindView(R.id.logout_button)
+    Button logOutButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        userNameView = findViewById(R.id.profile_user_name_text_view);
-        logOutButton = findViewById(R.id.logout_button);
-        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
-        toolBarButtonRight = findViewById(R.id.toolbar_button_right);
-        toolBarTextView = findViewById(R.id.toolbar_text_center);
-        toolBarText = "Profile";
+        ButterKnife.bind(this);
 
         //call to bottom navigation bar listener
         bottomNavigationView();
+        setTitle("Profile");
 
-        //initialize the top navigation bar with the correct text and icons
-        toolBarTextView.setText(toolBarText);
         toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
         toolBarButtonLeft.setVisibility(View.INVISIBLE);
         myUserName = AuthenticationService.getInstance().getUsername();
@@ -102,42 +90,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-
-    /**
-     * This sets up the bottom navigation bar functionality and sends the user to
-     * the requested activity once the corresponding icon is clicked.
-     */
-    private void bottomNavigationView() {
-        //set up bottom navigation bar...go to corresponding activity
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
-        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_friends:
-                        intent = new Intent(Profile.this, FriendsMoods.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_moods:
-                        intent = new Intent(Profile.this, MoodHistory.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_notif:
-                        intent = new Intent(Profile.this, Notifications.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_profile:
-                        //already in profile activity
-                        break;
-                }
-                return false;
-            }
-        });
-    }
-
 
 }
 

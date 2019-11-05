@@ -6,17 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.auth.User;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
@@ -24,8 +24,6 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
-import ca.ualberta.moodroid.service.UserService;
-import ca.ualberta.moodroid.service.ValidationService;
 
 public class SignUp extends AppCompatActivity {
 
@@ -33,7 +31,7 @@ public class SignUp extends AppCompatActivity {
     UserRepository users;
     FirebaseUser user;
 
-    @BindView(R.id.usernameField)
+    @BindView(R.id.signup_username)
     EditText usernameField;
 
 
@@ -41,12 +39,15 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        ButterKnife.bind(this);
         users = new UserRepository();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+
     }
 
     @OnClick(R.id.register_btn)
-    protected void registerUsername() {
+    public void registerUsername(View v) {
         final String username = usernameField.getText().toString();
         users.where("username", username).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
@@ -62,7 +63,7 @@ public class SignUp extends AppCompatActivity {
                             UserModel m = (UserModel) modelInterface;
                             Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
                             AuthenticationService.getInstance().setUsername(username);
-                            startActivity(new Intent(SignUp.this, MainActivity.class));
+                            startActivity(new Intent(SignUp.this, MoodHistory.class));
                         }
 
                     });

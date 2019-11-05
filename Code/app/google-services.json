@@ -8,41 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:958098346462:android:48bdc470948a702b968d4f",
-        "android_client_info": {
-          "package_name": "ca.ualbera.moodroid"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "958098346462-knlig2403liqv9h1gr187bnvm029rtn8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDZiQeejcjVVzusGJiXCvxTRTt_9ay1oqc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "958098346462-knlig2403liqv9h1gr187bnvm029rtn8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:958098346462:android:03eaec823d1f7525968d4f",
         "android_client_info": {
           "package_name": "ca.ualberta.moodroid"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "958098346462-drotovei8upqij4qk46stbuf89pec6sr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.ualberta.moodroid",
+            "certificate_hash": "54b928a0597c5dcc08ffb33761caea9c3fce09e5"
+          }
+        },
         {
           "client_id": "958098346462-knlig2403liqv9h1gr187bnvm029rtn8.apps.googleusercontent.com",
           "client_type": 3

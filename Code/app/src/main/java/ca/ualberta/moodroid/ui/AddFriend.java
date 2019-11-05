@@ -43,11 +43,11 @@ public class AddFriend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        ButterKnife.bind(this);
         this.users = new UserRepository();
         this.requests = new FollowRequestRepository();
         this.me = AuthenticationService.getInstance().getUsername();
 
-        ButterKnife.bind(this);
     }
 
     @OnClick(R.id.request_follow_btn)
