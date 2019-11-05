@@ -8,16 +8,26 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.Calendar;
 import java.util.Date;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.model.MoodModel;
+import ca.ualberta.moodroid.repository.MoodEventRepository;
+import ca.ualberta.moodroid.repository.MoodRepository;
 
 public class add_mood_detail extends AppCompatActivity {
 
@@ -25,20 +35,47 @@ public class add_mood_detail extends AppCompatActivity {
     private TextView mood_title;
     private RelativeLayout banner;
 
+    // creating the mood repo
+    final MoodEventRepository mood = new MoodEventRepository();
+
     MoodEventModel moodEvent = new MoodEventModel();
+
+
 
 
 
     private TextView dateInput;
     private DatePickerDialog.OnDateSetListener dateListener;
 
+    private Button confirm_button;
 
+
+    @OnClick(R.id.confirm_button)
+    public void confirmClick(){
+
+        mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+            @Override
+            public void onSuccess(ModelInterface modelInterface) {
+                final MoodEventModel m = (MoodEventModel) modelInterface;
+                Log.d("RESULT/CREATE", m.getInternalId());
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_mood_detail);
+        ButterKnife.bind(this);
 
+
+        confirm_button = findViewById(R.id.confirm_button);
+
+
+
+
+        // initializing the views that will be set from the last activity
         mood_img = findViewById(R.id.mood_img);
         mood_title = findViewById(R.id.mood_text);
         banner = findViewById(R.id.banner);
@@ -62,7 +99,15 @@ public class add_mood_detail extends AppCompatActivity {
         // Now, after initializing the activity with the right appearance, grabbing the date from
         // the user with a date picker and displaying it while adding it to a mood event
 
-        
+
+
+
+
+
+        moodEvent.setMoodName(mood_name);
+        // TODO: TAYLOR add username to mood event.
+
+
         dateInput = findViewById(R.id.date_time);
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +126,6 @@ public class add_mood_detail extends AppCompatActivity {
                 moodEvent.setDatetime(theDate);
                 String date = year + "-" + month + "-" + day;
                 dateInput.setText(date);
-
-
-
             }
         });
         // after the date is selected, close the window and display the selected date, while also
@@ -91,7 +133,7 @@ public class add_mood_detail extends AppCompatActivity {
         dateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month += 1;
+              //  month += 1;
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, day);
                 Date theDate = cal.getTime();
@@ -107,23 +149,7 @@ public class add_mood_detail extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        confirmClick();
 
 
 
