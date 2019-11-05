@@ -1,6 +1,4 @@
-package ca.ualberta.moodroid;
-
-import androidx.appcompat.app.AppCompatActivity;
+package ca.ualberta.moodroid.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -16,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Calendar;
@@ -23,13 +23,12 @@ import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.MoodRepository;
 
-public class add_mood_detail extends AppCompatActivity {
+public class AddMoodDetail extends AppCompatActivity {
 
     private ImageView mood_img;
     private TextView mood_title;
@@ -41,9 +40,6 @@ public class add_mood_detail extends AppCompatActivity {
     MoodEventModel moodEvent = new MoodEventModel();
 
 
-
-
-
     private TextView dateInput;
     private DatePickerDialog.OnDateSetListener dateListener;
 
@@ -51,7 +47,7 @@ public class add_mood_detail extends AppCompatActivity {
 
 
     @OnClick(R.id.confirm_button)
-    public void confirmClick(){
+    public void confirmClick() {
 
         mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
@@ -71,8 +67,6 @@ public class add_mood_detail extends AppCompatActivity {
 
 
         confirm_button = findViewById(R.id.confirm_button);
-
-
 
 
         // initializing the views that will be set from the last activity
@@ -100,10 +94,6 @@ public class add_mood_detail extends AppCompatActivity {
         // the user with a date picker and displaying it while adding it to a mood event
 
 
-
-
-
-
         moodEvent.setMoodName(mood_name);
         // TODO: TAYLOR add username to mood event.
 
@@ -119,7 +109,7 @@ public class add_mood_detail extends AppCompatActivity {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 // the date picker window is created below
-                DatePickerDialog dialog = new DatePickerDialog(add_mood_detail.this, android.R.style.Theme_Holo_Dialog_MinWidth, dateListener, year, month, day);
+                DatePickerDialog dialog = new DatePickerDialog(AddMoodDetail.this, android.R.style.Theme_Holo_Dialog_MinWidth, dateListener, year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
                 Date theDate = cal.getTime();
@@ -133,7 +123,7 @@ public class add_mood_detail extends AppCompatActivity {
         dateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-              //  month += 1;
+                //  month += 1;
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, day);
                 Date theDate = cal.getTime();
@@ -142,17 +132,14 @@ public class add_mood_detail extends AppCompatActivity {
                 dateInput.setText(date);
 
 
-
             }
         };
-
-
 
 
         confirmClick();
 
 
-
-
     }
+
+
 }

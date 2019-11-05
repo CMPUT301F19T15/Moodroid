@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -61,6 +62,16 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         bottomNavigationView();
         setTitle("Mood History");
 
+
+        toolBarButtonLeft.setImageResource(R.drawable.ic_addmood);
+        toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to MoodMap Activity
+                intent = new Intent(MoodHistory.this, AddMood.class);
+                startActivity(intent);
+            }
+        });
 
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();

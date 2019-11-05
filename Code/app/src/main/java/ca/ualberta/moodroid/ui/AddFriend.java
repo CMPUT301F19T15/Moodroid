@@ -95,7 +95,7 @@ public class AddFriend extends AppCompatActivity {
                                 FollowRequestModel request = new FollowRequestModel();
                                 request.setRequesteeUsername(name);
                                 request.setRequesterUsername(me);
-                                request.setState("requested");
+                                request.setState("undecided");
                                 requests.create(request).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
                                     @Override
                                     public void onComplete(@NonNull Task<ModelInterface> task) {
