@@ -9,7 +9,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/colorSecondary"
             android:weightSum="4">
 
@@ -20,7 +20,7 @@
                 android:layout_weight="1"
                 android:background="@color/colorSecondary"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_menu_camera">
+                >
             </ImageButton>
 
             <TextView
@@ -33,7 +33,6 @@
                 android:layout_gravity="center"
                 android:textColor="@color/colorWriting"
                 android:gravity="center"
-                android:text="Profile"
                 android:textStyle="bold">
             </TextView>
 
@@ -44,7 +43,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@color/colorSecondary"
-                android:src="@drawable/ic_menu_map_foreground"></ImageButton>
+                ></ImageButton>
 
         </LinearLayout>
 

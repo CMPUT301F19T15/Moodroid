@@ -8,6 +8,9 @@ import android.icu.util.Freezable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.auth.User;
@@ -24,6 +27,11 @@ public class FriendsMoods extends AppCompatActivity {
     private static final int ACTIVITY_NUM=2;
     Intent intent;
 
+    ImageButton toolBarButtonLeft;
+    ImageButton toolBarButtonRight;
+    TextView toolBarTextView;
+    String toolBarText;
+
 //    public FriendsMoods(UserService userService, MoodEventService moodEventService) {
  //       this.users = userService;
     //      this.moodEvents = moodEventService;
@@ -33,7 +41,33 @@ public class FriendsMoods extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_moods);
+
+        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
+        toolBarButtonRight = findViewById(R.id.toolbar_button_right);
+        toolBarTextView = findViewById(R.id.toolbar_text_center);
+        toolBarText = "Friends Mood";
+
+        toolBarTextView.setText(toolBarText);
+        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
+        toolBarButtonLeft.setImageResource(R.drawable.ic_person_add_black_24dp);
+        toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to MoodMap Activity
+                intent = new Intent(FriendsMoods.this, AddFriend.class);
+                startActivity(intent);
+            }
+        });
+        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to MoodMap Activity
+                intent = new Intent(FriendsMoods.this, MoodMap.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
 
     private void bottomNavigationView(){
