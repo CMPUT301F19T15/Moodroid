@@ -26,6 +26,7 @@ import java.util.Comparator;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import ca.ualberta.moodroid.R;
 //import ca.ualberta.moodroid.model.ModelInterface;
 //import ca.ualberta.moodroid.model.MoodEventModel;
@@ -38,19 +39,15 @@ import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 
 
-public class MoodHistory extends AppCompatActivity implements MoodListAdapter.OnListListener {
+public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
 
     MoodEventService moodEvents;
-    private static final int ACTIVITY_NUM = 1;
+    private int ACTIVITY_NUM = 1;
     private Intent intent;
     private RecyclerView moodListRecyclerView;
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
     ArrayList<MoodEventModel> moodList;
-    ImageButton toolBarButtonLeft;
-    ImageButton toolBarButtonRight;
-    TextView toolBarTextView;
-    String toolBarText;
 
 
     @Override
@@ -58,18 +55,11 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood_history);
         moodEvents = new MoodEventService();
+        ButterKnife.bind(this);
 
         //Bottom Navigation Bar Listener
         bottomNavigationView();
-
-        //set top toolbar text & buttons
-        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);                  //////you can just change the images for the buttons here....
-        toolBarButtonRight = findViewById(R.id.toolbar_button_right);                /////and when you do the mood map you can do the same thing, just change it to different images
-//        toolBarTextView = findViewById(R.id.toolbar_text_center);                    //// if you don't a button to show, you can call toolBarButtonLeft.setVisibility(View.INVISIBLE);
-//        toolBarText = "Mood History";                                                ////
-//        toolBarTextView.setText(toolBarText);
-
-        //TO DO: add on click listeners for toolbar
+        setTitle("Mood History");
 
 
         //Recycler List View with all mood events of the user
@@ -102,36 +92,6 @@ public class MoodHistory extends AppCompatActivity implements MoodListAdapter.On
         moodListAdapter = new MoodListAdapter(moodList, moodEvents, MoodHistory.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
-    }
-
-    private void bottomNavigationView() {
-        //set up bottom navigation bar...go to corresponding activity
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
-        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_notif:
-                        intent = new Intent(MoodHistory.this, Notifications.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_moods:
-                        //already in moods
-                        break;
-                    case R.id.ic_friends:
-                        intent = new Intent(MoodHistory.this, FriendsMoods.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_profile:
-                        //don't have profile activity yet
-                        break;
-                }
-                return false;
-            }
-        });
     }
 
     @Override
