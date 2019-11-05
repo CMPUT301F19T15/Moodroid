@@ -13,6 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".add_mood_detail"></activity>
+        <activity
+            android:name=".add_mood"
+            android:exported="true" />
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key"/>
         <activity android:name=".ui.Notifications" />
