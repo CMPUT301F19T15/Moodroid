@@ -13,9 +13,15 @@ import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
-public class UserServiceTests {
+import static org.junit.Assert.assertEquals;
 
-    //init for UsErSeRvIcE
+public class UserServiceTests {
+    /*
+    NOTE THAT NOT ALL TESTS ARE WRITTEN YET SO KEEP THAT IN MIND
+    ALSO REPLACE ALL THOSE SHIT STATEMENTS WITH ASSERTEQUALS
+     */
+
+    //init for UsErSeRvIcE args to construct a UserService
     AuthenticationService auth = AuthenticationService.getInstance();
     UserRepository reeeee = new UserRepository();
     FollowRequestRepository requests = new FollowRequestRepository();
@@ -29,22 +35,20 @@ public class UserServiceTests {
     public void TestPendingFollows1(){
        List<FollowRequestModel> myFollowers =  userService.getAllPendingFollowRequests();
        List<FollowRequestModel> actual = null;
-       assert(myFollowers == actual);
-    }
+       assertEquals(myFollowers, actual);    }
 
     @Test
     public void TestPendingFollows2(){
         List<FollowRequestModel> myFollowers =  userService.getAllPendingFollowRequests();
         List<FollowRequestModel> actual = null;
-        assert(myFollowers == actual);
+        assertEquals(myFollowers, actual);
     }
 
     @Test
     public void TestPendingFollows3(){
         List<FollowRequestModel> myFollowers =  userService.getAllPendingFollowRequests();
         List<FollowRequestModel> actual = null;
-        assert(myFollowers == actual);
-    }
+        assertEquals(myFollowers, actual);    }
 
     //create follow request
     @Test
@@ -54,7 +58,7 @@ public class UserServiceTests {
         FollowRequestModel request = userService.createFollowRequest(usr);
         //expected here compare to request
         FollowRequestModel actual = null;
-        assert(request == actual);
+        assertEquals(request, actual);
     }
     @Test
     public void createFollowRequest2(){
@@ -63,7 +67,7 @@ public class UserServiceTests {
         FollowRequestModel request = userService.createFollowRequest(usr);
         //expected here compare to request
         FollowRequestModel actual = null;
-        assert(request == actual);
+        assertEquals(request, actual);
     }
     @Test
     public void createFollowRequest3(){
@@ -72,7 +76,7 @@ public class UserServiceTests {
         FollowRequestModel request = userService.createFollowRequest(usr);
         //expected here compare to request
         FollowRequestModel actual = null;
-        assert(request == actual);
+        assertEquals(request, actual);
     }
 
     //get user by user name
@@ -80,18 +84,18 @@ public class UserServiceTests {
     public void getUser1(){
         UserModel usr = userService.getUserByUsername("User");
         UserModel actual = null;
-        assert(usr == actual);
+        assertEquals(usr , actual);
     }
     @Test
     public void getUser2(){
         UserModel usr = userService.getUserByUsername("User");
         UserModel actual = null;
-        assert(usr == actual);
+        assertEquals(usr , actual);
     }
     @Test
     public void getUser3(){
         UserModel usr = userService.getUserByUsername("User");
         UserModel actual = null;
-        assert(usr == actual);
+        assertEquals(usr , actual);
     }
 }
