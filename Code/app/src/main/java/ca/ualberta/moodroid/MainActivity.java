@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.users = new UserRepository();
 
-        /*
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -102,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         .setIsSmartLockEnabled(false)
                         .build(),
                 123);
-        */
-        // sign out stuff
+
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
