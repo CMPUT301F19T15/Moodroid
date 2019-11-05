@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LoginTheme" parent="FirebaseUI">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+
+        <item name="android:textColorHint">@android:color/white</item>
+    </style>
+</resources>
