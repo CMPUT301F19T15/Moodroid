@@ -3,10 +3,12 @@ package ca.ualberta.moodroid.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,29 +30,46 @@ import ca.ualberta.moodroid.service.UserService;
 
 public class AddFriend extends AppCompatActivity {
 
-
+    Intent intent;
     UserRepository users;
     FollowRequestRepository requests;
     // TODO: Get my username and wait until it is grabbed
     String me;
+    ImageButton toolBarButtonLeft;
+    TextView toolBarTextView;
+    String toolBarText;
 
     @BindView(R.id.username)
     EditText usernameField;
 
-    @BindView(R.id.status_text)
+    @BindView(R.id.instruction)
     TextView statusField;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        ButterKnife.bind(this);
         this.users = new UserRepository();
         this.requests = new FollowRequestRepository();
         this.me = AuthenticationService.getInstance().getUsername();
 
-        ButterKnife.bind(this);
+        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
+        toolBarTextView = findViewById(R.id.toolbar_text_center);
+        toolBarText = "Add Friend";
+
+        toolBarTextView.setText(toolBarText);
+        toolBarButtonLeft.setImageResource(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to MoodMap Activity
+                intent = new Intent(AddFriend.this, FriendsMoods.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    @OnClick(R.id.request_follow_btn)
+    @OnClick(R.id.send)
     public void attemptUserFollow(View view) {
         statusField.setText("");
         Log.d("ADDUSER/OUT", "I am: " + me);
@@ -76,7 +95,7 @@ public class AddFriend extends AppCompatActivity {
                                 FollowRequestModel request = new FollowRequestModel();
                                 request.setRequesteeUsername(name);
                                 request.setRequesterUsername(me);
-                                request.setState("requested");
+                                request.setState("undecided");
                                 requests.create(request).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
                                     @Override
                                     public void onComplete(@NonNull Task<ModelInterface> task) {

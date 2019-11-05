@@ -84,36 +84,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //set top toolbar text & buttons
-        toolBarButtonLeft = findViewById(R.id.toolbar_button_left);      //// here you set the images for the buttons
-        toolBarButtonRight = findViewById(R.id.toolbar_button_right);    ///
-        toolBarTextView = findViewById(R.id.toolbar_text_center);       ////
-        toolBarText = "Main Activity";                                  ////  -------change this text
-
-        toolBarTextView.setText(toolBarText);                           /// here you set the text for this activity
-        ////still need to add on click listeners for toolbar
-
-
-        bottomNavigationView();
-
 
         this.users = new UserRepository();
-
 
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
+
         // Create and launch sign-in intent
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setIsSmartLockEnabled(false)
                         .build(),
                 123);
 
-        // sign out stuff
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -143,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         if (m != null) {
                             AuthenticationService.getInstance().setUsername(m.getUsername());
                             Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+                            startActivity(new Intent(MainActivity.this, MoodHistory.class));
                         } else {
                             startActivity(new Intent(MainActivity.this, SignUp.class));
                         }
@@ -153,38 +142,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    // Bottom Navigation view for each activity
-
-
-    private void bottomNavigationView() {
-
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
-        //   BottomNavView.setupBottomNavView(bottomNavigationViewEx);
-
-        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_notif:
-                        intent = new Intent(MainActivity.this, Notifications.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_moods:
-                        intent = new Intent(MainActivity.this, MoodHistory.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_friends:
-                        intent = new Intent(MainActivity.this, FriendsMoods.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_profile:
-                        intent = new Intent(MainActivity.this, Profile.class);
-                        startActivity(intent);
-                        break;
-                }
-                return false;
-            }
-        });
-    }
-
 }

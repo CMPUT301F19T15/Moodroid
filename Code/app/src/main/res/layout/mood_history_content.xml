@@ -1,142 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="4dp">
 
     <ImageView
+        android:id="@+id/list_item_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="2dp"
-        android:id="@+id/list_item_background"
         android:background="@color/colorPrimary"
-        android:src="@drawable/mood_list_custom_shape">
-    </ImageView>
+        android:padding="2dp"
+        android:src="@drawable/mood_list_custom_shape"></ImageView>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="2dp"
-        android:layout_margin="4dp">
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id="@+id/mood_list_view_image"
-            android:padding="2dp">
-        </ImageView>
+        android:layout_height="87dp"
+        android:layout_margin="4dp"
+        android:padding="2dp">
 
         <TextView
+            android:id="@+id/mood_list_view_emoji"
+            android:layout_width="108dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"
+            android:padding="2dp"
+            android:textSize="40sp"></TextView>
+
+        <TextView
+            android:id="@+id/follow_notification_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_margin="5dp"
-            android:layout_centerVertical="true"
-            android:paddingLeft="20dp"
-            android:id="@+id/mood_list_view_moodText"
-            android:layout_toRightOf="@+id/mood_list_view_image"
-            android:textColor="@color/colorWriting"
+            android:layout_alignStart="@+id/mood_list_view_emoji"
+            android:layout_alignLeft="@+id/mood_list_view_emoji"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="84dp"
+            android:layout_marginLeft="84dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             android:fontFamily="monospace"
-            android:text="Angry">
-        </TextView>
+            android:paddingLeft="20dp"
+            android:text="Angry"
+            android:textColor="@color/colorWriting"
+            android:textSize="30sp"></TextView>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingRight="20dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true">
+            android:orientation="vertical"
+            android:paddingRight="20dp">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorWriting"
-            android:id="@+id/mood_list_view_dateText"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@+id/mood_list_view_moodText"
-            android:layout_alignParentTop="true"
-            android:text="02/02/19">
-        </TextView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorWriting"
-            android:id="@+id/mood_list_view_timeText"
-            android:layout_gravity="center"
-            android:text="12:05"
-            android:layout_below="@+id/mood_list_view_dateText"
-            android:layout_alignLeft="@id/mood_list_view_dateText"
-            android:textSize="20sp">
-        </TextView>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/mood_list_view_dateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:layout_toRightOf="@+id/mood_list_view_moodText"
+                android:text="02/02/19"
+                android:textColor="@color/colorWriting"
+                android:textSize="20sp"></TextView>
+
+            <TextView
+                android:id="@+id/mood_list_view_timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mood_list_view_dateText"
+                android:layout_alignLeft="@id/mood_list_view_dateText"
+                android:layout_gravity="center"
+                android:text="12:05"
+                android:textColor="@color/colorWriting"
+                android:textSize="20sp"></TextView>
+        </LinearLayout>
     </RelativeLayout>
-
-
-
-
 
 
 </androidx.cardview.widget.CardView>
 
 
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--&lt;!&ndash;    android:orientation="horizontal"&ndash;&gt;-->
-<!--&lt;!&ndash;    android:layout_width="match_parent"&ndash;&gt;-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:layout_marginTop="@dimen/mood_history_margin_top"-->
-<!--    android:layout_marginLeft="@dimen/mood_history_margin_sides"-->
-<!--    android:layout_marginRight="@dimen/mood_history_margin_sides"-->
-<!--    android:weightSum="6"-->
-<!--    android:background="@drawable/mood_list_custom_shape">-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--&lt;!&ndash;    android:orientation="horizontal"&ndash;&gt;-->
+    <!--&lt;!&ndash;    android:layout_width="match_parent"&ndash;&gt;-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:layout_marginTop="@dimen/mood_history_margin_top"-->
+    <!--    android:layout_marginLeft="@dimen/mood_history_margin_sides"-->
+    <!--    android:layout_marginRight="@dimen/mood_history_margin_sides"-->
+    <!--    android:weightSum="6"-->
+    <!--    android:background="@drawable/mood_list_custom_shape">-->
 
-<!--    <ImageView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:src="@drawable/ic_moods"-->
-<!--        android:layout_margin="2dp"-->
-<!--        android:layout_weight="2.5">-->
-<!--    </ImageView>-->
+    <!--    <ImageView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:src="@drawable/ic_moods"-->
+    <!--        android:layout_margin="2dp"-->
+    <!--        android:layout_weight="2.5">-->
+    <!--    </ImageView>-->
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_weight="1.5"-->
-<!--        android:textSize="35sp"-->
-<!--        android:layout_margin="5dp"-->
-<!--        android:textColor="@color/colorWriting"-->
-<!--        android:text="Angry">-->
-<!--    </TextView>-->
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="1.5"-->
+    <!--        android:textSize="35sp"-->
+    <!--        android:layout_margin="5dp"-->
+    <!--        android:textColor="@color/colorWriting"-->
+    <!--        android:text="Angry">-->
+    <!--    </TextView>-->
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_weight="2"-->
-<!--        android:orientation="vertical">-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/colorWriting"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_weight="1"-->
-<!--            android:textSize="20sp"-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_weight="2"-->
+    <!--        android:orientation="vertical">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textColor="@color/colorWriting"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:textSize="20sp"-->
 
-<!--            android:text="02/02/19">-->
-<!--        </TextView>-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/colorWriting"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_weight="1"-->
-<!--            android:text="12:05"-->
-<!--            android:textSize="20sp">-->
-<!--        </TextView>-->
-<!--    </LinearLayout>-->
+    <!--            android:text="02/02/19">-->
+    <!--        </TextView>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textColor="@color/colorWriting"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:text="12:05"-->
+    <!--            android:textSize="20sp">-->
+    <!--        </TextView>-->
+    <!--    </LinearLayout>-->
 
-<!--</LinearLayout>-->
+    <!--</LinearLayout>-->
 
 
