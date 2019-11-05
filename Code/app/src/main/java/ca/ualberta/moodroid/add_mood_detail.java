@@ -62,10 +62,7 @@ public class add_mood_detail extends AppCompatActivity {
         // Now, after initializing the activity with the right appearance, grabbing the date from
         // the user with a date picker and displaying it while adding it to a mood event
 
-
-
-
-
+        
         dateInput = findViewById(R.id.date_time);
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +79,10 @@ public class add_mood_detail extends AppCompatActivity {
                 dialog.show();
                 Date theDate = cal.getTime();
                 moodEvent.setDatetime(theDate);
-                
+                String date = year + "-" + month + "-" + day;
+                dateInput.setText(date);
+
+
 
             }
         });
@@ -96,10 +96,17 @@ public class add_mood_detail extends AppCompatActivity {
                 cal.set(year, month, day);
                 Date theDate = cal.getTime();
                 moodEvent.setDatetime(theDate);
+                String date = year + "-" + month + "-" + day;
+                dateInput.setText(date);
+
 
 
             }
         };
+
+
+
+
 
 
 
