@@ -99,12 +99,13 @@ public class MainActivity extends AppCompatActivity {
 
         this.users = new UserRepository();
 
-
+        /*
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
+
         // Create and launch sign-in intent
         startActivityForResult(
                 AuthUI.getInstance()
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAvailableProviders(providers)
                         .build(),
                 123);
-
+        */
         // sign out stuff
         AuthUI.getInstance()
                 .signOut(this)
