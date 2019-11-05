@@ -1,9 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AddFriend">
+    tools:context=".ui.Profile"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+        <!-- top toolbar -->
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/app_bar_main"></include>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/instruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="50sp"
+
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:minWidth="220sp"
+            android:padding="10sp"
+            android:text="Send a request to a friend with their username"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="20dp"
+            android:textStyle="bold">
+
+        </TextView>
+
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="302dp"
+            android:layout_height="51dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="239dp"
+            android:layout_marginEnd="54dp"
+            android:layout_marginRight="54dp"
+            android:background="@drawable/profile_user_name_custom_shape"
+            android:hint="Enter Username"
+            android:textSize="30dp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:textColor="@color/cardview_light_background" />
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="182dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/profile_user_name_custom_shape"
+            android:fontFamily="monospace"
+            android:padding="15dp"
+            android:text="Send"
+            android:textSize="25sp">
+
+        </Button>
+
+
+    </RelativeLayout>
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

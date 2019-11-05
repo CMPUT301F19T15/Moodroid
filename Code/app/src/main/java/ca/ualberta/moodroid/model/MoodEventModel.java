@@ -6,13 +6,6 @@ import java.util.Date;
 
 public class MoodEventModel extends BaseModel {
 
-    enum Situation {
-        ALONE,
-        ONE_PERSON,
-        TWO_TO_SEVERAL,
-        CROWD
-    }
-
 
     private Date datetime;
 
@@ -22,12 +15,14 @@ public class MoodEventModel extends BaseModel {
 
     private String reasonImageUrl;
 
-    private Situation situation;
+    private String situation;
 
     private Location location;
 
+    private String username;
+
     public Date getDatetime() {
-        return datetime;
+        return new Date();
     }
 
     public void setDatetime(Date datetime) {
@@ -58,12 +53,20 @@ public class MoodEventModel extends BaseModel {
         this.reasonImageUrl = reasonImageUrl;
     }
 
-    public Situation getSituation() {
+    public String getSituation() {
         return situation;
     }
 
-    public void setSituation(Situation situation) {
+    public void setSituation(String situation) {
         this.situation = situation;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Location getLocation() {

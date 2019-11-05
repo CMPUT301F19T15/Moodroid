@@ -1,33 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentTop="true">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="match_parent"
+            android:background="@color/colorSecondary"
+            android:weightSum="4">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <ImageButton
+                android:id="@+id/toolbar_button_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorSecondary"
+                android:layout_gravity="center"
+                >
+            </ImageButton>
 
-    <include layout="@layout/content_main" />
+            <TextView
+                android:id="@+id/toolbar_text_center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="monospace"
+                android:textSize="25dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorWriting"
+                android:gravity="center"
+                android:textStyle="bold">
+            </TextView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+            <ImageButton
+                android:id="@+id/toolbar_button_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/colorSecondary"
+                ></ImageButton>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</merge>
+
+
+
+
+
+
+<!--<com.google.android.material.appbar.AppBarLayout-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_alignParentTop="true"-->
+<!--android:layout_alignParentBottom="true"-->
+<!--android:background="@color/colorSecondary"-->
+<!--android:layout_height="wrap_content">-->
+
+<!--<com.google.android.material.tabs.TabLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:id="@+id/tabs"/>-->
+<!--</com.google.android.material.appbar.AppBarLayout>-->

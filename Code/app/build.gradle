@@ -18,6 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    // for https://stackoverflow.com/questions/49891730/invoke-customs-are-only-supported-starting-with-android-0-min-api-26
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -34,6 +35,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'com.android.support:multidex:1.0.3' // use latest version
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 
     // Add the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
@@ -55,6 +58,16 @@ dependencies {
 
     implementation 'com.jakewharton:butterknife:10.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+
+    // design library for coordinator layout and toolbar
+    implementation 'com.google.android.material:material:1.0.0-alpha3'
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
+
+    // recycler view & card view
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
+    def cardview_version = "1.0.0"
+    implementation "androidx.cardview:cardview:$cardview_version"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
 
 
