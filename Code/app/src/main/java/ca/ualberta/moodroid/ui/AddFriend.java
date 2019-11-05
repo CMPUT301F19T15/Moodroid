@@ -48,11 +48,11 @@ public class AddFriend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        ButterKnife.bind(this);
         this.users = new UserRepository();
         this.requests = new FollowRequestRepository();
         this.me = AuthenticationService.getInstance().getUsername();
 
-        ButterKnife.bind(this);
         toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
         toolBarTextView = findViewById(R.id.toolbar_text_center);
         toolBarText = "Add Friend";

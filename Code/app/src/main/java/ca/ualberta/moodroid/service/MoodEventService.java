@@ -1,5 +1,11 @@
 package ca.ualberta.moodroid.service;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ca.ualberta.moodroid.model.FollowRequestModel;
+import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.FollowRequestRepository;
@@ -22,18 +29,25 @@ public class MoodEventService {
     private RepositoryInterface requests;
 
     @Inject
-    public MoodEventService(AuthenticationService auth, MoodEventRepository moodEvents, FollowRequestRepository requests) {
-        this.auth = auth;
-        this.events = moodEvents;
-        this.requests = requests;
+    public MoodEventService() {
+        this.auth = AuthenticationService.getInstance();
+        this.events = new MoodEventRepository();
     }
 
-    public List<MoodEventModel> getMyEvents() {
-        // get the user
-        // get all mood events based on the user
-        final List<MoodEventModel> returning = new ArrayList<>();
+    public Task<List<MoodEventModel>> getMyEvents() {
+        return this.events.where("username", this.auth.getUsername()).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
+            @Override
+            public List<MoodEventModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
+                List<MoodEventModel> results = new ArrayList<MoodEventModel>();
+                if (task.isSuccessful()) {
+                    for (ModelInterface m : task.getResult()) {
+                        results.add((MoodEventModel) m);
+                    }
+                }
 
-        return returning;
+                return results;
+            }
+        });
 
     }
 
