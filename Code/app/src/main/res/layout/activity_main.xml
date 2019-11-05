@@ -3,37 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!-- top toolbar -->
         <RelativeLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar">
-            <include layout="@layout/app_bar_main"></include>
-        </RelativeLayout>
+            android:layout_height="wrap_content"></RelativeLayout>
 
         <!-- middle section -->
         <RelativeLayout
+            android:id="@+id/body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/body"
             android:layout_below="@+id/toolbar">
+
             <include layout="@layout/content_main"></include>
         </RelativeLayout>
 
         <!-- navigation bar -->
-        <include layout="@layout/app_bar_bottom"></include>
-
     </RelativeLayout>
-
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

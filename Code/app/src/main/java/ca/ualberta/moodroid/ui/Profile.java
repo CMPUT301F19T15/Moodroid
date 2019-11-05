@@ -64,7 +64,7 @@ public class Profile extends AppCompatActivity {
         toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
         toolBarButtonRight = findViewById(R.id.toolbar_button_right);
         toolBarTextView = findViewById(R.id.toolbar_text_center);
-        toolBarText = "Profile";
+        toolBarText = "Profile \uD83D\uDE00";
 
         //Bottom Navigation Bar Listener
         bottomNavigationView();
