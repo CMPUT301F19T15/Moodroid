@@ -42,6 +42,7 @@ public class AddMoodDetail extends AppCompatActivity {
 
     private TextView dateInput;
     private DatePickerDialog.OnDateSetListener dateListener;
+    private TextView reasonInput;
 
     private Button confirm_button;
 
@@ -58,6 +59,17 @@ public class AddMoodDetail extends AppCompatActivity {
         });
 
     }
+
+//    public void reasonClick() {
+//        reasonInput.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(AddMoodDetail.this, AddMoodReason.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +149,9 @@ public class AddMoodDetail extends AppCompatActivity {
 
 
         confirmClick();
+//        reasonClick();
+
+
 
 
     }
