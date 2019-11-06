@@ -38,6 +38,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     private ArrayList<MoodEventModel> moodList;
     MoodEventService moodEvents;
     private List<MoodModel> moods;
+    private Boolean showUsername;
     static Context context;
 
     private OnListListener mOnListListener;
@@ -72,8 +73,9 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         }
     }
 
-    public MoodListAdapter(ArrayList<MoodEventModel> moodList, List<MoodModel> moods, OnListListener onListListener) {
+    public MoodListAdapter(ArrayList<MoodEventModel> moodList, List<MoodModel> moods, Boolean showUsername, OnListListener onListListener) {
         this.moodList = moodList;
+        this.showUsername = showUsername;
         context = context;
         this.moods = moods;
 
@@ -122,7 +124,13 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         // TODO: don't show until mood is loaded
         MoodEventModel moodObject = moodList.get(position);
         String moodStr = moodObject.getMoodName();
-        holder.moodText.setText(moodStr);
+
+        if (this.showUsername) {
+            holder.moodText.setText("@" + moodObject.getUsername() + "\n" + moodStr);
+
+        } else {
+            holder.moodText.setText(moodStr);
+        }
 
         Log.d("MOODLIST/MOOD", "Mood Name: " + moodStr + " Mood Position: " + position);
         MoodModel mood = new MoodModel();

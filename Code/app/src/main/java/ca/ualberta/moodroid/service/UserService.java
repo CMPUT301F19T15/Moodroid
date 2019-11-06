@@ -54,6 +54,22 @@ public class UserService implements UserInterface {
         });
     }
 
+    public Task<List<FollowRequestModel>> getAllUsersIFollow() {
+        return this.requests.where("requesterUsername", this.auth.getUsername()).where("state", FollowRequestModel.ACCEPT_STATE).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
+            @Override
+            public List<FollowRequestModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
+                List<FollowRequestModel> data = new ArrayList<FollowRequestModel>();
+                if (task.isSuccessful()) {
+                    for (ModelInterface m : task.getResult()) {
+                        data.add((FollowRequestModel) m);
+                    }
+                }
+
+                return data;
+            }
+        });
+    }
+
     public FollowRequestModel createFollowRequest(UserModel user) {
         return new FollowRequestModel();
     }

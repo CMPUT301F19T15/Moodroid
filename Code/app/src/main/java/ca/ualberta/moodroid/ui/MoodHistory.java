@@ -49,9 +49,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     MoodService moods;
     private int ACTIVITY_NUM = 1;
     private Intent intent;
-    private RecyclerView moodListRecyclerView;
-    private RecyclerView.Adapter moodListAdapter;
-    private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
+    protected RecyclerView moodListRecyclerView;
+    protected RecyclerView.Adapter moodListAdapter;
+    protected RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
     ArrayList<MoodEventModel> moodList;
     List<MoodModel> allMoods;
 
@@ -101,7 +101,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         });
     }
 
-    private void reverseSort() {
+    protected void reverseSort() {
         Collections.sort(moodList, new Comparator<MoodEventModel>() {
             @Override
             public int compare(MoodEventModel mood1, MoodEventModel mood2) {
@@ -115,11 +115,11 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         });
     }
 
-    private void updateListView() {
+    protected void updateListView() {
         moodListRecyclerView = findViewById(R.id.mood_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(MoodHistory.this);
-        moodListAdapter = new MoodListAdapter(moodList, allMoods, MoodHistory.this);
+        moodListAdapter = new MoodListAdapter(moodList, allMoods, false, MoodHistory.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
