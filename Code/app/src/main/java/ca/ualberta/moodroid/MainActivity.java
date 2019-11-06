@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.users = new UserRepository();
         Log.d("TIMESTAMP", "" + new Date().getTime());
-
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -100,10 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
-//                        .setIsSmartLockEnabled(false)
+                        .setTheme(R.style.LoginTheme)
                         .build(),
                 123);
-
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
