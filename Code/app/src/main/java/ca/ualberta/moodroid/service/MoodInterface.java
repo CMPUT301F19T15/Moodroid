@@ -1,5 +1,7 @@
 package ca.ualberta.moodroid.service;
 
+import com.google.android.gms.tasks.Task;
+
 import java.util.List;
 
 import ca.ualberta.moodroid.model.MoodModel;
@@ -11,5 +13,5 @@ public interface MoodInterface {
      *
      * @return
      */
-    public List<MoodModel> getAllMoods();
+    public Task<List<MoodModel>> getAllMoods();
 }

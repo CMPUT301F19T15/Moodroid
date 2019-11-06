@@ -151,7 +151,6 @@ abstract class BaseRepository implements RepositoryInterface {
         return this.getQuery().limit(1).get().continueWith(new Continuation<QuerySnapshot, ModelInterface>() {
             @Override
             public ModelInterface then(@NonNull Task<QuerySnapshot> task) throws Exception {
-                r.reset();
                 DocumentSnapshot doc = task.getResult().getDocuments().get(0);
 
                 ModelInterface m = doc.toObject(modelClass);

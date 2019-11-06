@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 
 import ca.ualberta.moodroid.R;
 
+//TODO: Dynamically grab mood from Firestore
 public class AddMood extends AppCompatActivity {
 
     private ImageButton center_button;

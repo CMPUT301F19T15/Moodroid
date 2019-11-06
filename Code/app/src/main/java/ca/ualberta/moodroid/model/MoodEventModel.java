@@ -2,12 +2,13 @@ package ca.ualberta.moodroid.model;
 
 import android.location.Location;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MoodEventModel extends BaseModel {
 
 
-    private Date datetime;
+    private String datetime;
 
     private String moodName;
 
@@ -21,11 +22,13 @@ public class MoodEventModel extends BaseModel {
 
     private String username;
 
-    public Date getDatetime() {
-        return new Date();
+    public static String DATE_FORMAT = "mm/dd/yyyy HH:mm";
+
+    public String getDatetime() {
+        return this.datetime;
     }
 
-    public void setDatetime(Date datetime) {
+    public void setDatetime(String datetime) {
         this.datetime = datetime;
     }
 
@@ -75,5 +78,10 @@ public class MoodEventModel extends BaseModel {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+
+    public Date dateObject() throws Exception {
+        return new SimpleDateFormat(MoodEventModel.DATE_FORMAT).parse(this.getDatetime());
     }
 }

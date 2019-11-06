@@ -1,5 +1,7 @@
 package ca.ualberta.moodroid.service;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
@@ -25,7 +27,7 @@ public class MoodEventService {
 
 
     private AuthenticationInterface auth;
-    private RepositoryInterface events;
+    private MoodEventRepository events;
     private RepositoryInterface requests;
 
     @Inject
@@ -40,9 +42,14 @@ public class MoodEventService {
             public List<MoodEventModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
                 List<MoodEventModel> results = new ArrayList<MoodEventModel>();
                 if (task.isSuccessful()) {
+                    Log.d("MOODEVENT", "Task was successful");
                     for (ModelInterface m : task.getResult()) {
+                        Log.d("MOODEVENT/GETALL", "Got model: " + m.getInternalId());
                         results.add((MoodEventModel) m);
                     }
+                } else {
+                    Log.d("MOODEVENT", "Task was not successful: " + task.getException().getMessage());
+
                 }
 
                 return results;
@@ -70,9 +77,19 @@ public class MoodEventService {
 
     }
 
-//    public void createEvent(MoodEventModel moodEvent) {
-//        this.events.create(moodEvent);
-//    }
+    public Task<MoodEventModel> createEvent(MoodEventModel moodEvent) {
+        moodEvent.setUsername(this.auth.getUsername());
+        return this.events.create(moodEvent).continueWith(new Continuation<ModelInterface, MoodEventModel>() {
+            @Override
+            public MoodEventModel then(@NonNull Task<ModelInterface> task) throws Exception {
+                if (task.isSuccessful()) {
+                    return (MoodEventModel) task.getResult();
+                }
+                Log.d("MOODEVENT/CREATE", "Not yet successful....");
+                return moodEvent;
+            }
+        });
+    }
 //
 //    public void updateEvent(MoodEventModel moodEvent) {
 //        this.events.update(moodEvent);
