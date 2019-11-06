@@ -1,6 +1,6 @@
 package ca.ualberta.moodroid.model;
 
-import android.location.Location;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +18,7 @@ public class MoodEventModel extends BaseModel {
 
     private String situation;
 
-    private Location location;
+    private GeoPoint location;
 
     private String username;
 
@@ -72,11 +72,11 @@ public class MoodEventModel extends BaseModel {
         this.username = username;
     }
 
-    public Location getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 

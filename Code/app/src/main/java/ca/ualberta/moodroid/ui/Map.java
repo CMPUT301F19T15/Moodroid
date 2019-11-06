@@ -38,6 +38,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = "Maps activity";
 
 
+
+
     private GoogleMap mMap;
     ImageButton toolBarButtonLeft;
     ImageButton toolBarButtonRight;
@@ -145,25 +147,29 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                 for(ModelInterface m: modelInterfaces) {
                     MoodEventModel event = (MoodEventModel) m;
                     Log.d("MARKER", "NEW EVENT LOCATION: "+event.getLocation());
-                    if(event.getMoodName().equals("Mad")) {
-                        addIcon(iconFactory, "\uD83D\uDE21", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
-                    }
-                    if(event.getMoodName().equals("Sad")) {
-                        addIcon(iconFactory, "\uD83D\uDE1E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
-                    }
-                    if(event.getMoodName().equals("Annoyed")) {
-                        addIcon(iconFactory, "\uD83D\uDE12", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
-                    }
-                    if(event.getMoodName().equals("Sick")) {
-                        addIcon(iconFactory, "\uD83E\uDD2E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
-                    }
-                    if(event.getMoodName().equals("Happy")) {
-                        addIcon(iconFactory, "\uD83D\uDE0A", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
-                    }
-                    if(event.getMoodName().equals("Scared")) {
-                        addIcon(iconFactory, "\uD83D\uDE31", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
-                    }
 
+                    try {
+                        if (event.getMoodName().equals("Mad")) {
+                            addIcon(iconFactory, "\uD83D\uDE21", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                        }
+                        if (event.getMoodName().equals("Sad")) {
+                            addIcon(iconFactory, "\uD83D\uDE1E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                        }
+                        if (event.getMoodName().equals("Annoyed")) {
+                            addIcon(iconFactory, "\uD83D\uDE12", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                        }
+                        if (event.getMoodName().equals("Sick")) {
+                            addIcon(iconFactory, "\uD83E\uDD2E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                        }
+                        if (event.getMoodName().equals("Happy")) {
+                            addIcon(iconFactory, "\uD83D\uDE0A", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                        }
+                        if (event.getMoodName().equals("Scared")) {
+                            addIcon(iconFactory, "\uD83D\uDE31", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                        }
+                    }catch (NullPointerException e){
+                        Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
+                    }
                 }
             }
         });
@@ -171,10 +177,10 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-    private void addIcon(IconGenerator iconFactory, String text, LatLng position) {
+    private void addIcon(IconGenerator iconFactory, String text, LatLng position, String dateTime) {
         MarkerOptions markerOptions = new MarkerOptions().
                 icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text))).
-                position(position);
+                position(position).title(dateTime);
 
         mMap.addMarker(markerOptions);
     }
