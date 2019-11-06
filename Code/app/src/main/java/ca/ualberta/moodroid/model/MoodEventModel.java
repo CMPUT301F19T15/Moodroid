@@ -7,7 +7,7 @@ import java.util.Date;
 public class MoodEventModel extends BaseModel {
 
 
-    private Date datetime;
+    private String datetime;
 
     private String moodName;
 
@@ -21,11 +21,11 @@ public class MoodEventModel extends BaseModel {
 
     private String username;
 
-    public Date getDatetime() {
-        return new Date();
+    public String getDatetime() {
+        return this.datetime;
     }
 
-    public void setDatetime(Date datetime) {
+    public void setDatetime(String datetime) {
         this.datetime = datetime;
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,24 +122,24 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         // TODO: don't show until mood is loaded
         MoodEventModel moodObject = moodList.get(position);
         String moodStr = moodObject.getMoodName();
+        Log.d("MOODLIST/MOOD", "Mood Name: " + moodStr);
         this.moods.where("name", moodStr).one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
             public void onSuccess(ModelInterface modelInterface) {
                 MoodModel mood = (MoodModel) modelInterface;
-
+                Log.d("MOODLIST/MOOD", mood.getName() + mood.getColor());
                 holder.listItemBackgroundView.setBackground(new ColorDrawable(Color.parseColor(mood.getColor())));
                 holder.moodText.setText(moodStr);
                 holder.emojiView.setText(mood.getEmoji());
             }
         });
 
+
         //set emoji and background color
         //extract date, time from date object
-        SimpleDateFormat simpleDate = new SimpleDateFormat("dd/mm/yyyy");
-        SimpleDateFormat simpleTime = new SimpleDateFormat("hh:mm");
-        String dateStr = simpleDate.format(moodObject.getDatetime());
+        String dateStr = moodObject.getDatetime().split(" ")[0];
         holder.dateText.setText(dateStr);
-        String timeStr = simpleTime.format(moodObject.getDatetime());
+        String timeStr = moodObject.getDatetime().split(" ")[1];
         holder.timeText.setText(timeStr);
     }
 

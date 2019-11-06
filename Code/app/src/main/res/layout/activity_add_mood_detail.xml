@@ -34,194 +34,145 @@
             android:textColor="#FFFFFF"
             android:textSize="30dp" />
 
-        <TextView
-            android:id="@+id/mood_date"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="304dp"
-            android:layout_marginLeft="304dp"
-            android:layout_marginBottom="37dp"
-            android:fontFamily="@font/courier_new"
-            android:text="01/01/19"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/mood_time"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="325dp"
-            android:layout_marginLeft="325dp"
-            android:layout_marginBottom="7dp"
-            android:fontFamily="@font/courier_new"
-            android:text="06:11"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp" />
-
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:background="#1A2531">
 
-        <Button
-            android:id="@+id/add_date_time_button"
-            android:layout_width="307dp"
-            android:layout_height="29dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new_bold"
-            android:gravity="center|top"
-            android:text="Date and Time"
-            android:textSize="24sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/date_time"
-            android:layout_width="341dp"
-            android:layout_height="67dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/date_time_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Date and Time"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp" />
 
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="55dp"
-            android:background="@drawable/add_moon_details"
-            android:fontFamily="@font/courier_new"
-            android:gravity="center"
-            android:text="01/01/19\n06:11"
-            android:textSize="30dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/add_reason_button"
-            android:layout_width="307dp"
-            android:layout_height="29dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="150dp"
-            android:layout_marginEnd="47dp"
-            android:layout_marginRight="45dp"
-            android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new_bold"
-            android:gravity="center|top"
-            android:text="Reason"
-            android:textSize="24dp" />
+                    <EditText
+                        android:id="@+id/mood_detail_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF" />
 
-        <TextView
-            android:id="@+id/reason"
-            android:layout_width="341dp"
-            android:layout_height="67dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="175dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="45dp"
-            android:background="@drawable/add_moon_details"
-            android:fontFamily="@font/courier_new"
-            android:gravity="center"
-            android:text="People are\nannoying"
-            android:textSize="29dp" />
+                    <EditText
+                        android:id="@+id/mood_detail_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF" />
 
-        <Button
-            android:id="@+id/add_location_button"
-            android:layout_width="307dp"
-            android:layout_height="29dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="270dp"
-            android:layout_marginEnd="45dp"
-            android:layout_marginRight="45dp"
-            android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new_bold"
-            android:gravity="center|top"
-            android:text="Location"
-            android:textSize="24dp" />
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/locations"
-            android:layout_width="341dp"
-            android:layout_height="67dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="false"
-            android:layout_marginTop="295dp"
-            android:layout_marginEnd="29dp"
-            android:layout_marginRight="45dp"
-            android:background="@drawable/add_moon_details"
-            android:fontFamily="@font/courier_new"
-            android:gravity="center"
-            android:text="University of Alberta"
-            android:textSize="29dp" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/add_social"
-            android:layout_width="307dp"
-            android:layout_height="29dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="384dp"
-            android:layout_marginEnd="42dp"
-            android:layout_marginRight="42dp"
-            android:background="@drawable/add_mood_details_field_titles"
-            android:fontFamily="@font/courier_new_bold"
-            android:gravity="center|top"
-            android:text="Social Situation"
-            android:textSize="24dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="341dp"
-            android:layout_height="67dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="410dp"
-            android:layout_marginEnd="23dp"
-            android:layout_marginRight="23dp"
-            android:background="@drawable/add_moon_details"
-            android:fontFamily="@font/courier_new"
-            android:gravity="center"
-            android:text="Lonely"
-            android:textSize="29dp" />
+                <TextView
+                    android:id="@+id/reason_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Reason"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp" />
 
-        <Button
-            android:id="@+id/confirm_button"
-            android:layout_width="139dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="547dp"
-            android:layout_marginEnd="122dp"
-            android:layout_marginRight="122dp"
-            android:background="@drawable/add_moon_details"
-            android:fontFamily="@font/courier_new_bold"
-            android:gravity="center|top"
-            android:text="Confirm"
-            android:textSize="30dp" />
+                <EditText
+                    android:id="@+id/mood_detail_reason"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textColor="#FFFFFF" />
 
-    </RelativeLayout>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="vertical">
+
+                <Switch
+                    android:id="@+id/use_current_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal"
+                    android:text="Use Current Location"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/situation_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Social Situation"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp" />
+
+                <Spinner
+                    android:id="@+id/social_situation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/add_detail_confirm_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="Add To History" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

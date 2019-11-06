@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    app:cardBackgroundColor="#00FFFFFF"
     app:cardCornerRadius="4dp">
 
     <ImageView
         android:id="@+id/list_item_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#00FFFFFF"
         android:padding="2dp"
         android:src="@drawable/mood_list_custom_shape"></ImageView>
 
@@ -36,7 +37,7 @@
             android:textSize="40sp"></TextView>
 
         <TextView
-            android:id="@+id/follow_notification_text"
+            android:id="@+id/mood_list_view_moodText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/mood_list_view_emoji"
@@ -50,7 +51,6 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="monospace"
             android:paddingLeft="20dp"
-            android:text="Angry"
             android:textColor="@color/colorWriting"
             android:textSize="30sp"></TextView>
 
@@ -70,7 +70,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center"
                 android:layout_toRightOf="@+id/mood_list_view_moodText"
-                android:text="02/02/19"
                 android:textColor="@color/colorWriting"
                 android:textSize="20sp"></TextView>
 
@@ -81,7 +80,6 @@
                 android:layout_below="@+id/mood_list_view_dateText"
                 android:layout_alignLeft="@id/mood_list_view_dateText"
                 android:layout_gravity="center"
-                android:text="12:05"
                 android:textColor="@color/colorWriting"
                 android:textSize="20sp"></TextView>
         </LinearLayout>
