@@ -33,22 +33,27 @@ import ca.ualberta.moodroid.R;
 //import ca.ualberta.moodroid.model.MoodEventModel;
 //import ca.ualberta.moodroid.model.MoodModel;
 
+import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.repository.MoodRepository;
 
 import ca.ualberta.moodroid.service.MoodEventService;
+import ca.ualberta.moodroid.service.MoodService;
 
 
 public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
 
     MoodEventService moodEvents;
+    MoodService moods;
     private int ACTIVITY_NUM = 1;
     private Intent intent;
     private RecyclerView moodListRecyclerView;
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
     ArrayList<MoodEventModel> moodList;
+    List<MoodModel> allMoods;
 
 
     @Override
@@ -56,6 +61,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood_history);
         moodEvents = new MoodEventService();
+        moods = new MoodService();
         ButterKnife.bind(this);
 
         //Bottom Navigation Bar Listener
@@ -78,20 +84,33 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         moodEvents.getMyEvents().addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
             @Override
             public void onSuccess(List<MoodEventModel> moodEventModels) {
+
                 Log.d("MOODHISTORY/GET", "Got mood Events: " + moodEventModels.size());
-                moodList.addAll(moodEventModels);
-                reverseSort();
-                updateListView();
+
+                moods.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+                    @Override
+                    public void onSuccess(List<MoodModel> moodModels) {
+                        moodList.addAll(moodEventModels);
+                        allMoods = moodModels;
+                        reverseSort();
+                        updateListView();
+                    }
+                });
+
             }
         });
     }
 
     private void reverseSort() {
-        //sort array on date/time in reverse order
         Collections.sort(moodList, new Comparator<MoodEventModel>() {
             @Override
             public int compare(MoodEventModel mood1, MoodEventModel mood2) {
-                return mood2.getDatetime().compareTo(mood1.getDatetime());      //reversed
+                try {
+                    return mood2.dateObject().compareTo(mood1.dateObject());      //reversed
+                } catch (Exception e) {
+                    Log.e("MOODHISTORY/SORT", "Could not sort mood history: " + e.getMessage());
+                }
+                return 0;
             }
         });
     }
@@ -100,7 +119,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         moodListRecyclerView = findViewById(R.id.mood_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(MoodHistory.this);
-        moodListAdapter = new MoodListAdapter(moodList, moodEvents, MoodHistory.this);
+        moodListAdapter = new MoodListAdapter(moodList, allMoods, MoodHistory.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }

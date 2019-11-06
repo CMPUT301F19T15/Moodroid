@@ -79,7 +79,7 @@ public class AddMoodDetail extends AppCompatActivity {
         setContentView(R.layout.activity_add_mood_detail);
         ButterKnife.bind(this);
         this.date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(new Date()));
-        this.time.setText(new SimpleDateFormat("HH:MM", Locale.US).format(new Date()));
+        this.time.setText(new SimpleDateFormat("HH:mm", Locale.US).format(new Date()));
 
 
         // initializing the views that will be set from the last activity
@@ -138,7 +138,7 @@ public class AddMoodDetail extends AppCompatActivity {
     }
 
     public String getTimeString() {
-        return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+        return new SimpleDateFormat("HH:mm", Locale.US).format(calendar.getTime());
     }
 
     @OnClick(R.id.mood_detail_date)

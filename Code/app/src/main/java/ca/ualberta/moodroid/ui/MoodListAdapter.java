@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
@@ -36,7 +37,7 @@ import ca.ualberta.moodroid.service.MoodEventService;
 public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHolder> {
     private ArrayList<MoodEventModel> moodList;
     MoodEventService moodEvents;
-    private MoodRepository moods;
+    private List<MoodModel> moods;
     static Context context;
 
     private OnListListener mOnListListener;
@@ -71,11 +72,10 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         }
     }
 
-    public MoodListAdapter(ArrayList<MoodEventModel> moodList, MoodEventService moodEventService, OnListListener onListListener) {
+    public MoodListAdapter(ArrayList<MoodEventModel> moodList, List<MoodModel> moods, OnListListener onListListener) {
         this.moodList = moodList;
-        moodEvents = moodEventService;
         context = context;
-        this.moods = new MoodRepository();
+        this.moods = moods;
 
 
         this.mOnListListener = onListListener;
@@ -122,17 +122,20 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         // TODO: don't show until mood is loaded
         MoodEventModel moodObject = moodList.get(position);
         String moodStr = moodObject.getMoodName();
-        Log.d("MOODLIST/MOOD", "Mood Name: " + moodStr);
-        this.moods.where("name", moodStr).one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-            @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                MoodModel mood = (MoodModel) modelInterface;
-                Log.d("MOODLIST/MOOD", mood.getName() + mood.getColor());
-                holder.listItemBackgroundView.setBackground(new ColorDrawable(Color.parseColor(mood.getColor())));
-                holder.moodText.setText(moodStr);
-                holder.emojiView.setText(mood.getEmoji());
+        holder.moodText.setText(moodStr);
+
+        Log.d("MOODLIST/MOOD", "Mood Name: " + moodStr + " Mood Position: " + position);
+        MoodModel mood = new MoodModel();
+
+        for (MoodModel m : moods) {
+            if (m.getName().equals(moodStr)) {
+                mood = m;
             }
-        });
+        }
+
+        Log.d("MOODLIST/MOOD", mood.getName() + mood.getColor());
+        holder.listItemBackgroundView.setBackground(new ColorDrawable(Color.parseColor(mood.getColor())));
+        holder.emojiView.setText(mood.getEmoji());
 
 
         //set emoji and background color
