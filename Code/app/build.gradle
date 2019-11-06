@@ -51,9 +51,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:2.24"
 
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     implementation 'com.jakewharton:butterknife:10.2.0'
@@ -68,12 +66,14 @@ dependencies {
     def cardview_version = "1.0.0"
     implementation "androidx.cardview:cardview:$cardview_version"
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0-beta01'
 
     //Testing
-    androidTestImplementation 'androidx.test:core:1.1.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test:core:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 }
-
 
 apply plugin: 'com.google.gms.google-services'
