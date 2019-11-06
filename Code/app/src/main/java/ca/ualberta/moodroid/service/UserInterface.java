@@ -1,5 +1,7 @@
 package ca.ualberta.moodroid.service;
 
+import com.google.android.gms.tasks.Task;
+
 import java.util.List;
 
 import ca.ualberta.moodroid.model.FollowRequestModel;
@@ -20,7 +22,7 @@ public interface UserInterface {
      *
      * @return
      */
-    public List<FollowRequestModel> getAllPendingFollowRequests();
+    public Task<List<FollowRequestModel>> getAllFollowRequests();
 
     /**
      * Create a new follow request for a specified user
@@ -34,14 +36,14 @@ public interface UserInterface {
      *
      * @param request
      */
-    public void acceptFollowRequest(FollowRequestModel request);
+    public Task<Boolean> acceptFollowRequest(FollowRequestModel request);
 
     /**
      * Deny a follow request from another user
      *
      * @param request
      */
-    public void denyFollowRequest(FollowRequestModel request);
+    public Task<Boolean> denyFollowRequest(FollowRequestModel request);
 
     /**
      * Get a user by his username and return a full UserModel

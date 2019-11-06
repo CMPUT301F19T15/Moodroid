@@ -36,7 +36,7 @@
             android:textSize="40sp"></TextView>
 
         <TextView
-            android:id="@+id/follow_notification_text"
+            android:id="@+id/mood_list_view_moodText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/mood_list_view_emoji"

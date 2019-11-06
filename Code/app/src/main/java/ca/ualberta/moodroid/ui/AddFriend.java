@@ -16,6 +16,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -74,6 +77,8 @@ public class AddFriend extends AppCompatActivity {
         statusField.setText("");
         Log.d("ADDUSER/OUT", "I am: " + me);
         final String name = this.usernameField.getText().toString();
+
+        // TODO: refactor to use the userService
         users.where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
             public void onComplete(@NonNull Task<ModelInterface> task) {
@@ -95,7 +100,8 @@ public class AddFriend extends AppCompatActivity {
                                 FollowRequestModel request = new FollowRequestModel();
                                 request.setRequesteeUsername(name);
                                 request.setRequesterUsername(me);
-                                request.setState("undecided");
+                                request.setState(FollowRequestModel.REQUESTED_STATE);
+                                request.setCreatedAt((String.valueOf((new Date()).getTime())));
                                 requests.create(request).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
                                     @Override
                                     public void onComplete(@NonNull Task<ModelInterface> task) {

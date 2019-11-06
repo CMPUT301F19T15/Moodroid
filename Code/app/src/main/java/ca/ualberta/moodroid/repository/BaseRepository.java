@@ -182,9 +182,13 @@ abstract class BaseRepository implements RepositoryInterface {
      * @return
      */
     public Task<ModelInterface> update(final ModelInterface model) {
+        Log.d("REPOSITORY/UPDATE", "Updating " + model.getInternalId());
         return this.collection.document(model.getInternalId()).set(model).continueWith(new Continuation<Void, ModelInterface>() {
             @Override
             public ModelInterface then(@NonNull Task<Void> task) throws Exception {
+                if (task.isSuccessful()) {
+
+                }
                 Log.d("REPO/UPDATE", model.getInternalId());
 
                 return model;

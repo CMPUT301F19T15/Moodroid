@@ -10,7 +10,7 @@
         android:id="@+id/list_item_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#000000"
         android:padding="2dp"
         android:src="@drawable/mood_list_custom_shape"></ImageView>
 
@@ -18,30 +18,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/follow_notification_text"
-            android:layout_width="match_parent"
-            android:layout_height="40sp"
+            android:id="@+id/mood_list_view_moodText"
+            android:layout_width="fill_parent"
+            android:layout_height="33dp"
             android:layout_alignParentTop="true"
             android:fontFamily="monospace"
+            android:gravity="center"
             android:text="Angry"
             android:textColor="@color/colorWriting"
-            android:textSize="18sp"></TextView>
+            android:textSize="14sp"></TextView>
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+            <Button
+                android:id="@+id/follow_deny_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="Deny" />
 
+            <Button
+                android:id="@+id/follow_accept_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="Accept" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

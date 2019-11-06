@@ -53,6 +53,7 @@ import ca.ualberta.moodroid.ui.MoodHistory;
 import ca.ualberta.moodroid.ui.Notifications;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.users = new UserRepository();
+        Log.d("TIMESTAMP", "" + new Date().getTime());
 
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(false)
+//                        .setIsSmartLockEnabled(false)
                         .build(),
                 123);
 
