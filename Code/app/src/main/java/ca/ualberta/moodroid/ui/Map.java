@@ -28,6 +28,7 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
+import ca.ualberta.moodroid.service.AuthenticationService;
 
 public class Map extends FragmentActivity implements OnMapReadyCallback {
     public Map() {
@@ -44,7 +45,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     String toolBarText;
     private Intent intent;
 
-
+    String myUserName;
 
 
     public static Map newInstance() {
@@ -55,6 +56,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        myUserName = AuthenticationService.getInstance().getUsername();
 
         setContentView(R.layout.activity_my_mood_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -137,7 +139,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         final IconGenerator iconFactory = new IconGenerator(this);
         MoodEventRepository moodEvents = new MoodEventRepository();
         // get all model interfaces (moodeventModel) then change it to a moodeventModel and get the location
-        moodEvents.where("username", "bryce").get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+        moodEvents.where("username", myUserName).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
             @Override
             public void onSuccess(List<ModelInterface> modelInterfaces) {
                 for(ModelInterface m: modelInterfaces) {
@@ -147,7 +149,19 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                         addIcon(iconFactory, "\uD83D\uDE21", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
                     }
                     if(event.getMoodName().equals("Sad")) {
-                        addIcon(iconFactory, "\uD83D\uDE2D", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
+                        addIcon(iconFactory, "\uD83D\uDE1E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
+                    }
+                    if(event.getMoodName().equals("Annoyed")) {
+                        addIcon(iconFactory, "\uD83D\uDE12", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
+                    }
+                    if(event.getMoodName().equals("Sick")) {
+                        addIcon(iconFactory, "\uD83E\uDD2E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
+                    }
+                    if(event.getMoodName().equals("Happy")) {
+                        addIcon(iconFactory, "\uD83D\uDE0A", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
+                    }
+                    if(event.getMoodName().equals("Scared")) {
+                        addIcon(iconFactory, "\uD83D\uDE31", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
                     }
 
                 }
