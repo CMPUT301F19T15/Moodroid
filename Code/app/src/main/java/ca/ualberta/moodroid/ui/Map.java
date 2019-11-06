@@ -28,17 +28,14 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.service.GeolocationService;
-import ca.ualberta.moodroid.service.MoodEventService;
 
-public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
-    public MoodMap() {
+public class Map extends FragmentActivity implements OnMapReadyCallback {
+    public Map() {
 
     }
 
     private static final String TAG = "Maps activity";
-    MoodEventService moodEvents;
-    GeolocationService geolocation;
+
 
     private GoogleMap mMap;
     ImageButton toolBarButtonLeft;
@@ -48,19 +45,22 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
     private Intent intent;
 
 
-    public MoodMap(MoodEventService moodEventService, GeolocationService geolocationService) {
-        this.moodEvents = moodEventService;
-        this.geolocation = geolocationService;
-    }
 
-    public static MoodMap newInstance() {
-        return new MoodMap();
+
+    public static Map newInstance() {
+        return new Map();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_my_mood_maps);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         // get all the ids for the tool bar
         toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
@@ -74,17 +74,12 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
         toolBarButtonRight.setImageResource(R.drawable.ic_compare_arrows_black_24dp);
 
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
         // on click listener for the back button to go back to the profile page
         toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //navigate to back to profile activity
-                intent = new Intent(MoodMap.this, Profile.class);
+                intent = new Intent(Map.this, Profile.class);
                 startActivity(intent);
             }
         });
@@ -142,7 +137,7 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
         final IconGenerator iconFactory = new IconGenerator(this);
         MoodEventRepository moodEvents = new MoodEventRepository();
         // get all model interfaces (moodeventModel) then change it to a moodeventModel and get the location
-        moodEvents.where("username", "nguy").get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+        moodEvents.where("username", "bryce").get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
             @Override
             public void onSuccess(List<ModelInterface> modelInterfaces) {
                 for(ModelInterface m: modelInterfaces) {
@@ -154,7 +149,7 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
                     if(event.getMoodName().equals("Sad")) {
                         addIcon(iconFactory, "\uD83D\uDE2D", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
                     }
-                    addIcon(iconFactory, "\uD83D\uDE2D", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
+
                 }
             }
         });

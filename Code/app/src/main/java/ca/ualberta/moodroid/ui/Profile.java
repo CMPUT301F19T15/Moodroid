@@ -1,17 +1,16 @@
 package ca.ualberta.moodroid.ui;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.ualberta.moodroid.MainActivity;
@@ -19,8 +18,6 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.ValidationService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 public class Profile extends BaseUIActivity {
 /**
@@ -85,7 +82,7 @@ public class Profile extends BaseUIActivity {
             @Override
             public void onClick(View view) {
                 //navigate to MoodMap Activity
-                intent = new Intent(Profile.this, MoodMap.class);
+                intent = new Intent(Profile.this, Map.class);
                 startActivity(intent);
             }
         });
