@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.auth.User;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -64,18 +66,23 @@ public class FriendsMoods extends MoodHistory {
         users.getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
+                ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
+
                 for (FollowRequestModel user : followRequestModels) {
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-                    moodEvents.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
-                        @Override
-                        public void onSuccess(List<MoodEventModel> moodEventModels) {
-                            Log.d("FRIENDSMOOD/EVENTS", "Got events (" + moodEventModels.size() + ") for: " + user.getRequesteeUsername());
-                            events.addAll(moodEventModels);
-                            reverseSort();
-                            updateListView();
-                        }
-                    });
+                    taskList.add(moodEvents.getEventsForUser(user.getRequesteeUsername()));
                 }
+
+                Tasks.whenAllSuccess(taskList).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                    @Override
+                    public void onSuccess(List<Object> objects) {
+                        for (Object e : objects) {
+                            events.addAll((List<MoodEventModel>) e);
+                        }
+                        reverseSort();
+                        updateListView();
+                    }
+                });
             }
         });
 
