@@ -78,7 +78,7 @@ public abstract class Map extends FragmentActivity implements OnMapReadyCallback
                 //
             }
         });
-
+        mIsRestore = savedInstanceState != null;
         setContentView(getLayoutId());
         setUpMap();
     }

@@ -102,7 +102,7 @@ import com.google.android.gms.tasks.Task;
             @Override
             public void onClick(View view) {
                 //navigate to MoodMap Activity
-                intent = new Intent(Profile.this, MoodMap.class);
+                intent = new Intent(Profile.this, Map.class);
                 startActivity(intent);
             }
         });
