@@ -1,50 +1,42 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
 
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Comparator;
-
 import java.util.List;
 
 import butterknife.ButterKnife;
 import ca.ualberta.moodroid.R;
+import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.model.MoodModel;
+import ca.ualberta.moodroid.service.MoodEventService;
+import ca.ualberta.moodroid.service.MoodService;
+
 //import ca.ualberta.moodroid.model.ModelInterface;
 //import ca.ualberta.moodroid.model.MoodEventModel;
 //import ca.ualberta.moodroid.model.MoodModel;
 
-import ca.ualberta.moodroid.model.ModelInterface;
-import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.MoodRepository;
-
-import ca.ualberta.moodroid.service.MoodEventService;
-import ca.ualberta.moodroid.service.MoodService;
-
 
 public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
 
+    /**
+     * this activity is just to display the users mood history
+     * there is a toolbar which contains two buttons
+     * one button for adding a new mood event
+     * another for filtering the mood list by a certain mood
+     */
+
+    // variables needed
     MoodEventService moodEvents;
     MoodService moods;
     private int ACTIVITY_NUM = 1;
@@ -54,6 +46,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
     ArrayList<MoodEventModel> moodList;
     List<MoodModel> allMoods;
+
 
 
     @Override
@@ -101,6 +94,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         });
     }
 
+    /**
+     * reverse sorting all of the mood events
+     */
     private void reverseSort() {
         Collections.sort(moodList, new Comparator<MoodEventModel>() {
             @Override
@@ -115,6 +111,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         });
     }
 
+    /**
+     * update the list view
+     */
     private void updateListView() {
         moodListRecyclerView = findViewById(R.id.mood_list_view);
         moodListRecyclerView.setHasFixedSize(true);
@@ -124,11 +123,22 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
 
+    /**
+     * checking when the user clicks on the list
+     * takes the certain postion
+     * and opens up that edit delete diaglog
+     * @param position
+     */
     @Override
     public void onListClick(int position) {
         openEditDeleteDialog();
     }
 
+    /**
+     * this is to start the new edit deletefragment
+     * where the user can decide on what they want to do with
+     * the list item that has been clicked
+     */
     public void openEditDeleteDialog() {
 
         EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
