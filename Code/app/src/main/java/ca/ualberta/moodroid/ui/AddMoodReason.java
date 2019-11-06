@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,21 +51,23 @@ import ca.ualberta.moodroid.repository.MoodEventRepository;
 
 import static android.view.View.GONE;
 
-public class AddMoodReason extends AppCompatActivity {
+public class AddMoodReason extends BaseUIActivity {
 
-////////in MAIN: delete the onclickListener and the photo button.......only put in to test this
-    //////delete the layout file activity_add_photo_____temp and use correct one for add mood activity
-    /////put some of this in service layer???
+
     /////change firebase storage permission ...public for now
-    ////save link to image in mood event
-    /////delete toolbar button and intent in MoodHistory activity (right one)
-
+    ////check if <20 chars or <= 3 words
+    /////look into connecting to camera
+    ////back button?
+    ////add to UI Mockup
+    ///add comments
+/////user can add photo from library or google account
 
     private Button takePhotoButton;
-    private Button savePhotoButton;
+    private Button doneButton;
     private Button addLibraryPhotoButton;
     private ImageView photoView;
     private String photoFileName;
+    private EditText reasonText;
     private Uri filePath;
     TextView toolBarTextView;
     private final int PICK_IMAGE_FROM_LIBRARY_REQUEST = 1;
@@ -73,40 +78,62 @@ public class AddMoodReason extends AppCompatActivity {
     private String photoKey;
     private MoodEventModel myMood;
     String url;
+    private boolean pickedPhoto;
     ImageView tempPhoto;
+//    private Button doneButton;
+    private ImageView mood_img;
+    private TextView mood_title;
+    private RelativeLayout banner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood_reason);
-
+        mood_img = findViewById(R.id.mood_img);
+        mood_title = findViewById(R.id.mood_text);
+        banner = findViewById(R.id.banner);
         takePhotoButton = findViewById(R.id.take_photo_button);
-        savePhotoButton = findViewById(R.id.save_photo_button);
-        savePhotoButton.setVisibility(View.INVISIBLE);
+        doneButton = findViewById(R.id.done_button);
+
         addLibraryPhotoButton = findViewById(R.id.add_photo_from_library_button);
         photoView = findViewById(R.id.show_photo_view);
-        toolBarTextView = findViewById(R.id.toolbar_text_center);
-        toolBarTextView.setText("Add Photo");
-        String internalId;
-        tempPhoto = findViewById(R.id.pic_show);
+//        toolBarTextView = findViewById(R.id.toolbar_text_center);
+//        toolBarTextView.setText("Add Photo");
+//        String internalId;
+        reasonText = findViewById(R.id.reason_text);
 
-        internalId = "yeqnwNGPbU8kan3O1peZ";
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        String imageId = extras.getString("imageId");
+        String moodName = extras.getString("moodName");
+        String hex = extras.getString("hex");
+        int mood_imageRes = getResources().getIdentifier(imageId, null, getOpPackageName());
+        Drawable res = getResources().getDrawable(mood_imageRes);
+
+        mood_img.setImageDrawable(res);
+        mood_title.setText(moodName);
+        banner.setBackgroundColor(Color.parseColor(hex));
+
+
+
 
         addLibraryPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 choosePhoto();
                 //make save photo button visible once user has chosen photo to upload
-                savePhotoButton.setVisibility(View.VISIBLE);
             }
         });
+
+
 
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePhoto();
                 //make save photo button visible once user has chosen photo to upload
-                savePhotoButton.setVisibility(View.VISIBLE);
             }
         });
 
@@ -114,11 +141,21 @@ public class AddMoodReason extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        savePhotoButton.setOnClickListener(new View.OnClickListener() {
+        doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadPhoto();
-                //TO DO: save url in firebase
+                if (pickedPhoto == true) {
+                    uploadPhoto();
+                }
+                //send back photo and text description
+                String textDescription = reasonText.getText().toString();
+                Bundle bundle = new Bundle();
+                bundle.putString("textReason", textDescription);
+                bundle.putString("reasonURL", url);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtras(bundle);
+                setResult(RESULT_OK, resultIntent);
+                finish();
             }
         });
     }
@@ -149,6 +186,7 @@ public class AddMoodReason extends AppCompatActivity {
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 photoView.setImageBitmap(bitmap);
+                pickedPhoto = true;
 
             }
             catch (IOException e){
@@ -157,6 +195,7 @@ public class AddMoodReason extends AppCompatActivity {
 
         }
     }
+
 
     private void uploadPhoto(){
         if(filePath != null){

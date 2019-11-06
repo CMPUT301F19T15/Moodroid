@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,19 +58,24 @@ public class AddMoodDetail extends AppCompatActivity {
                 Log.d("RESULT/CREATE", m.getInternalId());
             }
         });
-
     }
 
-//    public void reasonClick() {
-//        reasonInput.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(AddMoodDetail.this, AddMoodReason.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case(1): {
+                if(resultCode == RESULT_OK){
+                    String url = data.getStringExtra("reasonURL");
+                    moodEvent.setReasonImageUrl(url);
+                    String textReason = data.getStringExtra("textReason");
+                    moodEvent.setReasonText(textReason);
+                }
+
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +85,7 @@ public class AddMoodDetail extends AppCompatActivity {
 
 
         confirm_button = findViewById(R.id.confirm_button);
-
+        reasonInput = findViewById(R.id.reason);
 
         // initializing the views that will be set from the last activity
         mood_img = findViewById(R.id.mood_img);
@@ -149,7 +155,22 @@ public class AddMoodDetail extends AppCompatActivity {
 
 
         confirmClick();
-//        reasonClick();
+
+            reasonInput.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent resultIntent = new Intent(AddMoodDetail.this, AddMoodReason.class);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("imageId", image_id);
+                    bundle.putString("moodName", mood_name);
+                    bundle.putString("hex", hex);
+                    resultIntent.putExtras(bundle);
+                    startActivityForResult(resultIntent, 1);
+                }
+            });
+
+
 
 
 

@@ -5,67 +5,9 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#1A2531">
-
-        <ImageView
-            android:id="@+id/mood_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/annoyed">
-
-        </ImageView>
-
-        <TextView
-            android:id="@+id/mood_text"
-            android:layout_width="152dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="116dp"
-            android:layout_marginLeft="116dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/courier_new_bold"
-            android:text="TBD"
-            android:textColor="#FFFFFF"
-            android:textSize="30dp" />
-
-        <TextView
-            android:id="@+id/mood_date"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="304dp"
-            android:layout_marginLeft="304dp"
-            android:layout_marginBottom="37dp"
-            android:fontFamily="@font/courier_new"
-            android:text="01/01/19"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/mood_time"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="325dp"
-            android:layout_marginLeft="325dp"
-            android:layout_marginBottom="7dp"
-            android:fontFamily="@font/courier_new"
-            android:text="06:11"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp" />
-
-
-    </RelativeLayout>
+ <include
+     layout="@layout/add_mood_banner">
+ </include>
 
     <RelativeLayout
         android:layout_width="match_parent"
