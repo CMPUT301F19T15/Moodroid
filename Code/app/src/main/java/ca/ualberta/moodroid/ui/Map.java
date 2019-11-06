@@ -150,22 +150,22 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
                     try {
                         if (event.getMoodName().equals("Mad")) {
-                            addIcon(iconFactory, "\uD83D\uDE21", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                            addIcon(iconFactory, "\uD83D\uDE21", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
                         }
                         if (event.getMoodName().equals("Sad")) {
-                            addIcon(iconFactory, "\uD83D\uDE1E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                            addIcon(iconFactory, "\uD83D\uDE1E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
                         }
                         if (event.getMoodName().equals("Annoyed")) {
-                            addIcon(iconFactory, "\uD83D\uDE12", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                            addIcon(iconFactory, "\uD83D\uDE12", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
                         }
                         if (event.getMoodName().equals("Sick")) {
-                            addIcon(iconFactory, "\uD83E\uDD2E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                            addIcon(iconFactory, "\uD83E\uDD2E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
                         }
                         if (event.getMoodName().equals("Happy")) {
-                            addIcon(iconFactory, "\uD83D\uDE0A", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                            addIcon(iconFactory, "\uD83D\uDE0A", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
                         }
                         if (event.getMoodName().equals("Scared")) {
-                            addIcon(iconFactory, "\uD83D\uDE31", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime());
+                            addIcon(iconFactory, "\uD83D\uDE31", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
                         }
                     }catch (NullPointerException e){
                         Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
@@ -177,10 +177,10 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-    private void addIcon(IconGenerator iconFactory, String text, LatLng position, String dateTime) {
+    private void addIcon(IconGenerator iconFactory, String text, LatLng position, String dateTime, String socialSit) {
         MarkerOptions markerOptions = new MarkerOptions().
                 icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text))).
-                position(position).title(dateTime);
+                position(position).title(dateTime).snippet(socialSit);
 
         mMap.addMarker(markerOptions);
     }
