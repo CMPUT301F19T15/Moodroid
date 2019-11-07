@@ -71,6 +71,7 @@ public class AddMoodDetail extends AppCompatActivity {
                     moodEvent.setReasonImageUrl(url);
                     String textReason = data.getStringExtra("textReason");
                     moodEvent.setReasonText(textReason);
+                    reasonInput.setText(textReason);
                 }
 
             }
