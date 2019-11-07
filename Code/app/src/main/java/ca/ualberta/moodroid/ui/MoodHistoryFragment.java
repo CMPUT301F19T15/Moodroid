@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ * The type Mood history fragment.
+ */
 public class MoodHistoryFragment extends Fragment {
     @Nullable
     @Override

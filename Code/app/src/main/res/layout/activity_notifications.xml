@@ -22,21 +22,34 @@
             <include layout="@layout/app_bar_main"></include>
         </RelativeLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/sth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@+id/relativeLayout"
-        app:layout_anchorGravity="center">
-        <!-- navigation bar -->
-        <include
-            layout="@layout/app_bar_bottom"
+        <RelativeLayout
+            android:id="@+id/body"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:background="@color/colorPrimary">
 
-        </include>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notification_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/sth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_anchorGravity="center">
+            <!-- navigation bar -->
+            <include
+                layout="@layout/app_bar_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </include>
+        </RelativeLayout>
+
     </RelativeLayout>
 
 

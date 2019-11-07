@@ -25,12 +25,24 @@ import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 
+/**
+ * The type Sign up.
+ */
 public class SignUp extends AppCompatActivity {
 
 
+    /**
+     * The Users.
+     */
     UserRepository users;
+    /**
+     * The User.
+     */
     FirebaseUser user;
 
+    /**
+     * The Username field.
+     */
     @BindView(R.id.signup_username)
     EditText usernameField;
 
@@ -46,6 +58,11 @@ public class SignUp extends AppCompatActivity {
 
     }
 
+    /**
+     * Register username.
+     *
+     * @param v the v
+     */
     @OnClick(R.id.register_btn)
     public void registerUsername(View v) {
         final String username = usernameField.getText().toString();

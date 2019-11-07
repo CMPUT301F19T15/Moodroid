@@ -8,9 +8,18 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Section pager adapter.
+ */
 public class SectionPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
+
+    /**
+     * Instantiates a new Section pager adapter.
+     *
+     * @param fm the fm
+     */
     public SectionPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }
@@ -26,6 +35,11 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
         return mFragmentList.size();
     }
 
+    /**
+     * Add fragment.
+     *
+     * @param fragment the fragment
+     */
     public void addFragment(Fragment fragment){
         mFragmentList.add(fragment);
     }

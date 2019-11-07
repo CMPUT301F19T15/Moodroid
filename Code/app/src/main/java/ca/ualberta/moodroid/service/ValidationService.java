@@ -10,6 +10,11 @@ public class ValidationService implements ValidationInterface {
 
     private UserService user;
 
+    /**
+     * Instantiates a new Validation service.
+     *
+     * @param user the user
+     */
     @Inject
     public ValidationService(UserService user) {
         this.user = user;
