@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.net.UrlEscapers;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -258,8 +259,8 @@ public class AddMoodReason extends BaseUIActivity {
                         final ProgressDialog progressDialog = new ProgressDialog(this);
                         progressDialog.setTitle("Uploading...");
                         progressDialog.show();
-                        //create random name and create folder automatically when image is uploaded
-                        StorageReference ref = storageReference.child(userName + UUID.randomUUID().toString());
+                        //create random name starting with user internal id
+                        StorageReference ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
                         ref.putFile(filePath)
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
