@@ -14,24 +14,73 @@ import ca.ualberta.moodroid.model.ModelInterface;
  */
 public interface RepositoryInterface {
 
-    // Query provider
+    /**
+     * Get task.
+     *
+     * @return the task
+     */
+// Query provider
     Task<List<ModelInterface>> get();
 
+    /**
+     * One task.
+     *
+     * @return the task
+     */
     Task<ModelInterface> one();
 
-    // query filtering
+    /**
+     * Where repository interface.
+     *
+     * @param field the field
+     * @param value the value
+     * @return the repository interface
+     */
+// query filtering
     RepositoryInterface where(String field, String value);
 
+    /**
+     * Limit repository interface.
+     *
+     * @param i the
+     * @return the repository interface
+     */
     RepositoryInterface limit(int i);
 
+    /**
+     * Reset.
+     */
     void reset();
 
+    /**
+     * Update task.
+     *
+     * @param model the model
+     * @return the task
+     */
     Task<ModelInterface> update(final ModelInterface model);
 
+    /**
+     * Create task.
+     *
+     * @param model the model
+     * @return the task
+     */
     Task<ModelInterface> create(ModelInterface model);
 
+    /**
+     * Delete task.
+     *
+     * @param model the model
+     * @return the task
+     */
     Task<Void> delete(ModelInterface model);
 
+    /**
+     * Gets model class.
+     *
+     * @return the model class
+     */
     Class getModelClass();
 
 }

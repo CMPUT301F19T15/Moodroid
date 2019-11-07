@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
@@ -32,24 +34,61 @@ import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 
+/**
+ * The type Mood list adapter.
+ */
 public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHolder> {
     private ArrayList<MoodEventModel> moodList;
+    /**
+     * The Mood events.
+     */
     MoodEventService moodEvents;
-    private MoodRepository moods;
+    private List<MoodModel> moods;
+    private Boolean showUsername;
+    /**
+     * The Context.
+     */
     static Context context;
 
     private OnListListener mOnListListener;
 
+    /**
+     * The type View holder.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
+        /**
+         * The Emoji view.
+         */
         public TextView emojiView;
+        /**
+         * The Mood text.
+         */
         public TextView moodText;
+        /**
+         * The Date text.
+         */
         public TextView dateText;
+        /**
+         * The Time text.
+         */
         public TextView timeText;
+        /**
+         * The List item background view.
+         */
         public ImageView listItemBackgroundView;
+        /**
+         * The On list listener.
+         */
         OnListListener onListListener;
 
 
+        /**
+         * Instantiates a new View holder.
+         *
+         * @param itemView       the item view
+         * @param onListListener the on list listener
+         */
         public ViewHolder(@NonNull View itemView, OnListListener onListListener) {
             super(itemView);
             //get references to items in list
@@ -70,11 +109,19 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         }
     }
 
-    public MoodListAdapter(ArrayList<MoodEventModel> moodList, MoodEventService moodEventService, OnListListener onListListener) {
+    /**
+     * Instantiates a new Mood list adapter.
+     *
+     * @param moodList       the mood list
+     * @param moods          the moods
+     * @param showUsername   the show username
+     * @param onListListener the on list listener
+     */
+    public MoodListAdapter(ArrayList<MoodEventModel> moodList, List<MoodModel> moods, Boolean showUsername, OnListListener onListListener) {
         this.moodList = moodList;
-        moodEvents = moodEventService;
+        this.showUsername = showUsername;
         context = context;
-        this.moods = new MoodRepository();
+        this.moods = moods;
 
 
         this.mOnListListener = onListListener;
@@ -104,10 +151,21 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
 
     //
 
+    /**
+     * The interface On list listener.
+     */
     public interface OnListListener {
+        /**
+         * On list click.
+         *
+         * @param position the position
+         */
         void onListClick(int position);
     }
 
+    /**
+     * Open edit delete dialog.
+     */
     public void openEditDeleteDialog() {
 
         EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
@@ -121,24 +179,33 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         // TODO: don't show until mood is loaded
         MoodEventModel moodObject = moodList.get(position);
         String moodStr = moodObject.getMoodName();
-        this.moods.where("name", moodStr).one().addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-            @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                MoodModel mood = (MoodModel) modelInterface;
 
-                holder.listItemBackgroundView.setBackground(new ColorDrawable(Color.parseColor(mood.getColor())));
-                holder.moodText.setText(moodStr);
-                holder.emojiView.setText(mood.getEmoji());
+        if (this.showUsername) {
+            holder.moodText.setText("@" + moodObject.getUsername() + "\n" + moodStr);
+
+        } else {
+            holder.moodText.setText(moodStr);
+        }
+
+        Log.d("MOODLIST/MOOD", "Mood Name: " + moodStr + " Mood Position: " + position);
+        MoodModel mood = new MoodModel();
+
+        for (MoodModel m : moods) {
+            if (m.getName().equals(moodStr)) {
+                mood = m;
             }
-        });
+        }
+
+        Log.d("MOODLIST/MOOD", mood.getName() + mood.getColor());
+        holder.listItemBackgroundView.setBackground(new ColorDrawable(Color.parseColor(mood.getColor())));
+        holder.emojiView.setText(mood.getEmoji());
+
 
         //set emoji and background color
         //extract date, time from date object
-        SimpleDateFormat simpleDate = new SimpleDateFormat("dd/mm/yyyy");
-        SimpleDateFormat simpleTime = new SimpleDateFormat("hh:mm");
-        String dateStr = simpleDate.format(moodObject.getDatetime());
+        String dateStr = moodObject.getDatetime().split(" ")[0];
         holder.dateText.setText(dateStr);
-        String timeStr = simpleTime.format(moodObject.getDatetime());
+        String timeStr = moodObject.getDatetime().split(" ")[1];
         holder.timeText.setText(timeStr);
     }
 

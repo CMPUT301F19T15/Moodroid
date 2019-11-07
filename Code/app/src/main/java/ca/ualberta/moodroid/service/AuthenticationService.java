@@ -15,12 +15,20 @@ import javax.inject.Inject;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.repository.UserRepository;
 
+/**
+ * Singleton pattern to get a user's username
+ */
 public class AuthenticationService implements AuthenticationInterface {
 
     private static AuthenticationService service = null;
     private String username;
 
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static synchronized AuthenticationService getInstance() {
         if (service == null) {
             service = new AuthenticationService();

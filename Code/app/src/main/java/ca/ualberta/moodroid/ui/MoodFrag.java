@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ * The type Mood frag.
+ */
 public class MoodFrag extends Fragment {
     @Nullable
     @Override

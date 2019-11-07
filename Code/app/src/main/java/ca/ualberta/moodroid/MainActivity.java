@@ -53,6 +53,7 @@ import ca.ualberta.moodroid.ui.MoodHistory;
 import ca.ualberta.moodroid.ui.Notifications;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -67,6 +68,9 @@ import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.ui.AddFriend;
 import ca.ualberta.moodroid.ui.SignUp;
 
+/**
+ * The type Main activity.
+ */
 @Singleton
 public class MainActivity extends AppCompatActivity {
 
@@ -74,9 +78,21 @@ public class MainActivity extends AppCompatActivity {
     private UserRepository users;
     private Intent intent;
 
+    /**
+     * The Tool bar button left.
+     */
     ImageButton toolBarButtonLeft;
+    /**
+     * The Tool bar button right.
+     */
     ImageButton toolBarButtonRight;
+    /**
+     * The Tool bar text view.
+     */
     TextView toolBarTextView;
+    /**
+     * The Tool bar text.
+     */
     String toolBarText;
 
     @Override
@@ -86,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.users = new UserRepository();
-
+        Log.d("TIMESTAMP", "" + new Date().getTime());
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -98,10 +114,9 @@ public class MainActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(false)
+                        .setTheme(R.style.LoginTheme)
                         .build(),
                 123);
-
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

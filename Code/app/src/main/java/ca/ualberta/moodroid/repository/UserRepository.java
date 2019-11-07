@@ -9,6 +9,9 @@ import ca.ualberta.moodroid.model.UserModel;
 public class UserRepository extends BaseRepository {
 
 
+    /**
+     * Instantiates a new User repository.
+     */
     public UserRepository() {
         super("user", UserModel.class);
 

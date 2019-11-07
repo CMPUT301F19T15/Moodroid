@@ -1,5 +1,9 @@
 package ca.ualberta.moodroid.service;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
@@ -13,6 +17,9 @@ import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.repository.UserRepository;
 
+/**
+ * User operations in the application
+ */
 public class UserService implements UserInterface {
 
 
@@ -20,11 +27,13 @@ public class UserService implements UserInterface {
     private UserRepository users;
     private FollowRequestRepository requests;
 
-    @Inject
-    public UserService(AuthenticationService auth, UserRepository repo, FollowRequestRepository requests) {
-        this.auth = auth;
-        this.users = repo;
-        this.requests = requests;
+    /**
+     * Initialize all required services
+     */
+    public UserService() {
+        this.auth = AuthenticationService.getInstance();
+        this.users = new UserRepository();
+        this.requests = new FollowRequestRepository();
     }
 
 
@@ -32,26 +41,98 @@ public class UserService implements UserInterface {
         // get current user, and set the username
     }
 
-    public List<FollowRequestModel> getAllPendingFollowRequests() {
+    /**
+     * Get all follow requests where they are being requested to be followed
+     *
+     * @return
+     */
+    public Task<List<FollowRequestModel>> getAllFollowRequests() {
 
-        final List<FollowRequestModel> returning = new ArrayList<>();
+        return this.requests.where("requesteeUsername", this.auth.getUsername()).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
+            @Override
+            public List<FollowRequestModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
 
-        return returning;
+                List<FollowRequestModel> data = new ArrayList<FollowRequestModel>();
+                if (task.isSuccessful()) {
+                    for (ModelInterface m : task.getResult()) {
+                        data.add((FollowRequestModel) m);
+                    }
+                }
+
+                return data;
+            }
+        });
     }
 
+    /**
+     * Return a list of follow requests of the users that the signed in user currently follows
+     *
+     * @return all users i follow
+     */
+    public Task<List<FollowRequestModel>> getAllUsersIFollow() {
+        return this.requests.where("requesterUsername", this.auth.getUsername()).where("state", FollowRequestModel.ACCEPT_STATE).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
+            @Override
+            public List<FollowRequestModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
+                List<FollowRequestModel> data = new ArrayList<FollowRequestModel>();
+                if (task.isSuccessful()) {
+                    for (ModelInterface m : task.getResult()) {
+                        data.add((FollowRequestModel) m);
+                    }
+                }
+
+                return data;
+            }
+        });
+    }
+
+    /**
+     * Not implemented
+     *
+     * @param user
+     * @return
+     */
     public FollowRequestModel createFollowRequest(UserModel user) {
         return new FollowRequestModel();
     }
 
-    public void acceptFollowRequest(FollowRequestModel request) {
-        // check to ensure the follow request is for you, then accept it
-
+    /**
+     * Accept a follow request
+     *
+     * @param request
+     * @return
+     */
+    public Task<Boolean> acceptFollowRequest(FollowRequestModel request) {
+        request.setState(FollowRequestModel.ACCEPT_STATE);
+        return this.requests.update(request).continueWith(new Continuation<ModelInterface, Boolean>() {
+            @Override
+            public Boolean then(@NonNull Task<ModelInterface> task) throws Exception {
+                return ((FollowRequestModel) task.getResult()).getState().equals(FollowRequestModel.ACCEPT_STATE);
+            }
+        });
     }
 
-    public void denyFollowRequest(FollowRequestModel request) {
-
+    /**
+     * Deny a follow request
+     *
+     * @param request
+     * @return
+     */
+    public Task<Boolean> denyFollowRequest(FollowRequestModel request) {
+        request.setState(FollowRequestModel.DENY_STATE);
+        return this.requests.update(request).continueWith(new Continuation<ModelInterface, Boolean>() {
+            @Override
+            public Boolean then(@NonNull Task<ModelInterface> task) throws Exception {
+                return ((FollowRequestModel) task.getResult()).getState().equals(FollowRequestModel.DENY_STATE);
+            }
+        });
     }
 
+    /**
+     * Not implemented
+     *
+     * @param username
+     * @return
+     */
     public UserModel getUserByUsername(String username) {
         return new UserModel();
     }
