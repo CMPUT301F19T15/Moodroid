@@ -6,22 +6,60 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Mood event implementation of a given mood event history item.
+ * Mood event implementation of a user added mood event. Includes all required
+ * attributes of a mood event as per requested.
  */
 public class MoodEventModel extends BaseModel {
 
 
+    /**
+     *  datetime
+     *  A string value that represents the time of the users mood
+     */
     private String datetime;
 
+    /**
+     * moodName
+     * A string value that holds the mood name, which should be any of the following: Happy, Angry,
+     * Scared, Sad, Annoyed, or Sick.
+     */
     private String moodName;
 
+    /**
+     * reasonText
+     * A string value that contains a user inputted reason for this current mood event
+     */
     private String reasonText;
 
+    /**
+     * reasonImageUrl
+     * String data containing the url for any image the user would like to associate with a
+     * mood event
+     */
     private String reasonImageUrl;
+
+    /**
+     * situation
+     *
+     * String data containing the current situation of a mood such as "Alone" or "in a crowd"
+     */
 
     private String situation;
 
+    /**
+     * location
+     *
+     * map data for pinpointing a mood events location, which will be integrated into the
+     * map feature of the app
+     */
+
     private GeoPoint location;
+
+    /**
+     * username
+     *
+     * String value for the username of the person making the mood event.
+     */
 
     private String username;
 

@@ -1,22 +1,34 @@
 package ca.ualberta.moodroid.model;
 
 /**
- * Simple implementation of the mood object
+ * Simple implementation of the mood object. These mood objects currently include our 6 moods:
+ *
+     * Happy
+     * Angry
+     * Sad
+     * Sick
+     * Sacred
+     * Annoyed
+ *
+ * This class will define the attributes that are associated and carried throughout the entire
+ * app for each mood
+ *
  */
 public class MoodModel extends BaseModel {
 
     /**
-     * Name of the mood
+     * Name of the mood, which is one of the 6 names above.
      */
     private String name;
 
     /**
-     * UTF-8 string of the emoji
+     * UTF-8 string of the emoji. Each emoji is thematically associated with each mood
      */
     private String emoji;
 
     /**
-     * Hex compatible color as a string (ie: #ababab)
+     * Hex compatible colour as a string (ie: #ababab). Each color is also thematically associated
+     * with each mood, such as the colour red relates with an Angry mood, or blue with a Sad mood
      */
     private String color;
 

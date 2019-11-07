@@ -5,7 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Implementation of a follow request document
+ * FollowRequestModel
+ *
+ * Extends BaseModel, used to create and interpret friend requests, which can be
+ * either accepted or denied by the user
  */
 public class FollowRequestModel extends BaseModel {
 
@@ -27,7 +30,7 @@ public class FollowRequestModel extends BaseModel {
     private String createdAt;
 
     /**
-     * These are the base states used throughout the app
+     * These are the base states used throughout the app, it changes based on user action,
      */
     public static String ACCEPT_STATE = "accepted";
     /**
@@ -36,11 +39,13 @@ public class FollowRequestModel extends BaseModel {
     public static String DENY_STATE = "declined";
     /**
      * The constant REQUESTED_STATE.
+     *
+     * Stays in this state if the user does not act upon the request.
      */
     public static String REQUESTED_STATE = "undecided";
 
     /**
-     * Gets state.
+     * Gets the state of the request.
      *
      * @return the state
      */
@@ -94,7 +99,7 @@ public class FollowRequestModel extends BaseModel {
     }
 
     /**
-     * Gets created at.
+     * Gets created at, which is String information for a time that the request will be created at.
      *
      * @return the created at
      */
@@ -112,7 +117,7 @@ public class FollowRequestModel extends BaseModel {
     }
 
     /**
-     * Date object date.
+     * Date object date, turns CreatedAt into a date object, then returned.
      *
      * @return the date
      */
