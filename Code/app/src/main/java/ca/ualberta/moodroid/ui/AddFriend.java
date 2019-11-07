@@ -136,22 +136,30 @@ public class AddFriend extends AppCompatActivity {
 
                                 Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                             } else {
-                                // create a new follow request
-                                Log.d("ADDUSER/REQUEST", "Request non-existent");
-                                FollowRequestModel request = new FollowRequestModel();
-                                request.setRequesteeUsername(name);
-                                request.setRequesterUsername(me);
-                                request.setState(FollowRequestModel.REQUESTED_STATE);
-                                request.setCreatedAt((String.valueOf((new Date()).getTime())));
-                                requests.create(request).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<ModelInterface> task) {
-                                        if (task.isSuccessful()) {
-                                            statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
-                                            Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
+                                //check if user is trying to follow themselves
+                                if (!me.equals(name)){
+                                    // create a new follow request
+                                    Log.d("ADDUSER/REQUEST", "Request non-existent");
+                                    FollowRequestModel request = new FollowRequestModel();
+                                    request.setRequesteeUsername(name);
+                                    request.setRequesterUsername(me);
+                                    request.setState(FollowRequestModel.REQUESTED_STATE);
+                                    request.setCreatedAt((String.valueOf((new Date()).getTime())));
+                                    requests.create(request).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<ModelInterface> task) {
+                                            if (task.isSuccessful()) {
+                                                statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
+                                                Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
+                                //If you try to follow yourself
+                                else{
+                                    statusField.setText("You cannot follow yourself.");
+                                }
+
                             }
                         }
                     });

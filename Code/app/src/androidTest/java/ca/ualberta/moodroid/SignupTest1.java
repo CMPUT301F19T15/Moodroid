@@ -18,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.os.SystemClock.sleep;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -31,20 +32,24 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
-
-/*
-    This test checks that a username is taken when we try to register it, it also checks that the
-    profile for a user shows their profile name (this is the assert to make sure the test worked)
- */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SignupTakenNameCheckProfile {
+public class SignupTest1 {
+
+    /*
+    sign up tests DO NOT WORK, I'm not sure why, but it crashes just before the assert due to an issue with view hierarchy, sleeping doesn't seem to fix this
+     */
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void signupTakenNameCheckProfile() {
+    public void signupTest1() {
+
+        //You need to redfine a username and email each time
+        String username = "usernametotes4455t123";
+        String email = "email1212312414441231545512@email.ca";
+
         ViewInteraction supportVectorDrawablesButton = onView(
                 allOf(withId(R.id.email_button), withText("Sign in with email"),
                         childAtPosition(
@@ -55,16 +60,6 @@ public class SignupTakenNameCheckProfile {
                                 0)));
         supportVectorDrawablesButton.perform(scrollTo(), click());
 
-        ViewInteraction textInputLayout = onView(
-                allOf(withId(R.id.email_layout),
-                        childAtPosition(
-                                allOf(withId(R.id.email_top_layout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.ScrollView")),
-                                                0)),
-                                1)));
-        textInputLayout.perform(scrollTo(), click());
-
         ViewInteraction textInputEditText = onView(
                 allOf(withId(R.id.email),
                         childAtPosition(
@@ -72,7 +67,7 @@ public class SignupTakenNameCheckProfile {
                                         withId(R.id.email_layout),
                                         0),
                                 0)));
-        textInputEditText.perform(scrollTo(), replaceText("testemail2@test.ca"), closeSoftKeyboard());
+        textInputEditText.perform(scrollTo(), replaceText(email), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button_next), withText("Next"),
@@ -109,7 +104,7 @@ public class SignupTakenNameCheckProfile {
                                         withId(R.id.name_layout),
                                         0),
                                 0)));
-        textInputEditText4.perform(scrollTo(), replaceText("Test"), closeSoftKeyboard());
+        textInputEditText4.perform(scrollTo(), replaceText("Te"), closeSoftKeyboard());
 
         ViewInteraction textInputEditText5 = onView(
                 allOf(withId(R.id.password),
@@ -118,7 +113,7 @@ public class SignupTakenNameCheckProfile {
                                         withId(R.id.password_layout),
                                         0),
                                 0)));
-        textInputEditText5.perform(scrollTo(), replaceText("test111"), closeSoftKeyboard());
+        textInputEditText5.perform(scrollTo(), replaceText("test123"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.button_create), withText("Save"),
@@ -137,7 +132,9 @@ public class SignupTakenNameCheckProfile {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("jorden1"), closeSoftKeyboard());
+        //sleep so it doesnt break i hope
+        sleep(1000);
+        appCompatEditText.perform(replaceText(username), closeSoftKeyboard());
 
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.register_btn), withText("Sign up"),
@@ -149,36 +146,6 @@ public class SignupTakenNameCheckProfile {
                         isDisplayed()));
         appCompatButton3.perform(click());
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.signup_username), withText("jorden1"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("test test test"));
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.signup_username), withText("test test test"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText3.perform(closeSoftKeyboard());
-
-        ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.register_btn), withText("Sign up"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatButton4.perform(click());
-
         ViewInteraction bottomNavigationItemView = onView(
                 allOf(withId(R.id.ic_profile),
                         childAtPosition(
@@ -187,10 +154,12 @@ public class SignupTakenNameCheckProfile {
                                         0),
                                 3),
                         isDisplayed()));
+        //classic required sleep
+        sleep(1000);
         bottomNavigationItemView.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.profile_user_name_text_view), withText("test test test"),
+                allOf(withId(R.id.profile_user_name_text_view), withText("test4"),
                         childAtPosition(
                                 allOf(withId(R.id.relativeLayout),
                                         childAtPosition(
@@ -198,7 +167,9 @@ public class SignupTakenNameCheckProfile {
                                                 0)),
                                 1),
                         isDisplayed()));
-        textView.check(matches(withText("test test test")));
+        //classic required sleep 5 seconds doesnt seem to be enough to fix it so idk
+        sleep(5000);
+        textView.check(matches(withText(username)));
     }
 
     private static Matcher<View> childAtPosition(
