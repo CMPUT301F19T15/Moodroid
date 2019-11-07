@@ -68,6 +68,9 @@ import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.ui.AddFriend;
 import ca.ualberta.moodroid.ui.SignUp;
 
+/**
+ * The type Main activity.
+ */
 @Singleton
 public class MainActivity extends AppCompatActivity {
 
@@ -75,9 +78,21 @@ public class MainActivity extends AppCompatActivity {
     private UserRepository users;
     private Intent intent;
 
+    /**
+     * The Tool bar button left.
+     */
     ImageButton toolBarButtonLeft;
+    /**
+     * The Tool bar button right.
+     */
     ImageButton toolBarButtonRight;
+    /**
+     * The Tool bar text view.
+     */
     TextView toolBarTextView;
+    /**
+     * The Tool bar text.
+     */
     String toolBarText;
 
     @Override

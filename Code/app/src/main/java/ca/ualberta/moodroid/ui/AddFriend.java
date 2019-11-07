@@ -31,23 +31,58 @@ import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
+/**
+ * Request to follow a friend's mood events
+ */
 public class AddFriend extends AppCompatActivity {
 
+    /**
+     * The Intent.
+     */
     Intent intent;
+    /**
+     * The Users.
+     */
     UserRepository users;
+    /**
+     * The Requests.
+     */
     FollowRequestRepository requests;
-    // TODO: Get my username and wait until it is grabbed
+    /**
+     * The Me.
+     */
+// TODO: Get my username and wait until it is grabbed
     String me;
+    /**
+     * The Tool bar button left.
+     */
     ImageButton toolBarButtonLeft;
+    /**
+     * The Tool bar text view.
+     */
     TextView toolBarTextView;
+    /**
+     * The Tool bar text.
+     */
     String toolBarText;
 
+    /**
+     * The Username field.
+     */
     @BindView(R.id.username)
     EditText usernameField;
 
+    /**
+     * The Status field.
+     */
     @BindView(R.id.instruction)
     TextView statusField;
 
+    /**
+     * Build the initial UI
+     *
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
@@ -72,6 +107,11 @@ public class AddFriend extends AppCompatActivity {
         });
     }
 
+    /**
+     * When the send button is clicked, attempt to follow the user.
+     *
+     * @param view the view
+     */
     @OnClick(R.id.send)
     public void attemptUserFollow(View view) {
         statusField.setText("");
@@ -82,6 +122,7 @@ public class AddFriend extends AppCompatActivity {
         users.where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
             public void onComplete(@NonNull Task<ModelInterface> task) {
+                // We were able to find the user
                 if (task.isSuccessful()) {
                     UserModel user = (UserModel) task.getResult();
                     Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
@@ -115,6 +156,7 @@ public class AddFriend extends AppCompatActivity {
                         }
                     });
                 } else {
+                    // the specified user doesn't exist
                     usernameField.setError("That username does not exist.");
                     Log.d("ADDUSER/FAILURE", "Couldn't find the user: " + name);
                 }

@@ -17,6 +17,9 @@ import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.repository.UserRepository;
 
+/**
+ * User operations in the application
+ */
 public class UserService implements UserInterface {
 
 
@@ -24,7 +27,9 @@ public class UserService implements UserInterface {
     private UserRepository users;
     private FollowRequestRepository requests;
 
-    @Inject
+    /**
+     * Initialize all required services
+     */
     public UserService() {
         this.auth = AuthenticationService.getInstance();
         this.users = new UserRepository();
@@ -36,6 +41,11 @@ public class UserService implements UserInterface {
         // get current user, and set the username
     }
 
+    /**
+     * Get all follow requests where they are being requested to be followed
+     *
+     * @return
+     */
     public Task<List<FollowRequestModel>> getAllFollowRequests() {
 
         return this.requests.where("requesteeUsername", this.auth.getUsername()).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
@@ -54,6 +64,11 @@ public class UserService implements UserInterface {
         });
     }
 
+    /**
+     * Return a list of follow requests of the users that the signed in user currently follows
+     *
+     * @return all users i follow
+     */
     public Task<List<FollowRequestModel>> getAllUsersIFollow() {
         return this.requests.where("requesterUsername", this.auth.getUsername()).where("state", FollowRequestModel.ACCEPT_STATE).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
             @Override
@@ -70,11 +85,24 @@ public class UserService implements UserInterface {
         });
     }
 
+    /**
+     * Not implemented
+     *
+     * @param user
+     * @return
+     */
     public FollowRequestModel createFollowRequest(UserModel user) {
         return new FollowRequestModel();
     }
 
+    /**
+     * Accept a follow request
+     *
+     * @param request
+     * @return
+     */
     public Task<Boolean> acceptFollowRequest(FollowRequestModel request) {
+        request.setState(FollowRequestModel.ACCEPT_STATE);
         return this.requests.update(request).continueWith(new Continuation<ModelInterface, Boolean>() {
             @Override
             public Boolean then(@NonNull Task<ModelInterface> task) throws Exception {
@@ -83,7 +111,14 @@ public class UserService implements UserInterface {
         });
     }
 
+    /**
+     * Deny a follow request
+     *
+     * @param request
+     * @return
+     */
     public Task<Boolean> denyFollowRequest(FollowRequestModel request) {
+        request.setState(FollowRequestModel.DENY_STATE);
         return this.requests.update(request).continueWith(new Continuation<ModelInterface, Boolean>() {
             @Override
             public Boolean then(@NonNull Task<ModelInterface> task) throws Exception {
@@ -92,6 +127,12 @@ public class UserService implements UserInterface {
         });
     }
 
+    /**
+     * Not implemented
+     *
+     * @param username
+     * @return
+     */
     public UserModel getUserByUsername(String username) {
         return new UserModel();
     }

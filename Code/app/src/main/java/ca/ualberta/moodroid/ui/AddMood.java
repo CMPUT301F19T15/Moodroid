@@ -10,6 +10,9 @@ import android.widget.ImageButton;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ * Display for selecting a mood when first creating a mood event
+ */
 //TODO: Dynamically grab mood from Firestore
 public class AddMood extends AppCompatActivity {
 
@@ -20,18 +23,49 @@ public class AddMood extends AppCompatActivity {
     private ImageButton mad_button;
     private ImageButton scared_button;
     private ImageButton sick_button;
+    /**
+     * The Annoyed drawable id.
+     */
     String annoyed_drawable_id = "@drawable/annoyed";
+    /**
+     * The Happy drawable id.
+     */
     String happy_drawable_id = "@drawable/happy";
+    /**
+     * The Sad drawable id.
+     */
     String sad_drawable_id = "@drawable/sad";
+    /**
+     * The Mad drawable id.
+     */
     String mad_drawable_id = "@drawable/mad";
+    /**
+     * The Scared drawable id.
+     */
     String scared_drawable_id = "@drawable/scared";
+    /**
+     * The Sick drawable id.
+     */
     String sick_drawable_id = "@drawable/sick";
     private boolean center_filled = false;
+    /**
+     * The Selected img.
+     */
     String selected_img;
+    /**
+     * The Mood name.
+     */
     String mood_name;
+    /**
+     * The Hex.
+     */
     String hex;
 
-
+    /**
+     * Set a listener for each button, and on click but the drawable in the center. When the center is clicked, go to the mood detail screen.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

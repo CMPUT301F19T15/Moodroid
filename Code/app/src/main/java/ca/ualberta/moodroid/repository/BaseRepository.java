@@ -30,11 +30,23 @@ abstract class BaseRepository implements RepositoryInterface {
      * These are configurable things
      */
     protected String collectionName;
+    /**
+     * The Model class.
+     */
     protected Class modelClass;
 
 
+    /**
+     * The Collection.
+     */
     protected CollectionReference collection;
+    /**
+     * The Query.
+     */
     protected Query query;
+    /**
+     * The Db.
+     */
     protected FirebaseFirestore db;
 
 
@@ -65,7 +77,7 @@ abstract class BaseRepository implements RepositoryInterface {
     /**
      * Get the current query
      *
-     * @return
+     * @return query
      */
     protected Query getQuery() {
         if (this.query == null) {
@@ -78,7 +90,7 @@ abstract class BaseRepository implements RepositoryInterface {
     /**
      * Set the current query
      *
-     * @param q
+     * @param q the q
      */
     protected void setQuery(Query q) {
         this.query = q;
@@ -162,6 +174,12 @@ abstract class BaseRepository implements RepositoryInterface {
         });
     }
 
+    /**
+     * Find a specific document by it's ID
+     *
+     * @param id the id
+     * @return task
+     */
     public Task<ModelInterface> find(String id) {
         final Class<ModelInterface> modelClass = this.getModelClass();
         return this.collection.document(id).get().continueWith(new Continuation<DocumentSnapshot, ModelInterface>() {
@@ -216,6 +234,13 @@ abstract class BaseRepository implements RepositoryInterface {
                 });
     }
 
+    /**
+     * Create a document in firestore
+     *
+     * @param model the model
+     * @param docId the doc id
+     * @return task
+     */
     public Task<ModelInterface> create(final ModelInterface model, final String docId) {
         return this.collection.document(docId).set(model)
                 .continueWith(new Continuation<Void, ModelInterface>() {

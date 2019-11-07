@@ -27,6 +27,9 @@ import ca.ualberta.moodroid.service.MoodService;
 //import ca.ualberta.moodroid.model.MoodModel;
 
 
+/**
+ * Get the mood history for a logged in user
+ */
 public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
 
     /**
@@ -35,18 +38,34 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * one button for adding a new mood event
      * another for filtering the mood list by a certain mood
      */
-
-    // variables needed
+// variables needed
     MoodEventService moodEvents;
+    /**
+     * The Moods.
+     */
     MoodService moods;
     private int ACTIVITY_NUM = 1;
     private Intent intent;
+    /**
+     * The Mood list recycler view.
+     */
     protected RecyclerView moodListRecyclerView;
+    /**
+     * The Mood list adapter.
+     */
     protected RecyclerView.Adapter moodListAdapter;
+    /**
+     * The Mood list layout manager.
+     */
     protected RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
+    /**
+     * The Mood list.
+     */
     ArrayList<MoodEventModel> moodList;
+    /**
+     * The All moods.
+     */
     List<MoodModel> allMoods;
-
 
 
     @Override
@@ -98,7 +117,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     /**
      * reverse sorting all of the mood events
      */
-    private void reverseSort() {
+    protected void reverseSort() {
         Collections.sort(moodList, new Comparator<MoodEventModel>() {
             @Override
             public int compare(MoodEventModel mood1, MoodEventModel mood2) {
@@ -116,7 +135,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     /**
      * update the list view
      */
-    private void updateListView() {
+    protected void updateListView() {
         moodListRecyclerView = findViewById(R.id.mood_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(MoodHistory.this);
@@ -129,6 +148,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * checking when the user clicks on the list
      * takes the certain postion
      * and opens up that edit delete diaglog
+     *
      * @param position
      */
     @Override

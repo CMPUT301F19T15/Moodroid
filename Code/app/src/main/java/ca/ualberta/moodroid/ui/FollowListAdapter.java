@@ -21,22 +21,52 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.service.UserService;
 
+/**
+ * Adapter for the list of follow requests on the notification page
+ */
 public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.ViewHolder> {
     private ArrayList<FollowRequestModel> requestList;
+    /**
+     * The User service.
+     */
     UserService userService;
+    /**
+     * The Context.
+     */
     static Context context;
 
     private OnListListener mOnListListener;
 
+    /**
+     * The type View holder.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
 
+        /**
+         * The Request text.
+         */
         public TextView requestText;
+        /**
+         * The Deny button.
+         */
         public Button denyButton;
+        /**
+         * The Accept button.
+         */
         public Button acceptButton;
+        /**
+         * The On list listener.
+         */
         FollowListAdapter.OnListListener onListListener;
 
 
+        /**
+         * Instantiates a new View holder.
+         *
+         * @param itemView       the item view
+         * @param onListListener the on list listener
+         */
         public ViewHolder(@NonNull View itemView, OnListListener onListListener) {
             super(itemView);
             //get references to items in list
@@ -55,6 +85,13 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         }
     }
 
+    /**
+     * Instantiates a new Follow list adapter.
+     *
+     * @param requestList    the request list
+     * @param userService    the user service
+     * @param onListListener the on list listener
+     */
     public FollowListAdapter(ArrayList<FollowRequestModel> requestList, UserService userService, OnListListener onListListener) {
         this.requestList = requestList;
         this.userService = userService;
@@ -85,17 +122,33 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
     //
 
+    /**
+     * The interface On list listener.
+     */
     public interface OnListListener {
+        /**
+         * On list click.
+         *
+         * @param position the position
+         */
         void onListClick(int position);
     }
 
+    /**
+     * Open edit delete dialog.
+     */
     public void openEditDeleteDialog() {
 
         EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
         editDeleteFragment.show(((MoodHistory) context).getSupportFragmentManager(), "Options");
     }
 
-    //
+    /**
+     * When a new list item is added, set the view parameters (color, text, buttons, ect) also setup the button actions individually for each list item
+     *
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //assign values and display items in list
@@ -151,6 +204,12 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         });
     }
 
+    /**
+     * Sets a given item view to "accepted" mode, removing the buttons and changing the text.
+     *
+     * @param holder  the holder
+     * @param request the request
+     */
     public void setAccepted(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " is following your moods.");
         holder.denyButton.setVisibility(View.INVISIBLE);
@@ -158,6 +217,12 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
     }
 
+    /**
+     * Sets a given item view to "denied" mode, removing buttons and changing the text.
+     *
+     * @param holder  the holder
+     * @param request the request
+     */
     public void setDenied(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " was declined.");
         holder.denyButton.setVisibility(View.INVISIBLE);

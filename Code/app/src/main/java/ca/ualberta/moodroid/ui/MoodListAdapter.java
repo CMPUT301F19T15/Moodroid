@@ -34,25 +34,61 @@ import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 
+/**
+ * The type Mood list adapter.
+ */
 public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHolder> {
     private ArrayList<MoodEventModel> moodList;
+    /**
+     * The Mood events.
+     */
     MoodEventService moodEvents;
     private List<MoodModel> moods;
     private Boolean showUsername;
+    /**
+     * The Context.
+     */
     static Context context;
 
     private OnListListener mOnListListener;
 
+    /**
+     * The type View holder.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
+        /**
+         * The Emoji view.
+         */
         public TextView emojiView;
+        /**
+         * The Mood text.
+         */
         public TextView moodText;
+        /**
+         * The Date text.
+         */
         public TextView dateText;
+        /**
+         * The Time text.
+         */
         public TextView timeText;
+        /**
+         * The List item background view.
+         */
         public ImageView listItemBackgroundView;
+        /**
+         * The On list listener.
+         */
         OnListListener onListListener;
 
 
+        /**
+         * Instantiates a new View holder.
+         *
+         * @param itemView       the item view
+         * @param onListListener the on list listener
+         */
         public ViewHolder(@NonNull View itemView, OnListListener onListListener) {
             super(itemView);
             //get references to items in list
@@ -73,6 +109,14 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         }
     }
 
+    /**
+     * Instantiates a new Mood list adapter.
+     *
+     * @param moodList       the mood list
+     * @param moods          the moods
+     * @param showUsername   the show username
+     * @param onListListener the on list listener
+     */
     public MoodListAdapter(ArrayList<MoodEventModel> moodList, List<MoodModel> moods, Boolean showUsername, OnListListener onListListener) {
         this.moodList = moodList;
         this.showUsername = showUsername;
@@ -107,10 +151,21 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
 
     //
 
+    /**
+     * The interface On list listener.
+     */
     public interface OnListListener {
+        /**
+         * On list click.
+         *
+         * @param position the position
+         */
         void onListClick(int position);
     }
 
+    /**
+     * Open edit delete dialog.
+     */
     public void openEditDeleteDialog() {
 
         EditDeleteFragment editDeleteFragment = new EditDeleteFragment();

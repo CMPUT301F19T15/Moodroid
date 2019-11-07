@@ -19,22 +19,37 @@ import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.ValidationService;
 
-public class Profile extends BaseUIActivity {
 /**
- * This shows the user's profile info, an option to navigate to the
- * map view, and an option to logout of the app.
+ * The type Profile.
  */
+public class Profile extends BaseUIActivity {
+    /**
+     * This shows the user's profile info, an option to navigate to the
+     * map view, and an option to logout of the app.
+     */
 
     MoodEventService moodEvents;
+    /**
+     * The Validation.
+     */
     ValidationService validation;
 
     private int ACTIVITY_NUM = 3;
     private Intent intent;
 
+    /**
+     * The My user name.
+     */
     String myUserName;
 
+    /**
+     * The User name view.
+     */
     @BindView(R.id.profile_user_name_text_view)
     TextView userNameView;
+    /**
+     * The Log out button.
+     */
     @BindView(R.id.logout_button)
     Button logOutButton;
 

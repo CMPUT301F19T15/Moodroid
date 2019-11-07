@@ -30,23 +30,24 @@ import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 
+/**
+ * The type Map.
+ */
 public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     /**
      * Map activity where it creates the map with the
      * desired markers on the map and sets the camera view
-     *
+     * <p>
      * TO DO
      * - Make the marker look better and easier to see
      * - add icon generator to do that
      * - change the map view to current location
      * - implement the current location on the map
      * - add an on long click listener to the marker
-     *   to take the user to view all of the mood details for that mood
+     * to take the user to view all of the mood details for that mood
      * - if time then add clusters
-     *
      */
-
     public Map() {
 
     }
@@ -58,15 +59,35 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     // any variable needed
     private GoogleMap mMap;
+    /**
+     * The Tool bar button left.
+     */
     ImageButton toolBarButtonLeft;
+    /**
+     * The Tool bar button right.
+     */
     ImageButton toolBarButtonRight;
+    /**
+     * The Tool bar text view.
+     */
     TextView toolBarTextView;
+    /**
+     * The Tool bar text.
+     */
     String toolBarText;
     private Intent intent;
 
+    /**
+     * The My user name.
+     */
     String myUserName;
 
 
+    /**
+     * New instance map.
+     *
+     * @return the map
+     */
     public static Map newInstance() {
         return new Map();
     }

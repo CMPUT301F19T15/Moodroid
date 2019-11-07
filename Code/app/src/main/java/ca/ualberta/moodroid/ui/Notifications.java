@@ -30,14 +30,23 @@ import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
+/**
+ * The type Notifications.
+ */
 public class Notifications extends BaseUIActivity implements FollowListAdapter.OnListListener {
 
+    /**
+     * The Users.
+     */
     UserService users;
     private static final int ACTIVITY_NUM = 0;
 
     private RecyclerView moodListRecyclerView;
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
+    /**
+     * The Request list.
+     */
     ArrayList<FollowRequestModel> requestList;
 
 

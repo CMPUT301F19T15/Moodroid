@@ -37,42 +37,82 @@ import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 
+/**
+ * Insert a mood event for the logged in user after selecting their mood
+ */
 public class AddMoodDetail extends AppCompatActivity {
 
     private ImageView mood_img;
     private TextView mood_title;
     private RelativeLayout banner;
 
-    // creating the mood repo
+    /**
+     * The Mood.
+     */
+// creating the mood repo
     final MoodEventRepository mood = new MoodEventRepository();
 
+    /**
+     * The Mood event.
+     */
     MoodEventModel moodEvent = new MoodEventModel();
 
+    /**
+     * The Date.
+     */
     @BindView(R.id.mood_detail_date)
     protected EditText date;
 
+    /**
+     * The Time.
+     */
     @BindView(R.id.mood_detail_time)
     protected EditText time;
 
+    /**
+     * The Social situation.
+     */
     @BindView(R.id.social_situation)
     protected Spinner social_situation;
 
 
+    /**
+     * The Reason text.
+     */
     @BindView(R.id.mood_detail_reason)
     protected EditText reason_text;
 
+    /**
+     * The constant situations.
+     */
     protected static String[] situations = new String[]{"Alone", "One Other Person", "Two to Several People", "Crowd"};
 
 
+    /**
+     * The Confirm btn.
+     */
     @BindView(R.id.add_detail_confirm_btn)
     protected Button confirmBtn;
 
+    /**
+     * The Date dialog.
+     */
     DatePickerDialog.OnDateSetListener dateDialog;
+    /**
+     * The Time dialog.
+     */
     TimePickerDialog.OnTimeSetListener timeDialog;
 
+    /**
+     * The Calendar.
+     */
     final Calendar calendar = Calendar.getInstance();
 
-
+    /**
+     * Setup the display to match the previously picked mood, and update the date fields with the current date and time
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,22 +165,41 @@ public class AddMoodDetail extends AppCompatActivity {
         };
     }
 
+    /**
+     * Update date display.
+     */
     public void updateDateDisplay() {
         this.date.setText(this.getDateString());
     }
 
+    /**
+     * Gets date string.
+     *
+     * @return the date string
+     */
     public String getDateString() {
         return new SimpleDateFormat("MM/dd/yy", Locale.US).format(calendar.getTime());
     }
 
+    /**
+     * Update time display.
+     */
     public void updateTimeDisplay() {
         this.time.setText(this.getTimeString());
     }
 
+    /**
+     * Gets time string.
+     *
+     * @return the time string
+     */
     public String getTimeString() {
         return new SimpleDateFormat("HH:mm", Locale.US).format(calendar.getTime());
     }
 
+    /**
+     * Show the date picker dialog
+     */
     @OnClick(R.id.mood_detail_date)
     public void dateClick() {
         Log.d("MOODDETAIL/DATE", "Date clicked!");
@@ -148,6 +207,9 @@ public class AddMoodDetail extends AppCompatActivity {
 
     }
 
+    /**
+     * Show the time picker dialog
+     */
     @OnClick(R.id.mood_detail_time)
     public void timeClick() {
         Log.d("MOODDETAIL/DATE", "Time clicked!");
@@ -155,6 +217,9 @@ public class AddMoodDetail extends AppCompatActivity {
     }
 
 
+    /**
+     * On click of the confirm button, create the new mood event and direct the user to the mood history view
+     */
     @OnClick(R.id.add_detail_confirm_btn)
     public void confirmClick() {
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());

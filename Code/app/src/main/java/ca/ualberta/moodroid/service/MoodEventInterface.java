@@ -1,5 +1,7 @@
 package ca.ualberta.moodroid.service;
 
+import com.google.android.gms.tasks.Task;
+
 import java.util.List;
 
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -13,43 +15,37 @@ public interface MoodEventInterface {
     /**
      * Get a list of all your mood events.
      *
-     * @return
+     * @return my events
      */
-    public List<MoodEventModel> getMyEvents();
+    public Task<List<MoodEventModel>> getMyEvents();
 
     /**
      * Get a list of all your mood events filtered by a mood
      *
-     * @param mood
-     * @return
+     * @param mood the mood
+     * @return my events
      */
     public List<MoodEventModel> getMyEvents(MoodModel mood);
 
-    /**
-     * Get a list of all the mood events of people you are allowed to follow
-     *
-     * @return
-     */
-    public List<MoodEventModel> getAllFollowingEvents();
 
     /**
      * Create a new mood event for the current user
      *
-     * @param moodEvent
+     * @param moodEvent the mood event
      */
-    public void createEvent(MoodEventModel moodEvent);
+    public Task<MoodEventModel> createEvent(MoodEventModel moodEvent);
 
     /**
      * Update an existing mood event for the current user
      *
-     * @param moodEvent
+     * @param moodEvent the mood event
      */
     public void updateEvent(MoodEventModel moodEvent);
 
     /**
      * Delete a mood event for the current user. Be sure this person is allowed to actually delete the mood event.
      *
-     * @param moodEvent
+     * @param moodEvent the mood event
      */
     public void deleteEvent(MoodEventModel moodEvent);
 }

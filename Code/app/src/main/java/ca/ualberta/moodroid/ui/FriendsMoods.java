@@ -33,15 +33,35 @@ import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.UserService;
 
+/**
+ * Shows the list of all people you follow's moods
+ */
 public class FriendsMoods extends MoodHistory {
 
+    /**
+     * The Users.
+     */
     UserService users;
+    /**
+     * The Mood events.
+     */
     MoodEventService moodEvents;
     private int ACTIVITY_NUM = 2;
+    /**
+     * The Intent.
+     */
     Intent intent;
+    /**
+     * The Events.
+     */
     ArrayList<MoodEventModel> events;
 
 
+    /**
+     * Get all the users you follow, and get a list of each users moods - then sort and display the moods
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +133,9 @@ public class FriendsMoods extends MoodHistory {
         });
     }
 
-
+    /**
+     * Updates the internal list view items with a new listing of events
+     */
     @Override
     protected void updateListView() {
         if (allMoods == null) {

@@ -31,28 +31,63 @@ import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.GeolocationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 
+/**
+ * The type Mood map.
+ */
 public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
+    /**
+     * Instantiates a new Mood map.
+     */
     public MoodMap() {
 
     }
 
     private static final String TAG = "Maps activity";
+    /**
+     * The Mood events.
+     */
     MoodEventService moodEvents;
+    /**
+     * The Geolocation.
+     */
     GeolocationService geolocation;
 
     private GoogleMap mMap;
+    /**
+     * The Tool bar button left.
+     */
     ImageButton toolBarButtonLeft;
+    /**
+     * The Tool bar button right.
+     */
     ImageButton toolBarButtonRight;
+    /**
+     * The Tool bar text view.
+     */
     TextView toolBarTextView;
+    /**
+     * The Tool bar text.
+     */
     String toolBarText;
     private Intent intent;
 
 
+    /**
+     * Instantiates a new Mood map.
+     *
+     * @param moodEventService   the mood event service
+     * @param geolocationService the geolocation service
+     */
     public MoodMap(MoodEventService moodEventService, GeolocationService geolocationService) {
         this.moodEvents = moodEventService;
         this.geolocation = geolocationService;
     }
 
+    /**
+     * New instance mood map.
+     *
+     * @return the mood map
+     */
     public static MoodMap newInstance() {
         return new MoodMap();
     }
