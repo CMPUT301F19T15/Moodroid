@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -69,20 +70,25 @@ public class FriendsMoods extends MoodHistory {
                 ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
 
                 for (FollowRequestModel user : followRequestModels) {
+                    // TODO: I need to reinitiate this service otherwise it won't get all the objects.
+                    MoodEventService eventsvc = new MoodEventService();
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-                    taskList.add(moodEvents.getEventsForUser(user.getRequesteeUsername()));
-                }
-
-                Tasks.whenAllSuccess(taskList).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
-                    @Override
-                    public void onSuccess(List<Object> objects) {
-                        for (Object e : objects) {
-                            events.addAll((List<MoodEventModel>) e);
+                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                        @Override
+                        public void onSuccess(List<MoodEventModel> moodEventModels) {
+                            Log.d("FRIENDSMOOD/TASK", "Task completed for: " + user.getRequesteeUsername() + ", size=" + moodEventModels.size());
+                            events.addAll(moodEventModels);
+                            reverseSort();
+                            updateListView();
                         }
-                        reverseSort();
-                        updateListView();
-                    }
-                });
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("FRIENDSMOOD/TASK", "Task failed for: " + user.getRequesteeUsername() + e.getMessage());
+
+                        }
+                    });
+                }
             }
         });
 
