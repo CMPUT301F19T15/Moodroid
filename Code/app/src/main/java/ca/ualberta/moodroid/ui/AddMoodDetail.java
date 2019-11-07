@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -72,6 +73,14 @@ public class AddMoodDetail extends AppCompatActivity {
                     String textReason = data.getStringExtra("textReason");
                     moodEvent.setReasonText(textReason);
                     reasonInput.setText(textReason);
+                    try
+                    {
+                        Thread.sleep(1000);
+                    }
+                    catch(InterruptedException ex)
+                    {
+                        Thread.currentThread().interrupt();
+                    }
                 }
 
             }
