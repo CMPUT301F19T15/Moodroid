@@ -1,6 +1,7 @@
 package ca.ualberta.moodroid.model;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FollowRequestModel extends BaseModel {
@@ -46,6 +47,10 @@ public class FollowRequestModel extends BaseModel {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date dateObject() {
+        return new Date(Long.parseLong(this.getCreatedAt()));
     }
 
 }

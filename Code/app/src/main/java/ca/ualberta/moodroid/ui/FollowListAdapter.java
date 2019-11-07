@@ -103,7 +103,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         FollowRequestModel moodObject = requestList.get(position);
 
         if (moodObject.getState().equals(FollowRequestModel.REQUESTED_STATE)) {
-            holder.requestText.setText("@" + moodObject.getRequesterUsername() + " requested to be friends on " + moodObject.getCreatedAt());
+            holder.requestText.setText("@" + moodObject.getRequesterUsername() + " requested to be friends on " + new SimpleDateFormat("MMMM dd yyyy").format(moodObject.dateObject()));
         } else if (moodObject.getState().equals(FollowRequestModel.ACCEPT_STATE)) {
             setAccepted(holder, moodObject);
         } else if (moodObject.getState().equals(FollowRequestModel.DENY_STATE)) {

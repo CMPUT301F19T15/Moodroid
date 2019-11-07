@@ -4,8 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -28,16 +30,22 @@ public class MoodEventService {
 
     private AuthenticationInterface auth;
     private MoodEventRepository events;
-    private RepositoryInterface requests;
+    private UserService requests;
 
     @Inject
     public MoodEventService() {
         this.auth = AuthenticationService.getInstance();
         this.events = new MoodEventRepository();
+        this.requests = new UserService();
     }
 
     public Task<List<MoodEventModel>> getMyEvents() {
-        return this.events.where("username", this.auth.getUsername()).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
+        return this.getEventsForUser(AuthenticationService.getInstance().getUsername());
+
+    }
+
+    public Task<List<MoodEventModel>> getEventsForUser(String username) {
+        return this.events.where("username", username).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
             @Override
             public List<MoodEventModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
                 List<MoodEventModel> results = new ArrayList<MoodEventModel>();
@@ -67,15 +75,6 @@ public class MoodEventService {
         return returning;
     }
 
-    public List<MoodEventModel> getAllFollowingEvents() {
-
-        // get all allowed users to follow
-        // get all events that have those users
-        final List<MoodEventModel> returning = new ArrayList<>();
-
-        return returning;
-
-    }
 
     public Task<MoodEventModel> createEvent(MoodEventModel moodEvent) {
         moodEvent.setUsername(this.auth.getUsername());

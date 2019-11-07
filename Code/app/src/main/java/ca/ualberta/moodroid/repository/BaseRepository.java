@@ -98,6 +98,7 @@ abstract class BaseRepository implements RepositoryInterface {
         return this;
     }
 
+
     /**
      * Limit the number of query results when using get
      *
