@@ -166,6 +166,7 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
         } catch (Resources.NotFoundException e) {
             Log.e(TAG, "Can't find style. Error: ", e);
         }
+        mMap.setMyLocationEnabled(true);
 
         addMapMarkers();
         setCameraView();
