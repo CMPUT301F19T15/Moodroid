@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ * This code creates a mood fragment for display purposes in MoodHistory.
+ */
 public class MoodFrag extends Fragment {
     @Nullable
     @Override

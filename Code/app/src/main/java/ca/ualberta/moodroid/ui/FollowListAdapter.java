@@ -21,22 +21,56 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.service.UserService;
 
+/**
+ * Adapter for the list of follow requests on the notification page. This code takes data from
+ * requests sent to the user and displays them with some character.
+ */
 public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.ViewHolder> {
     private ArrayList<FollowRequestModel> requestList;
+    /**
+     * The User service type, used for handling data and situations with friends
+     * and following
+     */
     UserService userService;
+    /**
+     * The Context.
+     */
     static Context context;
 
     private OnListListener mOnListListener;
 
+    /**
+     * The type View holder. A ViewHolder describes an item view and metadata about its place
+     * within the RecyclerView.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
 
+        /**
+         * The Request text from a different user, displayed in a text view.
+         */
         public TextView requestText;
+        /**
+         * The deny button. A user can click this button to deny a follow request.
+         */
         public Button denyButton;
+        /**
+         * The Accept button. A user can click this button to accept a follow request.
+         */
         public Button acceptButton;
+        /**
+         * The On list listener, which is just a listener object for an item in a list, works like
+         * a listener for a button.
+         */
         FollowListAdapter.OnListListener onListListener;
 
 
+        /**
+         * Instantiates a new View holder.
+         *
+         * @param itemView       the item view
+         * @param onListListener the on list listener
+         */
         public ViewHolder(@NonNull View itemView, OnListListener onListListener) {
             super(itemView);
             //get references to items in list
@@ -55,6 +89,13 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         }
     }
 
+    /**
+     * Instantiates a new Follow list adapter.
+     *
+     * @param requestList    the request list
+     * @param userService    the user service
+     * @param onListListener the on list listener
+     */
     public FollowListAdapter(ArrayList<FollowRequestModel> requestList, UserService userService, OnListListener onListListener) {
         this.requestList = requestList;
         this.userService = userService;
@@ -85,17 +126,33 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
     //
 
+    /**
+     * The interface On list listener.
+     */
     public interface OnListListener {
+        /**
+         * On list click.
+         *
+         * @param position the position
+         */
         void onListClick(int position);
     }
 
+    /**
+     * Open edit delete dialog.
+     */
     public void openEditDeleteDialog() {
 
         EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
         editDeleteFragment.show(((MoodHistory) context).getSupportFragmentManager(), "Options");
     }
 
-    //
+    /**
+     * When a new list item is added, set the view parameters (color, text, buttons, ect) also setup the button actions individually for each list item
+     *
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //assign values and display items in list
@@ -151,6 +208,12 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         });
     }
 
+    /**
+     * Sets a given item view to "accepted" mode, removing the buttons and changing the text.
+     *
+     * @param holder  the holder
+     * @param request the request
+     */
     public void setAccepted(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " is following your moods.");
         holder.denyButton.setVisibility(View.INVISIBLE);
@@ -158,6 +221,12 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
     }
 
+    /**
+     * Sets a given item view to "denied" mode, removing buttons and changing the text.
+     *
+     * @param holder  the holder
+     * @param request the request
+     */
     public void setDenied(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " was declined.");
         holder.denyButton.setVisibility(View.INVISIBLE);

@@ -11,8 +11,16 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ * The type Bottom nav view.
+ */
 public class BottomNavView {
 
+    /**
+     * Sets bottom nav view.
+     *
+     * @param bottomNavigationViewEx the bottom navigation view ex
+     */
     public static void setupBottomNavView(BottomNavigationViewEx bottomNavigationViewEx) {
         bottomNavigationViewEx.enableAnimation(false);
         bottomNavigationViewEx.enableItemShiftingMode(false);
@@ -20,6 +28,12 @@ public class BottomNavView {
         bottomNavigationViewEx.setTextVisibility(false);
     }
 
+    /**
+     * Enable navigation
+     *
+     * @param context the context
+     * @param view    the view
+     */
     public static void enableNav(final Context context, BottomNavigationViewEx view) {
         view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

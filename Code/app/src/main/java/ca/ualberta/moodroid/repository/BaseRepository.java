@@ -19,7 +19,9 @@ import java.util.List;
 import ca.ualberta.moodroid.model.ModelInterface;
 
 /**
- * The base repository all repositories use to query FireStore.
+ * The base repository all repositories use to query FireStore. This is the root class of all of
+ * the repositories used for our project. Attributes mostly include names of major models and
+ * collections, collections being groups of info that is a unique term to firebase
  *
  * @author Taylor Christie
  * @version v1
@@ -27,14 +29,27 @@ import ca.ualberta.moodroid.model.ModelInterface;
 abstract class BaseRepository implements RepositoryInterface {
 
     /**
-     * These are configurable things
+     *
+     * This contains data for the name of a collection in our database
      */
     protected String collectionName;
+    /**
+     * The Model class, stores information for our models.
+     */
     protected Class modelClass;
 
 
+    /**
+     * The Collection, contains data to reference a certain collection in the database
+     */
     protected CollectionReference collection;
+    /**
+     * A query object, contains data for a particular query
+     */
     protected Query query;
+    /**
+     * a reference to the database itself.
+     */
     protected FirebaseFirestore db;
 
 
@@ -63,9 +78,9 @@ abstract class BaseRepository implements RepositoryInterface {
     }
 
     /**
-     * Get the current query
+     * grabs the current query from the database so the information can be used later
      *
-     * @return
+     * @return query
      */
     protected Query getQuery() {
         if (this.query == null) {
@@ -76,9 +91,9 @@ abstract class BaseRepository implements RepositoryInterface {
     }
 
     /**
-     * Set the current query
+     * Set the current query to find specific data
      *
-     * @param q
+     * @param q the q
      */
     protected void setQuery(Query q) {
         this.query = q;
@@ -162,6 +177,12 @@ abstract class BaseRepository implements RepositoryInterface {
         });
     }
 
+    /**
+     * Find a specific document by it's ID
+     *
+     * @param id the id
+     * @return task
+     */
     public Task<ModelInterface> find(String id) {
         final Class<ModelInterface> modelClass = this.getModelClass();
         return this.collection.document(id).get().continueWith(new Continuation<DocumentSnapshot, ModelInterface>() {
@@ -216,6 +237,13 @@ abstract class BaseRepository implements RepositoryInterface {
                 });
     }
 
+    /**
+     * Create a document in firestore
+     *
+     * @param model the model
+     * @param docId the doc id
+     * @return task
+     */
     public Task<ModelInterface> create(final ModelInterface model, final String docId) {
         return this.collection.document(docId).set(model)
                 .continueWith(new Continuation<Void, ModelInterface>() {

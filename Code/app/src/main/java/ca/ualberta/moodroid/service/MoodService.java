@@ -18,17 +18,29 @@ import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.repository.UserRepository;
 
+/**
+ * A simple way to get moods throughout the application
+ */
 public class MoodService implements MoodInterface {
 
-
+    /**
+     * The repository that stores all of the static mood concepts
+     */
     private MoodRepository moods;
 
-    @Inject
+    /**
+     * Initialize the mood repository
+     */
     public MoodService() {
 
         this.moods = new MoodRepository();
     }
 
+    /**
+     * Get the moods for the entire application, typed properly.
+     *
+     * @return
+     */
     public Task<List<MoodModel>> getAllMoods() {
 
         return this.moods.get().continueWith(new Continuation<List<ModelInterface>, List<MoodModel>>() {

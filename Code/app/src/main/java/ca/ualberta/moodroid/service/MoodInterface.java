@@ -6,12 +6,15 @@ import java.util.List;
 
 import ca.ualberta.moodroid.model.MoodModel;
 
+/**
+ * The interface Mood interface.
+ */
 public interface MoodInterface {
 
     /**
      * Get a list of all the moods in the application
      *
-     * @return
+     * @return all moods
      */
     public Task<List<MoodModel>> getAllMoods();
 }

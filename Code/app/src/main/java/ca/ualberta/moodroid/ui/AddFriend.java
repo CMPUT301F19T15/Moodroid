@@ -31,23 +31,69 @@ import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
+/**
+ * This class holds the logic that creates the ability for the user to interact with
+ * the app and create friend requests.
+ */
 public class AddFriend extends AppCompatActivity {
 
+    /**
+     * This intent brings the user back to their friends list in the FriendsMoods activity
+     */
     Intent intent;
+
+    /**
+     * the repository that stores user data
+     */
     UserRepository users;
+
+    /**
+     * The repository that stores all request related data.
+     */
     FollowRequestRepository requests;
-    // TODO: Get my username and wait until it is grabbed
+
+    /**
+     * String data that stores the users username
+     */
+// TODO: Get my username and wait until it is grabbed
     String me;
+
+    /**
+     * Part of the UI, essentially acts as a back button to navigate back to FriendsMoods
+     */
     ImageButton toolBarButtonLeft;
+
+    /**
+     * The text view that acts as a title for this activity.
+     */
     TextView toolBarTextView;
+
+    /**
+     * The string data that fills the toolBarText text view.
+     */
     String toolBarText;
 
+
+    /**
+     * This is the edit text field that the user interacts with, filling out the username of the
+     *  person they wish to add to their friends list.
+     */
     @BindView(R.id.username)
     EditText usernameField;
 
+    /**
+     * The field of text that explains what the user can do in this activity.
+     */
     @BindView(R.id.instruction)
     TextView statusField;
 
+    /**
+     * the code below builds the UI, and implements all of the logic that comes with it. As
+     * stated above, this class is meant to give the user the option to add a friend by using that
+     * friends username.
+     *
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
@@ -72,6 +118,11 @@ public class AddFriend extends AppCompatActivity {
         });
     }
 
+    /**
+     * When the send button is clicked, attempt to follow the user.
+     *
+     * @param view the view
+     */
     @OnClick(R.id.send)
     public void attemptUserFollow(View view) {
         statusField.setText("");
@@ -82,6 +133,7 @@ public class AddFriend extends AppCompatActivity {
         users.where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
             public void onComplete(@NonNull Task<ModelInterface> task) {
+                // We were able to find the user
                 if (task.isSuccessful()) {
                     UserModel user = (UserModel) task.getResult();
                     Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
@@ -115,6 +167,7 @@ public class AddFriend extends AppCompatActivity {
                         }
                     });
                 } else {
+                    // the specified user doesn't exist
                     usernameField.setError("That username does not exist.");
                     Log.d("ADDUSER/FAILURE", "Couldn't find the user: " + name);
                 }

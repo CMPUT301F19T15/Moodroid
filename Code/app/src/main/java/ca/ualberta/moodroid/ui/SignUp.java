@@ -25,12 +25,24 @@ import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 
+/**
+ * This is an initial screen a user will encounter when they are creating a username/account.
+ */
 public class SignUp extends AppCompatActivity {
 
 
+    /**
+     * The repository that holds user data
+     */
     UserRepository users;
+    /**
+     * the user object as firebase knows it.
+     */
     FirebaseUser user;
 
+    /**
+     * A textview that displays the username.
+     */
     @BindView(R.id.signup_username)
     EditText usernameField;
 
@@ -46,6 +58,11 @@ public class SignUp extends AppCompatActivity {
 
     }
 
+    /**
+     * Register username.
+     *
+     * @param v the v
+     */
     @OnClick(R.id.register_btn)
     public void registerUsername(View v) {
         final String username = usernameField.getText().toString();

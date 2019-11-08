@@ -24,26 +24,50 @@ import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.repository.RepositoryInterface;
 
-@Singleton
-public class MoodEventService {
+/**
+ * This service allows us to get many different mood event information that's important to us.
+ * It uses the authentication interface and the mood event repo to operate
+ */
+public class MoodEventService implements MoodEventInterface {
 
 
+    /**
+     * The authentication interface that includes get and set username
+     */
     private AuthenticationInterface auth;
+    /**
+     * The mood event repository that stores all user created mood events
+     */
     private MoodEventRepository events;
+
+
     private UserService requests;
 
-    @Inject
+    /**
+     * Initiate all required services
+     */
     public MoodEventService() {
         this.auth = AuthenticationService.getInstance();
         this.events = new MoodEventRepository();
         this.requests = new UserService();
     }
 
+    /**
+     * Get all the mood events of a logged in user
+     *
+     * @return my events
+     */
     public Task<List<MoodEventModel>> getMyEvents() {
         return this.getEventsForUser(AuthenticationService.getInstance().getUsername());
 
     }
 
+    /**
+     * Get all the mood events of any user, used for 05.03.01
+     *
+     * @param username the username
+     * @return events for user
+     */
     public Task<List<MoodEventModel>> getEventsForUser(String username) {
         return this.events.where("username", username).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
             @Override
@@ -66,6 +90,12 @@ public class MoodEventService {
 
     }
 
+    /**
+     * Not Implemented, used to get all a user's events filtered by a single mood.
+     *
+     * @param mood the mood
+     * @return my events
+     */
     public List<MoodEventModel> getMyEvents(MoodModel mood) {
         // get the user
         // get the mood name
@@ -76,6 +106,12 @@ public class MoodEventService {
     }
 
 
+    /**
+     * Create a mood event via a model.
+     *
+     * @param moodEvent the mood event
+     * @return task
+     */
     public Task<MoodEventModel> createEvent(MoodEventModel moodEvent) {
         moodEvent.setUsername(this.auth.getUsername());
         return this.events.create(moodEvent).continueWith(new Continuation<ModelInterface, MoodEventModel>() {
@@ -89,11 +125,21 @@ public class MoodEventService {
             }
         });
     }
-//
-//    public void updateEvent(MoodEventModel moodEvent) {
-//        this.events.update(moodEvent);
-//    }
 
+    /**
+     * Not yet implemented, update a mood event after input is given
+     *
+     * @param moodEvent the mood event
+     */
+    public void updateEvent(MoodEventModel moodEvent) {
+//        this.events.update(moodEvent);
+    }
+
+    /**
+     * Not yet implemented, delete a mood event
+     *
+     * @param moodEvent the mood event
+     */
     public void deleteEvent(MoodEventModel moodEvent) {
         //this.events.delete(moodEvent);
     }

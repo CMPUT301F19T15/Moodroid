@@ -13,6 +13,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ * NOT FULLY IMPLEMENTED
+ *
+ * a fragment for editing data
+ */
 public class EditDeleteFragment extends AppCompatDialogFragment {
 
     @NonNull

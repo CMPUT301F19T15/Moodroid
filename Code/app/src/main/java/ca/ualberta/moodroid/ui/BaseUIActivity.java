@@ -27,34 +27,68 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.service.MoodEventService;
 
+/**
+ * This class sets up our apps navigation capability. It creates the bottom tool bar for the main
+ * 4 activities in our app which are MoodHistory, FriendsMoods, Notifications, and Profile.
+ */
 public class BaseUIActivity extends AppCompatActivity {
 
+    /**
+     * The Activity num.
+     */
     protected int ACTIVITY_NUM;
 
 
+    /**
+     * The Tool bar button left
+     */
     @BindView(R.id.toolbar_button_left)
     ImageButton toolBarButtonLeft;
 
+    /**
+     * The Tool bar button right.
+     */
     @BindView(R.id.toolbar_button_right)
     ImageButton toolBarButtonRight;
 
+    /**
+     * The text view that displays the title of the activity.
+     */
     @BindView(R.id.toolbar_text_center)
     TextView toolBarTextView;
 
 
+    /**
+     * Sets title.
+     *
+     * @param title the title
+     */
     protected void setTitle(String title) {
         toolBarTextView.setText(title);
     }
 
+    /**
+     * Gets nav id.
+     *
+     * @return the nav id
+     */
     protected int getNavId() {
         return this.ACTIVITY_NUM;
     }
 
+    /**
+     * Gets me.
+     *
+     * @return the me
+     */
     protected AppCompatActivity getMe() {
         return this;
     }
 
 
+    /**
+     * Setup the bottom navigation bar view and navigation
+     */
     protected void bottomNavigationView() {
         //set up bottom navigation bar...go to corresponding activity
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);

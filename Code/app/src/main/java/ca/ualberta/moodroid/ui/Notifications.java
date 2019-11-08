@@ -30,14 +30,25 @@ import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
+/**
+ * This class creates the Notification activity, one of the 4 main activities. There will be
+ * data displayed on this screen via a custom array view if the user has pending requests to
+ * accept or deny.
+ */
 public class Notifications extends BaseUIActivity implements FollowListAdapter.OnListListener {
 
+    /**
+     * The Users.
+     */
     UserService users;
     private static final int ACTIVITY_NUM = 0;
 
     private RecyclerView moodListRecyclerView;
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
+    /**
+     * The Request list.
+     */
     ArrayList<FollowRequestModel> requestList;
 
 
