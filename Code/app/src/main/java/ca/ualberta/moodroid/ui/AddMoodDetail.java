@@ -39,6 +39,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,6 +72,8 @@ public class AddMoodDetail extends AppCompatActivity {
     private RelativeLayout banner;
     private Uri filePath;
     private String url;
+    private boolean hasPhoto;
+    private Uri urll; /////////////
 
     /**
      * The firebase storage references.
@@ -283,7 +286,15 @@ public class AddMoodDetail extends AppCompatActivity {
      */
     @OnClick(R.id.add_detail_confirm_btn)
     public void confirmClick() {
-        uploadPhoto();      /*upload photo to firebase storage */
+        if(hasPhoto){
+            //adding a photo is optional -> only call upload() if a photo has been added
+            uploadPhoto();      /*upload photo to firebase storage */
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
         moodEvent.setSituation(social_situation.getSelectedItem().toString());
@@ -316,6 +327,7 @@ public class AddMoodDetail extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 photoView.setImageBitmap(bitmap);
+                hasPhoto = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -336,7 +348,9 @@ public class AddMoodDetail extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //
+                        //get the photo's URL and save it as a string
+                      //  Uri urll = ref.getDownloadUrl().getResult();
+                    //    url = ref.getDownloadUrl().toString();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -354,9 +368,9 @@ public class AddMoodDetail extends AppCompatActivity {
                             progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
-            //get the photo's URL and save it as a string
-            url = ref.getDownloadUrl().toString();
+            Uri urll = ref.getDownloadUrl().getResult();
         }
+
     }
 
     /**
