@@ -125,7 +125,7 @@ public class AddMoodReason extends BaseUIActivity {
                 addLibraryPhotoButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                                choosePhoto();
+//                                choosePhoto();
                                 //make save photo button visible once user has chosen photo to upload
                         }
                 });
@@ -147,7 +147,7 @@ public class AddMoodReason extends BaseUIActivity {
                         @Override
                         public void onClick(View view) {
                                 if (pickedPhoto == true) {
-                                        uploadPhoto();
+//                                        uploadPhoto();
                                 }
                                 //send back photo and text description
                                 String textDescription = reasonText.getText().toString();
@@ -161,12 +161,12 @@ public class AddMoodReason extends BaseUIActivity {
                         }
                 });
 
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                                finish();
-                        }
-                });
+//                cancelButton.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                                finish();
+//                        }
+//                });
 
 
                 reasonText.addTextChangedListener(textWatcher);
@@ -214,10 +214,10 @@ public class AddMoodReason extends BaseUIActivity {
 
         private void choosePhoto() {
                 //create intent to start image choose dialog that allows user to browse through photo library
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "choose photo"), PICK_IMAGE_FROM_LIBRARY_REQUEST);
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "choose photo"), PICK_IMAGE_FROM_LIBRARY_REQUEST);
         }
 
         private void takePhoto() {
@@ -228,66 +228,66 @@ public class AddMoodReason extends BaseUIActivity {
                 }
         }
 
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-                //handle return intent
-                super.onActivityResult(requestCode, resultCode, data);
-                if (requestCode == PICK_IMAGE_FROM_LIBRARY_REQUEST && resultCode == RESULT_OK
-                        && data != null && data.getData() != null) {
-                        filePath = data.getData();
-                        try {
-                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                                photoView.setImageBitmap(bitmap);
-                                pickedPhoto = true;
-                                cancelButton.setVisibility(GONE);
-                                doneButton.setVisibility(View.VISIBLE);
-                        } catch (IOException e) {
-                                e.printStackTrace();
-                        }
-                }
-                else if(requestCode == TAKE_PHOTO_REQUEST && resultCode == RESULT_OK
-                        && data != null) {
-                        Bundle bundle = data.getExtras();
-                        Bitmap imageBitmap = (Bitmap) bundle.get("data");
-                        photoView.setImageBitmap(imageBitmap);
-                }
-        }
+//        @Override
+//        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//                //handle return intent
+//                super.onActivityResult(requestCode, resultCode, data);
+//                if (requestCode == PICK_IMAGE_FROM_LIBRARY_REQUEST && resultCode == RESULT_OK
+//                        && data != null && data.getData() != null) {
+//                        filePath = data.getData();
+//                        try {
+//                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+//                                photoView.setImageBitmap(bitmap);
+//                                pickedPhoto = true;
+//                                cancelButton.setVisibility(GONE);
+//                                doneButton.setVisibility(View.VISIBLE);
+//                        } catch (IOException e) {
+//                                e.printStackTrace();
+//                        }
+//                }
+//                else if(requestCode == TAKE_PHOTO_REQUEST && resultCode == RESULT_OK
+//                        && data != null) {
+//                        Bundle bundle = data.getExtras();
+//                        Bitmap imageBitmap = (Bitmap) bundle.get("data");
+//                        photoView.setImageBitmap(imageBitmap);
+//                }
+//        }
 
 
-        private void uploadPhoto() {
-                if (filePath != null) {
-                        final ProgressDialog progressDialog = new ProgressDialog(this);
-                        progressDialog.setTitle("Uploading...");
-                        progressDialog.show();
-                        //create random name starting with user internal id
-                        StorageReference ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
-                        ref.putFile(filePath)
-                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                progressDialog.dismiss();
-                                                Toast.makeText(AddMoodReason.this, "Image saved.", Toast.LENGTH_SHORT).show();
-                                        }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                                progressDialog.dismiss();
-                                                Toast.makeText(AddMoodReason.this, "Failed to save image. " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                })
-                                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                                        .getTotalByteCount());
-                                                progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                                        }
-                                });
-                        //get URL
-                        url = ref.getDownloadUrl().toString();
-                }
-        }
+//        private void uploadPhoto() {
+//                if (filePath != null) {
+//                        final ProgressDialog progressDialog = new ProgressDialog(this);
+//                        progressDialog.setTitle("Uploading...");
+//                        progressDialog.show();
+//                        //create random name starting with user internal id
+//                        StorageReference ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
+//                        ref.putFile(filePath)
+//                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                        @Override
+//                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                                progressDialog.dismiss();
+//                                                Toast.makeText(AddMoodReason.this, "Image saved.", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                        @Override
+//                                        public void onFailure(@NonNull Exception e) {
+//                                                progressDialog.dismiss();
+//                                                Toast.makeText(AddMoodReason.this, "Failed to save image. " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                        }
+//                                })
+//                                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                                        @Override
+//                                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                                                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+//                                                        .getTotalByteCount());
+//                                                progressDialog.setMessage("Uploaded " + (int) progress + "%");
+//                                        }
+//                                });
+//                        //get URL
+//                        url = ref.getDownloadUrl().toString();
+//                }
+//        }
 
 
 
