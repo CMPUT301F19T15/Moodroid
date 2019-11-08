@@ -32,3 +32,6 @@ This allows the design implementation to only know about how to talk with servic
 - **model**: a concrete construct of an object in firestore
 - **repository**: an implementation of C(reate)R(ead)U(pdate)D(elete) against some sort of persistent storage, in our case most likely Firestore
 - **service**: a concrete implementation of business logic to be utilized by the controllers/views/fragments/activities in our application
+- **friend follow request**: a user can send a request that is sent to the recipient and they can then decide whether to accept or decline the request
+- **friends mood event**: most recent mood event from friends who the user follows
+- **user**: a person who operates the application
