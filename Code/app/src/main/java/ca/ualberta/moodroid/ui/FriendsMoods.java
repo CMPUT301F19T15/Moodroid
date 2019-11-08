@@ -117,7 +117,7 @@ public class FriendsMoods extends MoodHistory {
         });
 
 
-        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
+//        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
         toolBarButtonLeft.setImageResource(R.drawable.ic_person_add_black_24dp);
         toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,14 +127,14 @@ public class FriendsMoods extends MoodHistory {
                 startActivity(intent);
             }
         });
-        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //navigate to MoodMap Activity
-                intent = new Intent(FriendsMoods.this, MoodMap.class);
-                startActivity(intent);
-            }
-        });
+//        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //navigate to MoodMap Activity
+//                intent = new Intent(FriendsMoods.this, MoodMap.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     /**
