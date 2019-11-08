@@ -42,8 +42,10 @@ public class SignupTryingTakenUsernamesTest {
 
         /*
         I'm pretty sure this test works and its just my lastpass fucking with it, but I could be wrong
+        either way I tested it by hand multiple times anyway at this point
          */
 
+        //define username and email since a new one is needed for each test, or they need to be removed from the database
         String username = "user4";
         String email = "email25@email.ca";
 
