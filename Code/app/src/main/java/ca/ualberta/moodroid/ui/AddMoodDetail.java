@@ -30,8 +30,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -289,11 +292,7 @@ public class AddMoodDetail extends AppCompatActivity {
         if(hasPhoto){
             //adding a photo is optional -> only call upload() if a photo has been added
             uploadPhoto();      /*upload photo to firebase storage */
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ////////////////////////////////////////////////////////////////////////////////////////////make it an asynchronous task
         }
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
@@ -339,39 +338,80 @@ public class AddMoodDetail extends AppCompatActivity {
      */
     private void uploadPhoto() {
         if (filePath != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-            //create random name starting with user internal id
+//            final ProgressDialog progressDialog = new ProgressDialog(this);
+//            progressDialog.setTitle("Uploading...");
+//            progressDialog.show();
+            //create random name starting with user's internal id
             StorageReference ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //get the photo's URL and save it as a string
+            //add file to Firebase storage, get url
+            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {          ////////////////////////////////////
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        urll = uri;             //Uri
+                        url = urll.toString();  //convert to string
+                    }
+                    });
+                }
+            });
+            }
+
+
+
+//            ref.putFile(filePath)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        //get the photo's URL and save it as a string
                       //  Uri urll = ref.getDownloadUrl().getResult();
                     //    url = ref.getDownloadUrl().toString();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(AddMoodDetail.this, "Failed to save image. " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
-                    });
-            Uri urll = ref.getDownloadUrl().getResult();
+//                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                @Override
+//                                public void onSuccess(Uri uri) {
+//                                    Uri downloadUrl = uri;
+//                                }
+//
+//                            });
+//
+//                            Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+//                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                @Override
+//                                public void onSuccess(Uri uri) {
+//                                    String photoLink = uri.toString();
+//                                }
+//                            });
+//
+//
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(AddMoodDetail.this, "Failed to save image. " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+//                                    .getTotalByteCount());
+//                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+//                        }
+//                    });
+            //Uri urll = ref.getDownloadUrl().getResult();
+
+
+
+
+
+
+
+
         }
 
-    }
 
     /**
      * Checks for valid input for the reason_text field. If more than 3 words are entered, it will
