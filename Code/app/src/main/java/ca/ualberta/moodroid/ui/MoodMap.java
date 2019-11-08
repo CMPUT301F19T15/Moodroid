@@ -1,6 +1,8 @@
 package ca.ualberta.moodroid.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -35,6 +38,8 @@ import ca.ualberta.moodroid.service.MoodEventService;
  * The type Mood map.
  */
 public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
+    private boolean mLocationPermissionGranted = true;
+
     /**
      * Instantiates a new Mood map.
      */
@@ -166,12 +171,21 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
         } catch (Resources.NotFoundException e) {
             Log.e(TAG, "Can't find style. Error: ", e);
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         mMap.setMyLocationEnabled(true);
+
 
         addMapMarkers();
         setCameraView();
 
     }
+
+
 
     private void addMapMarkers(){
 
