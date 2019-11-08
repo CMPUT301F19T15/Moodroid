@@ -163,7 +163,8 @@ public class AddFriend extends AppCompatActivity {
                             }
                         }
                     });
-                } else {
+                }
+                else {
                     // the specified user doesn't exist
                     usernameField.setError("That username does not exist.");
                     Log.d("ADDUSER/FAILURE", "Couldn't find the user: " + name);

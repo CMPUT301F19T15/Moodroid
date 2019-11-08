@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -19,7 +20,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.os.SystemClock.sleep;
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -27,29 +30,22 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SignupTest1 {
-
-    /*
-    sign up tests DO NOT WORK, I'm not sure why, but it crashes just before the assert due to an issue with view hierarchy, sleeping doesn't seem to fix this
-     */
+public class CreateMoodEventSickTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void signupTest1() {
-
-        //You need to redfine a username and email each time
-        String username = "usernametotes4455t123";
-        String email = "email1212312414441231545512@email.ca";
-
+    public void createMoodEventSickTest() {
         ViewInteraction supportVectorDrawablesButton = onView(
                 allOf(withId(R.id.email_button), withText("Sign in with email"),
                         childAtPosition(
@@ -67,7 +63,7 @@ public class SignupTest1 {
                                         withId(R.id.email_layout),
                                         0),
                                 0)));
-        textInputEditText.perform(scrollTo(), replaceText(email), closeSoftKeyboard());
+        textInputEditText.perform(scrollTo(), replaceText("test4@test.ca"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button_next), withText("Next"),
@@ -80,95 +76,122 @@ public class SignupTest1 {
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction textInputEditText2 = onView(
-                allOf(withId(R.id.name),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.name_layout),
-                                        0),
-                                0)));
-        textInputEditText2.perform(scrollTo(), click());
-
-        ViewInteraction textInputEditText3 = onView(
-                allOf(withId(R.id.name),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.name_layout),
-                                        0),
-                                0)));
-        textInputEditText3.perform(scrollTo(), click());
-
-        ViewInteraction textInputEditText4 = onView(
-                allOf(withId(R.id.name),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.name_layout),
-                                        0),
-                                0)));
-        textInputEditText4.perform(scrollTo(), replaceText("Te"), closeSoftKeyboard());
-
-        ViewInteraction textInputEditText5 = onView(
                 allOf(withId(R.id.password),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.password_layout),
                                         0),
                                 0)));
-        textInputEditText5.perform(scrollTo(), replaceText("test123"), closeSoftKeyboard());
+        textInputEditText2.perform(scrollTo(), replaceText("test123"), closeSoftKeyboard());
+
+        ViewInteraction checkableImageButton = onView(
+                allOf(withId(R.id.text_input_password_toggle), withContentDescription("Show password"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.password_layout),
+                                        0),
+                                1)));
+        checkableImageButton.perform(scrollTo(), click());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.button_create), withText("Save"),
+                allOf(withId(R.id.button_done), withText("Sign in"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
-                                3)));
+                                4)));
         appCompatButton2.perform(scrollTo(), click());
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.signup_username),
+        ViewInteraction appCompatImageButton = onView(
+                allOf(withId(R.id.toolbar_button_left),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("android.widget.RelativeLayout")),
                                         0),
                                 0),
                         isDisplayed()));
-        //sleep so it doesnt break i hope
+        //sleep for load
         sleep(1000);
-        appCompatEditText.perform(replaceText(username), closeSoftKeyboard());
+        appCompatImageButton.perform(click());
+
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withId(R.id.Sick),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                6),
+                        isDisplayed()));
+        //sleep for load
+        sleep(1000);
+        appCompatImageButton2.perform(click());
+
+        ViewInteraction appCompatImageButton3 = onView(
+                allOf(withId(R.id.centerButton),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatImageButton3.perform(click());
+
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.social_situation),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        3),
+                                1)));
+        appCompatSpinner.perform(scrollTo(), click());
+
+        DataInteraction appCompatCheckedTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(1);
+        appCompatCheckedTextView.perform(click());
+
+        ViewInteraction switch_ = onView(
+                allOf(withId(R.id.use_current_location), withText("Use Current Location"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        2),
+                                0)));
+        switch_.perform(scrollTo(), click());
+
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.mood_detail_reason),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        1),
+                                1)));
+        appCompatEditText.perform(scrollTo(), replaceText("hello"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.register_btn), withText("Sign up"),
+                allOf(withId(R.id.add_detail_confirm_btn), withText("Add To History"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatButton3.perform(click());
-
-        ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.ic_profile),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.bottomnav),
-                                        0),
-                                3),
-                        isDisplayed()));
-        //classic required sleep
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        4),
+                                0)));
+        //sleep for load
         sleep(1000);
-        bottomNavigationItemView.perform(click());
+        appCompatButton3.perform(scrollTo(), click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.profile_user_name_text_view), withText("test4"),
+                allOf(withId(R.id.mood_list_view_emoji), withText("\uD83E\uDD2E"),
                         childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                1),
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
+                                        1),
+                                0),
                         isDisplayed()));
-        //classic required sleep 5 seconds doesnt seem to be enough to fix it so idk
-        sleep(5000);
+        //sleep for load
+        sleep(3000);
+        //textView.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

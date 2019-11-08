@@ -13,7 +13,6 @@ import androidx.test.runner.AndroidJUnit4;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +23,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -34,21 +32,20 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SignupTest1 {
-
-    /*
-    sign up tests DO NOT WORK, I'm not sure why, but it crashes just before the assert due to an issue with view hierarchy, sleeping doesn't seem to fix this
-     */
+public class SignupTryingTakenUsernamesTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void signupTest1() {
+    public void signupTryingTakenUsernamesTest() {
 
-        //You need to redfine a username and email each time
-        String username = "usernametotes4455t123";
-        String email = "email1212312414441231545512@email.ca";
+        /*
+        I'm pretty sure this test works and its just my lastpass fucking with it, but I could be wrong
+         */
+
+        String username = "user4";
+        String email = "email25@email.ca";
 
         ViewInteraction supportVectorDrawablesButton = onView(
                 allOf(withId(R.id.email_button), withText("Sign in with email"),
@@ -104,7 +101,7 @@ public class SignupTest1 {
                                         withId(R.id.name_layout),
                                         0),
                                 0)));
-        textInputEditText4.perform(scrollTo(), replaceText("Te"), closeSoftKeyboard());
+        textInputEditText4.perform(scrollTo(), replaceText("Test Mctest"), closeSoftKeyboard());
 
         ViewInteraction textInputEditText5 = onView(
                 allOf(withId(R.id.password),
@@ -122,6 +119,7 @@ public class SignupTest1 {
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3)));
+        sleep(1000);
         appCompatButton2.perform(scrollTo(), click());
 
         ViewInteraction appCompatEditText = onView(
@@ -132,9 +130,8 @@ public class SignupTest1 {
                                         0),
                                 0),
                         isDisplayed()));
-        //sleep so it doesnt break i hope
         sleep(1000);
-        appCompatEditText.perform(replaceText(username), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("test test"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.register_btn), withText("Sign up"),
@@ -144,9 +141,52 @@ public class SignupTest1 {
                                         0),
                                 1),
                         isDisplayed()));
+        sleep(1000);
         appCompatButton3.perform(click());
 
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.signup_username), withText("test test"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText2.perform(click());
+
+        ViewInteraction appCompatEditText4 = onView(
+                allOf(withId(R.id.signup_username), withText(username),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText4.perform(closeSoftKeyboard());
+
+        ViewInteraction appCompatButton4 = onView(
+                allOf(withId(R.id.register_btn), withText("Sign up"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        sleep(1000);
+        appCompatButton4.perform(click());
+
         ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(R.id.ic_friends),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.bottomnav),
+                                        0),
+                                2),
+                        isDisplayed()));
+        sleep(1000);
+        bottomNavigationItemView.perform(click());
+
+        ViewInteraction bottomNavigationItemView2 = onView(
                 allOf(withId(R.id.ic_profile),
                         childAtPosition(
                                 childAtPosition(
@@ -154,21 +194,8 @@ public class SignupTest1 {
                                         0),
                                 3),
                         isDisplayed()));
-        //classic required sleep
         sleep(1000);
-        bottomNavigationItemView.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.profile_user_name_text_view), withText("test4"),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        //classic required sleep 5 seconds doesnt seem to be enough to fix it so idk
-        sleep(5000);
+        bottomNavigationItemView2.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
