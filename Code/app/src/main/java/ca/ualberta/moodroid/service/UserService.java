@@ -18,7 +18,8 @@ import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.repository.UserRepository;
 
 /**
- * User operations in the application
+ * This class implements user operations such as handling username functions as well as
+ * dealing with follow requests from other users, and sending your own follow request.
  */
 public class UserService implements UserInterface {
 

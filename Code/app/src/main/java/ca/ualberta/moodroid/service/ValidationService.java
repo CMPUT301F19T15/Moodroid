@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 /**
  * We should be utilizing a library to validate data and use this as an interface to the library to decouple our application from the library
+ * all methods below are explained in validationInterface.
  */
 public class ValidationService implements ValidationInterface {
 
@@ -15,6 +16,8 @@ public class ValidationService implements ValidationInterface {
      *
      * @param user the user
      */
+
+
     @Inject
     public ValidationService(UserService user) {
         this.user = user;

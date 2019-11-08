@@ -38,78 +38,96 @@ import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 
 /**
- * Insert a mood event for the logged in user after selecting their mood
+ * This activity follows immediately after AddMood. Once the User picks their emoji (which is
+ * always associated with a particular mood) they are brought to this activity where they then fill
+ * out the moods details. More information about what those details are below.
  */
 public class AddMoodDetail extends AppCompatActivity {
+
+    /**
+     * The 3 UI elements below are used to display the moods unique colour,
+     * title, and emoji using the info sent from AddMood via an intent.
+     *
+     *
+     * NOT CERTAIN THIS METHOD OF DISPLAY WILL CONTINUE TO BE USED
+     */
 
     private ImageView mood_img;
     private TextView mood_title;
     private RelativeLayout banner;
 
     /**
-     * The Mood.
+     * The mood repository is activated below.
      */
 // creating the mood repo
     final MoodEventRepository mood = new MoodEventRepository();
 
     /**
-     * The Mood event.
+     * The mood event model is created below. This is essentially the frame for a mood event
+     * it is an object that stores all details filled out by the user in this activity, and
+     * is what the main mood feed in MoodHistory is made of.
      */
     MoodEventModel moodEvent = new MoodEventModel();
 
     /**
-     * The Date.
+     * The date of the mood, given by the user.
      */
     @BindView(R.id.mood_detail_date)
     protected EditText date;
 
     /**
-     * The Time.
+     * The time of the mood, given by the user
      */
     @BindView(R.id.mood_detail_time)
     protected EditText time;
 
     /**
-     * The Social situation.
+     * The social situation of the mood, given by the user.
      */
     @BindView(R.id.social_situation)
     protected Spinner social_situation;
 
 
     /**
-     * The Reason text.
+     * The reason for the mood, given by the user.
      */
     @BindView(R.id.mood_detail_reason)
     protected EditText reason_text;
 
     /**
-     * The constant situations.
+     * This is an array of situations, which are the only options the user gets to pick for the
+     * moods "Social situation" data.
      */
     protected static String[] situations = new String[]{"Alone", "One Other Person", "Two to Several People", "Crowd"};
 
 
     /**
-     * The Confirm btn.
+     * The confirm button. when this button is clicked, it adds the mood to the firebase repository,
+     * and brings the user back to the activity MoodHistory.
      */
     @BindView(R.id.add_detail_confirm_btn)
     protected Button confirmBtn;
 
     /**
-     * The Date dialog.
+     * UI element, a tool used for picking dates. More specifically, used for picking the
+     * moods date.
      */
     DatePickerDialog.OnDateSetListener dateDialog;
     /**
-     * The Time dialog.
+     * Same as above, but for time.
      */
     TimePickerDialog.OnTimeSetListener timeDialog;
 
     /**
-     * The Calendar.
+     * A calendar object, used to store dates and times.
      */
     final Calendar calendar = Calendar.getInstance();
 
     /**
-     * Setup the display to match the previously picked mood, and update the date fields with the current date and time
+     * The initial UI is built here, using data from the last activity to dynamically display the
+     * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
+     * where the user is prompted to fill in all of the details of a mood event which were explained
+     * in the variables above.
      *
      * @param savedInstanceState
      */

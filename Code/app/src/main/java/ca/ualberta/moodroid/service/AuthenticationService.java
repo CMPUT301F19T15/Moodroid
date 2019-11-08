@@ -20,7 +20,14 @@ import ca.ualberta.moodroid.repository.UserRepository;
  */
 public class AuthenticationService implements AuthenticationInterface {
 
+    /**
+     *  The initial value for the authentication service instance
+     */
     private static AuthenticationService service = null;
+
+    /**
+     *  String data that stores the users username
+     */
     private String username;
 
 
@@ -37,9 +44,21 @@ public class AuthenticationService implements AuthenticationInterface {
         return service;
     }
 
+    /**
+     * Simple setter method that sets the username for the user
+     *
+     * @param name the name
+     */
+
     public void setUsername(String name) {
         this.username = name;
     }
+
+    /**
+     * Simple getter method that fetches the username
+     *
+     * @return
+     */
 
     public String getUsername() {
         return this.username;

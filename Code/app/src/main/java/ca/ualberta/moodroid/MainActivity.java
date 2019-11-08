@@ -69,7 +69,7 @@ import ca.ualberta.moodroid.ui.AddFriend;
 import ca.ualberta.moodroid.ui.SignUp;
 
 /**
- * The type Main activity.
+ * The main activity of our app.
  */
 @Singleton
 public class MainActivity extends AppCompatActivity {

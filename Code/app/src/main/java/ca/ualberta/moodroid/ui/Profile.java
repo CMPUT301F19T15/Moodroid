@@ -20,17 +20,16 @@ import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.ValidationService;
 
 /**
- * The type Profile.
+ * This class creates the Profile activity, which can be navigated to from the main bottom
+ * tool bar. The user can see their username on this screen and also logout from here. The user can
+ * also access their mood map from this screen.
  */
 public class Profile extends BaseUIActivity {
-    /**
-     * This shows the user's profile info, an option to navigate to the
-     * map view, and an option to logout of the app.
-     */
 
     MoodEventService moodEvents;
     /**
-     * The Validation.
+     * This is a validation item that is used to handle user related actions like logging in
+     * and out.
      */
     ValidationService validation;
 
@@ -38,12 +37,12 @@ public class Profile extends BaseUIActivity {
     private Intent intent;
 
     /**
-     * The My user name.
+     * A string containing the username.
      */
     String myUserName;
 
     /**
-     * The User name view.
+     * A text view containing the username.
      */
     @BindView(R.id.profile_user_name_text_view)
     TextView userNameView;

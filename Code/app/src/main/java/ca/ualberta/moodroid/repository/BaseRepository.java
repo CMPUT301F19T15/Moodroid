@@ -19,7 +19,9 @@ import java.util.List;
 import ca.ualberta.moodroid.model.ModelInterface;
 
 /**
- * The base repository all repositories use to query FireStore.
+ * The base repository all repositories use to query FireStore. This is the root class of all of
+ * the repositories used for our project. Attributes mostly include names of major models and
+ * collections, collections being groups of info that is a unique term to firebase
  *
  * @author Taylor Christie
  * @version v1
@@ -27,25 +29,26 @@ import ca.ualberta.moodroid.model.ModelInterface;
 abstract class BaseRepository implements RepositoryInterface {
 
     /**
-     * These are configurable things
+     *
+     * This contains data for the name of a collection in our database
      */
     protected String collectionName;
     /**
-     * The Model class.
+     * The Model class, stores information for our models.
      */
     protected Class modelClass;
 
 
     /**
-     * The Collection.
+     * The Collection, contains data to reference a certain collection in the database
      */
     protected CollectionReference collection;
     /**
-     * The Query.
+     * A query object, contains data for a particular query
      */
     protected Query query;
     /**
-     * The Db.
+     * a reference to the database itself.
      */
     protected FirebaseFirestore db;
 
@@ -75,7 +78,7 @@ abstract class BaseRepository implements RepositoryInterface {
     }
 
     /**
-     * Get the current query
+     * grabs the current query from the database so the information can be used later
      *
      * @return query
      */
@@ -88,7 +91,7 @@ abstract class BaseRepository implements RepositoryInterface {
     }
 
     /**
-     * Set the current query
+     * Set the current query to find specific data
      *
      * @param q the q
      */

@@ -32,7 +32,8 @@ import ca.ualberta.moodroid.service.GeolocationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 
 /**
- * The type Mood map.
+ * This class creates a map that displays moods via their corresponding emoji in the location
+ * that the mood event was created, if the user chooses to do so.
  */
 public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
     /**
@@ -48,7 +49,7 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
      */
     MoodEventService moodEvents;
     /**
-     * The Geolocation.
+     * The Geolocation. Helps pinpoint the current location on the map.
      */
     GeolocationService geolocation;
 

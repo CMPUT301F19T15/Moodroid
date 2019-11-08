@@ -31,7 +31,9 @@ import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
 /**
- * The type Notifications.
+ * This class creates the Notification activity, one of the 4 main activities. There will be
+ * data displayed on this screen via a custom array view if the user has pending requests to
+ * accept or deny.
  */
 public class Notifications extends BaseUIActivity implements FollowListAdapter.OnListListener {
 

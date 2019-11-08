@@ -32,54 +32,65 @@ import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
 /**
- * Request to follow a friend's mood events
+ * This class holds the logic that creates the ability for the user to interact with
+ * the app and create friend requests.
  */
 public class AddFriend extends AppCompatActivity {
 
     /**
-     * The Intent.
+     * This intent brings the user back to their friends list in the FriendsMoods activity
      */
     Intent intent;
+
     /**
-     * The Users.
+     * the repository that stores user data
      */
     UserRepository users;
+
     /**
-     * The Requests.
+     * The repository that stores all request related data.
      */
     FollowRequestRepository requests;
+
     /**
-     * The Me.
+     * String data that stores the users username
      */
 // TODO: Get my username and wait until it is grabbed
     String me;
+
     /**
-     * The Tool bar button left.
+     * Part of the UI, essentially acts as a back button to navigate back to FriendsMoods
      */
     ImageButton toolBarButtonLeft;
+
     /**
-     * The Tool bar text view.
+     * The text view that acts as a title for this activity.
      */
     TextView toolBarTextView;
+
     /**
-     * The Tool bar text.
+     * The string data that fills the toolBarText text view.
      */
     String toolBarText;
 
+
     /**
-     * The Username field.
+     * This is the edit text field that the user interacts with, filling out the username of the
+     *  person they wish to add to their friends list.
      */
     @BindView(R.id.username)
     EditText usernameField;
 
     /**
-     * The Status field.
+     * The field of text that explains what the user can do in this activity.
      */
     @BindView(R.id.instruction)
     TextView statusField;
 
     /**
-     * Build the initial UI
+     * the code below builds the UI, and implements all of the logic that comes with it. As
+     * stated above, this class is meant to give the user the option to add a friend by using that
+     * friends username.
      *
      * @param savedInstanceState
      */
