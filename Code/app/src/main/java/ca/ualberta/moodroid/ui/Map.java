@@ -354,7 +354,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
         // Set a boundary to start
         CameraUpdate center=
-                CameraUpdateFactory.newLatLng(new LatLng(53.525687, -113.125607));
+                CameraUpdateFactory.newLatLng(new LatLng(55.631611, -110.323975));
 
         // changed the zoom of the camera
         CameraUpdate zoom=CameraUpdateFactory.zoomTo(7);

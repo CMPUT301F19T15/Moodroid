@@ -147,6 +147,10 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      *
      */
 
+    /**
+     * check the map services
+     * @return
+     */
     private boolean checkMapServices(){
         if(isServicesOK()){
             if(isMapsEnabled()){
@@ -189,6 +193,10 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         return true;
     }
 
+    /**
+     * ask for location permission
+     *
+     */
     private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -234,6 +242,12 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         return false;
     }
 
+    /**
+     * the result
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -250,6 +264,12 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         }
     }
 
+    /**
+     * continue with the app
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -330,6 +350,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         editDeleteFragment.show(getSupportFragmentManager(), "Options");
     }
 
+    /**
+     * on resume get moods
+     */
     @Override
     protected void onResume(){
         super.onResume();
