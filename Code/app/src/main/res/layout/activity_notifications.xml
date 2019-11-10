@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
+            android:layout_above="@id/sth"
             android:background="@color/colorPrimary">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -39,7 +40,8 @@
         <RelativeLayout
             android:id="@+id/sth"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_alignParentBottom="true"
             app:layout_anchorGravity="center">
             <!-- navigation bar -->
             <include
