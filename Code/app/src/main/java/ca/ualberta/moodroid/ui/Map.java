@@ -219,14 +219,15 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
         // call to add to map
         addMapMarkers();
 
         // call to set camera view
-        setCameraView();
+        //setCameraView();
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+
 
     }
 
