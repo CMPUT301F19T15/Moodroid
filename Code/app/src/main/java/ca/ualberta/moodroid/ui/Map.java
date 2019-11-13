@@ -225,7 +225,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         // call to set camera view
         //setCameraView();
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
 
 
