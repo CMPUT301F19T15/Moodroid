@@ -80,14 +80,26 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         bottomNavigationView();
         setTitle("Mood History");
 
-
+        /**
+         * Initialize the top navigation bar buttons and set listeners for them.
+         */
         toolBarButtonLeft.setImageResource(R.drawable.ic_addmood);
         toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //navigate to MoodMap Activity
+                //navigate to AddMood Activity
                 intent = new Intent(MoodHistory.this, AddMood.class);
                 startActivity(intent);
+            }
+        });
+
+        toolBarButtonRight.setImageResource(R.drawable.filter_button);
+        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /////////////////////////////////////////////////
+                /////////////////////////////////////////////////
+                ////////////////////////////////////////////////
             }
         });
 
