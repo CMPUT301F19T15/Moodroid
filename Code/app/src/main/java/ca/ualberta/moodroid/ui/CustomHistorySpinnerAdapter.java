@@ -75,7 +75,7 @@ public class CustomHistorySpinnerAdapter extends ArrayAdapter {
      */
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return super.getView(position, convertView, parent);
+        return getView(position, convertView, parent);
     }
 
 
