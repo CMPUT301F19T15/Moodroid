@@ -243,14 +243,17 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                 .getBestProvider(criteria, false));
 
         // save the lat and long of the location
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+        if(location != null){
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
 
-        // create a new LatLng variable
-        LatLng latLng = new LatLng(latitude,longitude);
+            // create a new LatLng variable
+            LatLng latLng = new LatLng(latitude,longitude);
 
-        // set the new LatLng variable to the camera view
-        setCameraView(latLng);
+            // set the new LatLng variable to the camera view
+            setCameraView(latLng);
+        }
+
 
 
         // call to add to map
