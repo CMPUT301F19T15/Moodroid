@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,7 +75,14 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     String[] spinnerEmojis;
     Spinner spinner;
     CustomHistorySpinnerAdapter spinnerAdapter;
+    private boolean isInteracting;
 
+
+//    @Override
+//    public void onUserInteraction() {
+//        super.onUserInteraction();
+//        isInteracting = true;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +109,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             }
         });
 
-//        toolBarButtonRight.setImageResource(R.drawable.filter_button);
+//        toolBarButtonRight.setBackground(R.layout.history_filter_spinner);
 //        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -138,9 +147,25 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+        spinner = (Spinner) findViewById(R.id.spinner);
         ArrayList<String> arrayListMoodNames = new ArrayList<>();
         ArrayList<String> arrayListEmojis = new ArrayList<>();
-        spinner = findViewById(R.id.spinner);
+        //first item in each list should be blank to indicate no filter selected
+        arrayListMoodNames.add("");
+        arrayListEmojis.add("");
+
+
 
         moods.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
             @Override
@@ -157,6 +182,30 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             }
         });
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (isInteracting) {
+//                    Toast.makeText(MoodHistory.this, spinnerEmojis[i], Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //
+            }
+        });
+
+
+////////////////////on user interaction at top
+
+
+
+
+
+
+
+
 
 
 
@@ -170,6 +219,37 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
 
     }
+
+
+
+
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        isInteracting = true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**

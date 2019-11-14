@@ -22,20 +22,25 @@
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/colorSecondary">
 
-            <include layout="@layout/app_bar_main"></include>
 
 
 
 
+            <include layout="@layout/app_bar_main"
+                android:visibility="gone">
+            </include>
 
-
-
-
+<!--//////////////////////////////make toolbar visible again-->
+<!--            -->
+<!---->
+<!---->
+<!---->
             <include
                 layout="@layout/history_filter_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/toolbar"
+                android:layout_marginTop="50dp"
                 android:id="@+id/spinner_layout">
             </include>
 
@@ -43,6 +48,7 @@
 
 
 
+    </RelativeLayout>
 
 
 
@@ -52,9 +58,8 @@
 
 
 
-        </RelativeLayout>
 
-        <!-- middle section -->
+    <!-- middle section -->
         <RelativeLayout
             android:id="@+id/body"
             android:layout_width="match_parent"
