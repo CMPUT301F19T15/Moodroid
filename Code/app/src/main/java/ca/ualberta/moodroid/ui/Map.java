@@ -58,13 +58,16 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     public Map() {
 
     }
-    // setting tag
+
+    /**
+     * setting the tag
+     */
     private static final String TAG = "Maps activity";
 
 
-
-
-    // any variable needed
+    /**
+     * any variable that are needed
+     */
     private GoogleMap mMap;
     /**
      * The Tool bar button left.
