@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Spinner;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -67,6 +69,11 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      */
     List<MoodModel> allMoods;
 
+    String[] spinnerMoodNames;
+    String[] spinnerEmojis;
+    Spinner spinner;
+    CustomHistorySpinnerAdapter spinnerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,15 +100,16 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             }
         });
 
-        toolBarButtonRight.setImageResource(R.drawable.filter_button);
-        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /////////////////////////////////////////////////
-                /////////////////////////////////////////////////
-                ////////////////////////////////////////////////
-            }
-        });
+//        toolBarButtonRight.setImageResource(R.drawable.filter_button);
+//        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                /////////////////////////////////////////////////
+//                /////////////////////////////////////////////////
+//                ////////////////////////////////////////////////
+//            }
+//        });
+
 
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();
@@ -123,6 +131,44 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
             }
         });
+
+
+
+
+
+
+
+        ArrayList<String> arrayListMoodNames = new ArrayList<>();
+        ArrayList<String> arrayListEmojis = new ArrayList<>();
+        spinner = findViewById(R.id.spinner);
+
+        moods.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+            @Override
+            public void onSuccess(List<MoodModel> moodModels) {
+                allMoods = moodModels;
+                for(MoodModel mood : allMoods){
+                    arrayListMoodNames.add(mood.getName());
+                    arrayListEmojis.add(mood.getEmoji());
+                }
+                spinnerEmojis = arrayListEmojis.toArray(new String[0]);
+                spinnerMoodNames = arrayListMoodNames.toArray(new String[0]);
+                spinnerAdapter = new CustomHistorySpinnerAdapter(MoodHistory.this, spinnerEmojis, spinnerMoodNames);
+                spinner.setAdapter(spinnerAdapter);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -155,6 +201,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
+
 
     /**
      * checking when the user clicks on the list

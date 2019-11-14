@@ -8,6 +8,9 @@
     tools:context=".ui.MoodHistory"
     tools:openDrawer="start">
 
+
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,6 +23,35 @@
             android:background="@color/colorSecondary">
 
             <include layout="@layout/app_bar_main"></include>
+
+
+
+
+
+
+
+
+            <include
+                layout="@layout/history_filter_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar"
+                android:id="@+id/spinner_layout">
+            </include>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </RelativeLayout>
 
         <!-- middle section -->
