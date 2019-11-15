@@ -238,19 +238,19 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
-        // find the location and save it
-        Location location = locationManager.getLastKnownLocation(locationManager
-                .getBestProvider(criteria, false));
+        if( locationManager != null){
+            // find the location and save it
+            Location location = locationManager.getLastKnownLocation(locationManager
+                    .getBestProvider(criteria, false));
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
 
-        // save the lat and long of the location
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+            // create a new LatLng variable
+            LatLng latLng = new LatLng(latitude,longitude);
 
-        // create a new LatLng variable
-        LatLng latLng = new LatLng(latitude,longitude);
-
-        // set the new LatLng variable to the camera view
-        setCameraView(latLng);
+            // set the new LatLng variable to the camera view
+            setCameraView(latLng);
+        }
 
 
         // call to add to map
