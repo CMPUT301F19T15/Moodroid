@@ -1,61 +1,63 @@
 language: android
-sudo: required
 jdk: oraclejdk8
 
-before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+notifications:
+  slack: cmput301teamgroup:U4qrlow8zgbMj3e49uZhjAdV
 
 env:
   global:
-    - ANDROID_API=29
-    - EMULATOR_API=24
-    - EMULATOR_API_LEVEL=24
-    - ANDROID_BUILD_TOOLS=29.0.2
-    - ADB_INSTALL_TIMEOUT=5 # minutes
+    - ANDROID_TARGET=android-22
+    - ANDROID_ABI=armeabi-v7a
 
 android:
   components:
+    # Uncomment the lines below if you want to
+    # use the latest revision of Android SDK Tools
     - tools
     - platform-tools
-    - build-tools-$ANDROID_BUILD_TOOLS
-    - android-$ANDROID_API
-    - android-$EMULATOR_API_LEVEL
-    - extra-google-m2repository
-    - extra-android-m2repository # for design library
-    - addon-google_apis-google-29 # google play services
-    - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
-    - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL # the fix!
 
-  licenses:
-    - android-sdk-preview-license-.+
-    - android-sdk-license-.+
-    - google-gdk-license-.+
+    # The BuildTools version used by your project
+    - build-tools-23.0.3
+
+    # The SDK version used to compile your project
+    # TODO: why is this here explicitly in addition to $ANDROID_TARGET below
+    - android-23
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+    # The SDK version used to compile your project
+    - $ANDROID_TARGET
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests.
+    # The line should look like this after interpolation:
+    # - sys-img-armeabi-v7a-android-22
+    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+
+licenses:
+  - "android-sdk-license-.+"
 
 before_install:
-  - mkdir "$ANDROID_HOME/licenses" || true
-  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+  # Accept sdk licenses
+  - yes | sdkmanager "platforms;android-29"
   - cd Code/
+  # Get gradle
   - chmod +x gradlew
-  - echo y | android update sdk --no-ui --all --filter "tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository"
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
-  - ./gradlew dependencies || true # DON'T ADD unless you are getting "Install missing components using SDK manager"
-#Source: https://medium.com/@oldergod/constraint-layout-and-circleci-travis-d50342696d2
+  - wget http://services.gradle.org/distributions/gradle-5.3-bin.zip
+  - unzip -qq gradle-5.3-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-5.3
+  - export PATH=$GRADLE_HOME/bin:$PATH
 
-before_script:
-  - echo "y" | android update sdk -a --no-ui --filter android-${EMULATOR_API}
-  - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-${EMULATOR_API}
-  - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}' # list all targets
-  - echo no | android create avd --force -n test -t android-${EMULATOR_API} --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-window &
+  # Build the project
+  - gradle -v
+
+  # Start the emulator
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-
-script:
-  - "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
+  # The app will now automatically be installed and tested via
+  # the command `gradle connectedCheck`
