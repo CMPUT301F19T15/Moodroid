@@ -472,6 +472,22 @@ public class AddMoodDetail extends AppCompatActivity {
 
 
     /**
+     * When the user presses the phone's back button before saving the moodEvent, delete the photo from Firestore.
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(hasPhoto){
+            ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("DELETION/", "Photo deleted.");
+                }
+            });
+        }
+    }
+
+    /**
      * Checks for valid input for the reason_text field. If more than 3 words are entered, it will
      * disable the confirm button.
      * @param charSequence
