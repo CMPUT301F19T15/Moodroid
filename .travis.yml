@@ -17,7 +17,7 @@ android:
     - tools
     - platform-tools
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-    - android-29
+    - ${ANDROID_TARGET}
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
@@ -29,8 +29,8 @@ licenses:
 
 before_install:
   # Accept sdk licenses
-  - yes | sdkmanager "platforms;android-29"
-  - yes | sdkmanager "build-tools;29.0.3"
+  - yes | sdkmanager "platforms;${ANDROID_TARGET}"
+  - yes | sdkmanager "build-tools;2${ANDROID_BUILD_TOOLS_VERSION}"
   - cd Code/
   # Get gradle
   - chmod +x gradlew
