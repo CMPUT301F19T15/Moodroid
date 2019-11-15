@@ -172,6 +172,11 @@ public class AddMoodDetail extends AppCompatActivity {
      protected ImageView photoView;
 
     /**
+     * The Firestore storage reference.
+     */
+    StorageReference ref;
+
+    /**
      * The Date dialog.
      */
     DatePickerDialog.OnDateSetListener dateDialog;
@@ -252,6 +257,17 @@ public class AddMoodDetail extends AppCompatActivity {
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //if a photo has previously been selected, delete that photo from Firestore before
+                //choosing a new one
+                if(hasPhoto){
+                    //delete current photo before proceeding
+                    ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("DELETION/","Photo deleted.");
+                        }
+                    });
+                }
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -369,7 +385,7 @@ public class AddMoodDetail extends AppCompatActivity {
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
             //create random name starting with user's internal id
-            StorageReference ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
+            ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
             //add file to Firebase storage, get url
             ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
