@@ -365,7 +365,6 @@ public class AddMoodDetail extends AppCompatActivity {
             //update photo view
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                bitmap = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
                 photoView.setImageBitmap(bitmap);
                 hasPhoto = true;
             } catch (IOException e) {
