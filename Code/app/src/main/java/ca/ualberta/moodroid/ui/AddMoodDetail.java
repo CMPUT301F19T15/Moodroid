@@ -41,6 +41,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -63,6 +64,7 @@ import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 
 import static android.view.View.GONE;
+import static java.lang.Thread.sleep;
 
 /**
  * Insert a mood event for the logged in user after selecting their mood
@@ -70,13 +72,40 @@ import static android.view.View.GONE;
 
 public class AddMoodDetail extends AppCompatActivity {
 
+    /**
+     * The imageView.
+     */
     private ImageView mood_img;
+
+    /**
+     * The mood title for the banner.
+     */
     private TextView mood_title;
+
+    /**
+     * The banner.
+     */
     private RelativeLayout banner;
+
+    /**
+     * The URI file path to the library photo .
+     */
     private Uri filePath;
+
+    /**
+     * The url for the photo as a String.
+     */
     private String url;
+
+    /**
+     * A boolean. True indicates that a photo has been uploaded.
+     */
     private boolean hasPhoto;
-    private Uri urll; /////////////
+
+    /**
+     * The Firestore Uri for the photo.
+     */
+    private Uri urll;
 
     /**
      * The firebase storage references.
@@ -289,11 +318,6 @@ public class AddMoodDetail extends AppCompatActivity {
      */
     @OnClick(R.id.add_detail_confirm_btn)
     public void confirmClick() {
-        if(hasPhoto){
-            //adding a photo is optional -> only call upload() if a photo has been added
-            uploadPhoto();      /*upload photo to firebase storage */
-            ////////////////////////////////////////////////////////////////////////////////////////////make it an asynchronous task
-        }
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
         moodEvent.setSituation(social_situation.getSelectedItem().toString());
@@ -325,11 +349,14 @@ public class AddMoodDetail extends AppCompatActivity {
             //update photo view
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
                 photoView.setImageBitmap(bitmap);
                 hasPhoto = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            //upload photo to firestore
+            uploadPhoto();
         }
     }
 
@@ -338,79 +365,39 @@ public class AddMoodDetail extends AppCompatActivity {
      */
     private void uploadPhoto() {
         if (filePath != null) {
-//            final ProgressDialog progressDialog = new ProgressDialog(this);
-//            progressDialog.setTitle("Uploading...");
-//            progressDialog.show();
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
             //create random name starting with user's internal id
             StorageReference ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
             //add file to Firebase storage, get url
-            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {          ////////////////////////////////////
+            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        urll = uri;             //Uri
-                        url = urll.toString();  //convert to string
-                    }
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            urll = uri;             //Uri
+                            url = urll.toString();  //convert to string
+                            //confirm upload to user
+                            progressDialog.dismiss();
+                            Toast.makeText(AddMoodDetail.this, "Image saved. ", Toast.LENGTH_SHORT).show();
+                        }
                     });
                 }
-            });
-            }
-
-
-
-//            ref.putFile(filePath)
-//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        //get the photo's URL and save it as a string
-                      //  Uri urll = ref.getDownloadUrl().getResult();
-                    //    url = ref.getDownloadUrl().toString();
-//                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                @Override
-//                                public void onSuccess(Uri uri) {
-//                                    Uri downloadUrl = uri;
-//                                }
-//
-//                            });
-//
-//                            Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-//                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                @Override
-//                                public void onSuccess(Uri uri) {
-//                                    String photoLink = uri.toString();
-//                                }
-//                            });
-//
-//
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            progressDialog.dismiss();
-//                            Toast.makeText(AddMoodDetail.this, "Failed to save image. " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    })
-//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-//                                    .getTotalByteCount());
-//                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-//                        }
-//                    });
-            //Uri urll = ref.getDownloadUrl().getResult();
-
-
-
-
-
-
-
-
+            })
+                    //show upload progress on the screen
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
         }
+
+    }
 
 
     /**
