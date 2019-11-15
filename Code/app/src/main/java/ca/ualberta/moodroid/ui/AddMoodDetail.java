@@ -4,11 +4,12 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -161,6 +162,16 @@ public class AddMoodDetail extends AppCompatActivity {
         mood_img.setImageDrawable(res);
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
+
+        /**
+         * change status bar color
+         */
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.parseColor(hex));
+        }
 
 
         dateDialog = new DatePickerDialog.OnDateSetListener() {
