@@ -159,6 +159,13 @@ public class AddMoodDetail extends AppCompatActivity {
     protected Button addPhotoButton;
 
     /**
+     * The remove photo button.
+     */
+    @BindView(R.id.remove_photo_button)
+    protected Button removePhotoButton;
+
+
+    /**
      * The reason for the mood, given by the user.
      */
     @BindView(R.id.mood_detail_reason)
@@ -233,6 +240,8 @@ public class AddMoodDetail extends AppCompatActivity {
         mood_title = findViewById(R.id.mood_text);
         banner = findViewById(R.id.banner);
         social_situation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, AddMoodDetail.situations));
+        removePhotoButton.setVisibility(GONE);
+        addPhotoButton.setVisibility(View.VISIBLE);
 
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
@@ -300,6 +309,25 @@ public class AddMoodDetail extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "choose photo"), 1);
             }
         });
+
+        removePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //deletes the photo from Firestore and updates the imageView
+                ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DELETION/", "Photo deleted.");
+                    }
+                });
+                addPhotoButton.setVisibility(View.VISIBLE);
+                removePhotoButton.setVisibility(GONE);
+                //clear the imageView
+                photoView.setImageResource(0);
+
+            }
+        });
+
 
 
     }
@@ -398,6 +426,8 @@ public class AddMoodDetail extends AppCompatActivity {
             }
             //upload photo to firestore
             uploadPhoto();
+            addPhotoButton.setVisibility(GONE);
+            removePhotoButton.setVisibility(View.VISIBLE);
         }
     }
 
