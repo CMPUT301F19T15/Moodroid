@@ -7,7 +7,7 @@ notifications:
 env:
   global:
     - ANDROID_TARGET=android-29
-    - ANDROID_ABI=x86
+    - ANDROID_ABI=x86_64
     - ANDROID_BUILD_TOOLS_VERSION=29.0.2
 
 android:
