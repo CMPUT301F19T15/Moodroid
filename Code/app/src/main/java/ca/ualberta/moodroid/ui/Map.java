@@ -238,12 +238,10 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
-        // find the location and save it
-        Location location = locationManager.getLastKnownLocation(locationManager
-                .getBestProvider(criteria, false));
-
-        // save the lat and long of the location
-        if(location != null){
+        if( locationManager != null){
+            // find the location and save it
+            Location location = locationManager.getLastKnownLocation(locationManager
+                    .getBestProvider(criteria, false));
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
 
@@ -253,7 +251,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             // set the new LatLng variable to the camera view
             setCameraView(latLng);
         }
-
 
 
         // call to add to map
