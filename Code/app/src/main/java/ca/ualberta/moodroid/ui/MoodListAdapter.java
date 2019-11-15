@@ -35,12 +35,13 @@ import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 
 /**
- * The type Mood list adapter.
+ * This is a custom adapter meant for displaying moods according to the assignment spec. It takes
+ * the mood data the user creates and displays it with its colour, emoji, and title.
  */
 public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHolder> {
     private ArrayList<MoodEventModel> moodList;
     /**
-     * The Mood events.
+     * The mood events and their unique data for display.
      */
     MoodEventService moodEvents;
     private List<MoodModel> moods;
@@ -58,19 +59,19 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         /**
-         * The Emoji view.
+         * The field where the moods emoji will be displayed.
          */
         public TextView emojiView;
         /**
-         * The Mood text.
+         * The field where the the moods title will be displayed.
          */
         public TextView moodText;
         /**
-         * The Date text.
+         * The field where the mood date will be displayed.
          */
         public TextView dateText;
         /**
-         * The Time text.
+         * Same as above but for time.
          */
         public TextView timeText;
         /**
@@ -78,7 +79,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
          */
         public ImageView listItemBackgroundView;
         /**
-         * The On list listener.
+         * Same as an onClickListener but for items in a custom array display.
          */
         OnListListener onListListener;
 

@@ -26,12 +26,21 @@ import ca.ualberta.moodroid.repository.RepositoryInterface;
 
 /**
  * This service allows us to get many different mood event information that's important to us.
+ * It uses the authentication interface and the mood event repo to operate
  */
 public class MoodEventService implements MoodEventInterface {
 
 
+    /**
+     * The authentication interface that includes get and set username
+     */
     private AuthenticationInterface auth;
+    /**
+     * The mood event repository that stores all user created mood events
+     */
     private MoodEventRepository events;
+
+
     private UserService requests;
 
     /**

@@ -32,6 +32,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Date and Time"
+                    android:background="@color/colorSecondary"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
 
@@ -46,6 +47,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:clickable="true"
+                        android:hint="date"
+                        android:textColorHint="#585858"
                         android:editable="false"
                         android:ems="10"
                         android:focusable="false"
@@ -57,6 +60,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:hint="time"
+                        android:textColorHint="#585858"
                         android:clickable="true"
                         android:editable="false"
                         android:ems="10"
@@ -71,6 +76,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_marginTop="50dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -78,7 +84,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Reason"
+                    android:background="@color/colorSecondary"
+                    android:text="reason"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
 
@@ -93,6 +100,8 @@
                     android:layout_height="wrap_content"
                     android:maxLength="20"
                     android:layout_weight="1"
+                    android:textColorHint="#585858"
+                    android:hint="Reason"
                     android:ems="10"
                     android:gravity="center"
                     android:textColor="#FFFFFF" />
@@ -113,23 +122,37 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="50dp"
                 android:orientation="vertical">
 
-                <Switch
-                    android:id="@+id/use_current_location"
+                <TextView
+                    android:id="@+id/Location_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center|center_horizontal"
-                    android:text="Use Current Location"
+                    android:gravity="center"
+                    android:background="@color/colorSecondary"
+                    android:text="location"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
+                <EditText
+                    android:id="@+id/mood_detail_location"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColorHint="#585858"
+                    android:hint="Location"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textColor="#FFFFFF" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_marginTop="50dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -138,6 +161,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Social Situation"
+                    android:background="@color/colorSecondary"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
 

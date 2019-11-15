@@ -9,6 +9,14 @@ import android.location.Location;
 public class GeolocationService implements GeolocationInterface {
 
 
+    /**
+     * Returns this instance of a current location
+     *
+     *
+     * @return
+     */
+
+
     public Location getCurrentLocation() {
         return new Location("example");
     }

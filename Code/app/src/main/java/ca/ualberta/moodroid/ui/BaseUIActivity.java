@@ -28,7 +28,8 @@ import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.service.MoodEventService;
 
 /**
- * Base UI for the main views and the menu buttons
+ * This class sets up our apps navigation capability. It creates the bottom tool bar for the main
+ * 4 activities in our app which are MoodHistory, FriendsMoods, Notifications, and Profile.
  */
 public class BaseUIActivity extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class BaseUIActivity extends AppCompatActivity {
 
 
     /**
-     * The Tool bar button left.
+     * The Tool bar button left
      */
     @BindView(R.id.toolbar_button_left)
     ImageButton toolBarButtonLeft;
@@ -51,7 +52,7 @@ public class BaseUIActivity extends AppCompatActivity {
     ImageButton toolBarButtonRight;
 
     /**
-     * The Tool bar text view.
+     * The text view that displays the title of the activity.
      */
     @BindView(R.id.toolbar_text_center)
     TextView toolBarTextView;

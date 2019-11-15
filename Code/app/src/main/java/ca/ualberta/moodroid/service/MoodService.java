@@ -23,7 +23,9 @@ import ca.ualberta.moodroid.repository.UserRepository;
  */
 public class MoodService implements MoodInterface {
 
-
+    /**
+     * The repository that stores all of the static mood concepts
+     */
     private MoodRepository moods;
 
     /**

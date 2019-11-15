@@ -6,15 +6,20 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+
 import android.net.Uri;
+
+import android.os.Build;
+
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -67,7 +72,9 @@ import static android.view.View.GONE;
 import static java.lang.Thread.sleep;
 
 /**
- * Insert a mood event for the logged in user after selecting their mood
+ * This activity follows immediately after AddMood. Once the User picks their emoji (which is
+ * always associated with a particular mood) they are brought to this activity where they then fill
+ * out the moods details. More information about what those details are below.
  */
 
 public class AddMoodDetail extends AppCompatActivity {
@@ -88,6 +95,7 @@ public class AddMoodDetail extends AppCompatActivity {
     private RelativeLayout banner;
 
     /**
+
      * The URI file path to the library photo .
      */
     private Uri filePath;
@@ -114,30 +122,32 @@ public class AddMoodDetail extends AppCompatActivity {
     private StorageReference storageReference;
 
     /**
-     * The Mood.
+     * The mood repository is activated below.
      */
 // creating the mood repo
     final MoodEventRepository mood = new MoodEventRepository();
 
     /**
-     * The Mood event.
+     * The mood event model is created below. This is essentially the frame for a mood event
+     * it is an object that stores all details filled out by the user in this activity, and
+     * is what the main mood feed in MoodHistory is made of.
      */
     MoodEventModel moodEvent = new MoodEventModel();
 
     /**
-     * The Date.
+     * The date of the mood, given by the user.
      */
     @BindView(R.id.mood_detail_date)
     protected EditText date;
 
     /**
-     * The Time.
+     * The time of the mood, given by the user
      */
     @BindView(R.id.mood_detail_time)
     protected EditText time;
 
     /**
-     * The Social situation.
+     * The social situation of the mood, given by the user.
      */
     @BindView(R.id.social_situation)
     protected Spinner social_situation;
@@ -149,18 +159,20 @@ public class AddMoodDetail extends AppCompatActivity {
     protected Button addPhotoButton;
 
     /**
-     * The Reason text.
+     * The reason for the mood, given by the user.
      */
     @BindView(R.id.mood_detail_reason)
     protected EditText reason_text;
 
     /**
-     * The constant situations.
+     * This is an array of situations, which are the only options the user gets to pick for the
+     * moods "Social situation" data.
      */
     protected static String[] situations = new String[]{"Alone", "One Other Person", "Two to Several People", "Crowd"};
 
     /**
-     * The Confirm btn.
+     * The confirm button. when this button is clicked, it adds the mood to the firebase repository,
+     * and brings the user back to the activity MoodHistory.
      */
     @BindView(R.id.add_detail_confirm_btn)
     protected Button confirmBtn;
@@ -177,21 +189,25 @@ public class AddMoodDetail extends AppCompatActivity {
     StorageReference ref;
 
     /**
-     * The Date dialog.
+     * UI element, a tool used for picking dates. More specifically, used for picking the
+     * moods date.
      */
     DatePickerDialog.OnDateSetListener dateDialog;
     /**
-     * The Time dialog.
+     * Same as above, but for time.
      */
     TimePickerDialog.OnTimeSetListener timeDialog;
 
     /**
-     * The Calendar.
+     * A calendar object, used to store dates and times.
      */
     final Calendar calendar = Calendar.getInstance();
 
     /**
-     * Setup the display to match the previously picked mood, and update the date fields with the current date and time
+     * The initial UI is built here, using data from the last activity to dynamically display the
+     * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
+     * where the user is prompted to fill in all of the details of a mood event which were explained
+     * in the variables above.
      *
      * @param savedInstanceState
      */
@@ -233,6 +249,16 @@ public class AddMoodDetail extends AppCompatActivity {
         mood_img.setImageDrawable(res);
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
+
+        /**
+         * change status bar color
+         */
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.parseColor(hex));
+        }
 
 
         dateDialog = new DatePickerDialog.OnDateSetListener() {

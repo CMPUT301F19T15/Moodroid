@@ -69,7 +69,7 @@ import ca.ualberta.moodroid.ui.AddFriend;
 import ca.ualberta.moodroid.ui.SignUp;
 
 /**
- * The type Main activity.
+ * The main activity of our app.
  */
 @Singleton
 public class MainActivity extends AppCompatActivity {
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 final UserRepository users = this.users;
                 // Successfully signed in
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Log.d("AUTH", "Signin Successful" + user.getDisplayName());
+                Log.d("AUTH", "Sign-in Successful" + user.getDisplayName());
                 users.find(user.getUid()).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
                     @Override
                     public void onComplete(@NonNull Task<ModelInterface> task) {

@@ -1,20 +1,33 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ca.ualberta.moodroid.R;
 
 /**
- * Display for selecting a mood when first creating a mood event
+ * This activity presents the initial UI for creating a mood event. It starts at
+ * a screen where each mood emoji is displayed in a circle around a center button. The user will
+ * select a mood from the circle, and the mood will be displayed in the center. To confirm the
+ * mood selection, the user will tap the mood in the center and be brought to the AddMoodDetail
+ * activity.
  */
 //TODO: Dynamically grab mood from Firestore
 public class AddMood extends AppCompatActivity {
+
+
+    /**
+     * All buttons below represent each mood button in the circle, represented by their
+     * corresponding emojis
+     */
 
     private ImageButton center_button;
     private ImageButton annoyed_button;
@@ -23,41 +36,37 @@ public class AddMood extends AppCompatActivity {
     private ImageButton mad_button;
     private ImageButton scared_button;
     private ImageButton sick_button;
+
     /**
-     * The Annoyed drawable id.
+     * All Strings below represent the emojis resource ID's which are used for display purposes
+     *
+     * NOT SURE IF WE ARE KEEPING THIS METHOD OF DISPLAY
      */
     String annoyed_drawable_id = "@drawable/annoyed";
-    /**
-     * The Happy drawable id.
-     */
     String happy_drawable_id = "@drawable/happy";
-    /**
-     * The Sad drawable id.
-     */
     String sad_drawable_id = "@drawable/sad";
-    /**
-     * The Mad drawable id.
-     */
     String mad_drawable_id = "@drawable/mad";
-    /**
-     * The Scared drawable id.
-     */
     String scared_drawable_id = "@drawable/scared";
-    /**
-     * The Sick drawable id.
-     */
     String sick_drawable_id = "@drawable/sick";
-    private boolean center_filled = false;
+
     /**
-     * The Selected img.
+     * This boolean indicates whether the center of the mood circle has been filled or not. The
+     * user will not be able to proceed to the next activity if this boolean is false.
+     */
+
+    private boolean center_filled = false;
+
+
+    /**
+     * the string data for the selected image from the wheel, which will be one of the drawable Id's
      */
     String selected_img;
     /**
-     * The Mood name.
+     * The string data for the name of the mood.
      */
     String mood_name;
     /**
-     * The Hex.
+     * The hex colour code for the corresponding mood
      */
     String hex;
 
@@ -70,6 +79,16 @@ public class AddMood extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_mood);
+
+        /**
+         * change color of the status bar
+         */
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+        }
 
 
         center_button = findViewById(R.id.centerButton);

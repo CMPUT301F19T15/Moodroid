@@ -34,25 +34,29 @@ import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.UserService;
 
 /**
- * Shows the list of all people you follow's moods
+ * This activity displays a list of mood events identical to MoodHistory except it shows the users
+ * friends moods (users that have accepted your request or have been accepted by the user). The
+ * moods are all displayed with their unique attributes.
  */
 public class FriendsMoods extends MoodHistory {
 
     /**
-     * The Users.
+     * the user service item that represents the users who have moods displayed.
      */
     UserService users;
     /**
-     * The Mood events.
+     * The mood event items that display the details of the moods from said users.
      */
     MoodEventService moodEvents;
     private int ACTIVITY_NUM = 2;
     /**
-     * The Intent.
+     * An intent item, this item starts the AddFriend activity which is only reachable from this
+     * activity.
      */
     Intent intent;
     /**
-     * The Events.
+     * This is an array that holds mood events, which is whats displayed on the screen via an
+     * adapter.
      */
     ArrayList<MoodEventModel> events;
 
@@ -113,7 +117,7 @@ public class FriendsMoods extends MoodHistory {
         });
 
 
-        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
+//        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
         toolBarButtonLeft.setImageResource(R.drawable.ic_person_add_black_24dp);
         toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,14 +127,14 @@ public class FriendsMoods extends MoodHistory {
                 startActivity(intent);
             }
         });
-        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //navigate to MoodMap Activity
-                intent = new Intent(FriendsMoods.this, MoodMap.class);
-                startActivity(intent);
-            }
-        });
+//        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //navigate to MoodMap Activity
+//                intent = new Intent(FriendsMoods.this, MoodMap.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     /**

@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import ca.ualberta.moodroid.R;
 
 /**
- * The type Edit delete fragment.
+ * NOT FULLY IMPLEMENTED
+ *
+ * a fragment for editing data
  */
 public class EditDeleteFragment extends AppCompatDialogFragment {
 

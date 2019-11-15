@@ -22,12 +22,14 @@ import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.service.UserService;
 
 /**
- * Adapter for the list of follow requests on the notification page
+ * Adapter for the list of follow requests on the notification page. This code takes data from
+ * requests sent to the user and displays them with some character.
  */
 public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.ViewHolder> {
     private ArrayList<FollowRequestModel> requestList;
     /**
-     * The User service.
+     * The User service type, used for handling data and situations with friends
+     * and following
      */
     UserService userService;
     /**
@@ -38,25 +40,27 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     private OnListListener mOnListListener;
 
     /**
-     * The type View holder.
+     * The type View holder. A ViewHolder describes an item view and metadata about its place
+     * within the RecyclerView.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
 
         /**
-         * The Request text.
+         * The Request text from a different user, displayed in a text view.
          */
         public TextView requestText;
         /**
-         * The Deny button.
+         * The deny button. A user can click this button to deny a follow request.
          */
         public Button denyButton;
         /**
-         * The Accept button.
+         * The Accept button. A user can click this button to accept a follow request.
          */
         public Button acceptButton;
         /**
-         * The On list listener.
+         * The On list listener, which is just a listener object for an item in a list, works like
+         * a listener for a button.
          */
         FollowListAdapter.OnListListener onListListener;
 
