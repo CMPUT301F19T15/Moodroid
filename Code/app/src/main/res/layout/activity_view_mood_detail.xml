@@ -11,31 +11,32 @@
     <RelativeLayout
         android:id="@+id/banner"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#1A2531">
-
-        <ImageView
-            android:id="@+id/mood_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/annoyed">
-
-        </ImageView>
+        android:layout_height="wrap_content"
+        android:background="#131B22">
 
         <TextView
             android:id="@+id/mood_text"
-            android:layout_width="152dp"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="116dp"
-            android:layout_marginLeft="116dp"
-            android:layout_marginBottom="15dp"
             android:fontFamily="@font/courier_new_bold"
-            android:text="TBD"
+            android:text="Happy"
             android:textColor="#FFFFFF"
-            android:textSize="30dp" />
+            android:textSize="35dp" />
+
+        <TextView
+            android:id="@+id/mood_img"
+            android:textSize="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp">
+        </TextView>
+
+
 
 
     </RelativeLayout>
@@ -48,6 +49,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -76,15 +78,17 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:focusable="false"
+                        android:textSize="20dp"
                         android:gravity="center"
                         android:textColor="#FFFFFF" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/mood_detail_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:textSize="20dp"
                         android:focusable="false"
                         android:gravity="center"
                         android:textColor="#FFFFFF" />
@@ -114,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:textSize="20dp"
                     android:gravity="center"
                     android:textColor="#FFFFFF" />
 
@@ -142,6 +147,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="center"
+                    android:textSize="20dp"
                     android:textColor="#FFFFFF" />
 
             </LinearLayout>
@@ -168,6 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:textSize="20dp"
                     android:gravity="center"
                     android:textColor="#FFFFFF" />
 

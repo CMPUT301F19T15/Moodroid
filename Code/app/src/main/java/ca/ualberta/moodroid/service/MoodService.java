@@ -60,6 +60,30 @@ public class MoodService implements MoodInterface {
             }
         });
     }
+
+
+    public Task<List<MoodModel>> getMood(String moodName) {
+
+        return this.moods.where("name", moodName).get().continueWith(new Continuation<List<ModelInterface>, List<MoodModel>>() {
+            @Override
+            public List<MoodModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
+                List<MoodModel> data = new ArrayList<>();
+
+                if (task.isSuccessful()) {
+                    for (ModelInterface m : task.getResult()) {
+                        data.add((MoodModel) m);
+
+                    }
+                }
+
+
+                return data;
+            }
+        });
+    }
+
+
+
 }
 
 
