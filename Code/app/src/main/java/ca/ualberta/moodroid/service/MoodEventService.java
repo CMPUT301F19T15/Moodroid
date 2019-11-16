@@ -90,6 +90,28 @@ public class MoodEventService implements MoodEventInterface {
 
     }
 
+    public Task<List<MoodEventModel>> getEventWithId(String eventId) {
+        return this.events.where("internalId", eventId).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
+            @Override
+            public List<MoodEventModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
+                List<MoodEventModel> results = new ArrayList<MoodEventModel>();
+                if (task.isSuccessful()) {
+                    Log.d("MOODEVENT", "Task was successful");
+                    for (ModelInterface m : task.getResult()) {
+                        Log.d("MOODEVENT/GETALL", "Got model: " + m.getInternalId());
+                        results.add((MoodEventModel) m);
+                    }
+                } else {
+                    Log.d("MOODEVENT", "Task was not successful: " + task.getException().getMessage());
+
+                }
+
+                return results;
+            }
+        });
+    }
+
+
     /**
      * Not Implemented, used to get all a user's events filtered by a single mood.
      *

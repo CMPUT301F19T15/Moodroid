@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -154,6 +155,23 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     @Override
     public void onListClick(int position) {
         openEditDeleteDialog();
+    }
+
+    @Override
+    public void onShortClick(int position) {
+        MoodEventModel moodEventModel =  moodList.get(position);
+        moodEventModel.getInternalId();
+        intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
+        intent.putExtra("eventId", moodEventModel.getInternalId());
+//        intent.putExtra("eventMoodName", moodEventModel.getMoodName());
+//        intent.putExtra("eventSituation", moodEventModel.getSituation());
+//        intent.putExtra("eventDateTime", moodEventModel.getDatetime());
+//        intent.putExtra("eventImageUrl", moodEventModel.getReasonImageUrl());
+//        intent.putExtra("eventLocation", moodEventModel.getLocation());
+
+        startActivity(intent);
+
+
     }
 
     /**
