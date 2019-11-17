@@ -102,7 +102,6 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         bottomNavigationView();
         setTitle("Mood History");
 
-
         toolBarButtonLeft.setImageResource(R.drawable.ic_addmood);
         toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override

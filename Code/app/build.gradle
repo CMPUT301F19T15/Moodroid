@@ -45,6 +45,7 @@ dependencies {
     // For example, to use Firebase Authentication and Cloud Firestore
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
 
     implementation "com.google.dagger:dagger:2.24"
     implementation "com.google.dagger:dagger-android:2.24"
@@ -66,6 +67,10 @@ dependencies {
     implementation "androidx.cardview:cardview:$cardview_version"
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
     //Google Play Services for Maps
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
 
@@ -74,6 +79,7 @@ dependencies {
 
     // Google play services for location information
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+
 
     //Testing
     testImplementation 'junit:junit:4.12'
