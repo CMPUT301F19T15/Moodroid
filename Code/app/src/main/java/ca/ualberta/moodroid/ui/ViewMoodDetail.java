@@ -8,10 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -75,6 +77,7 @@ public class ViewMoodDetail extends BaseUIActivity {
         TextView reasonText;
         TextView situationText;
         ImageView reasonImage;
+        ImageButton backButton;
         String imageReasonUrl;
         GeoPoint location;
 
@@ -112,6 +115,7 @@ public class ViewMoodDetail extends BaseUIActivity {
         reasonText = findViewById(R.id.mood_detail_reason);
         situationText = findViewById(R.id.show_social_situation);
         reasonImage = findViewById(R.id.photoView);
+        backButton = findViewById(R.id.detail_view_back_button);
 
         ArrayList<MoodEventModel> moodList;
         MoodService moods = new MoodService();
@@ -125,15 +129,6 @@ public class ViewMoodDetail extends BaseUIActivity {
                     public void onSuccess(List<MoodModel> moodModels) {
                         moodList.addAll(moodEventModels);
                         event = moodList.get(0);
-//                        Integer size = moodList.size();
-//                        String sizestr = size.toString();
-//                        Toast.makeText(ViewMoodDetail.this, sizestr, Toast.LENGTH_SHORT).show();
-//                        size = moodList.size()+1;
-//                        sizestr = size.toString();
-//                        Toast.makeText(ViewMoodDetail.this, sizestr, Toast.LENGTH_SHORT).show();
-//                        allMoods = moodModels;
-//                        reverseSort();
-//                        updateListView();
                         //set the values for all views
                         MoodModel moodModel = moodModels.get(0);
                         String emojiString = moodModel.getEmoji();
@@ -142,11 +137,13 @@ public class ViewMoodDetail extends BaseUIActivity {
                         moodText.setText(moodModel.getName());
                         timeText.setText(event.getDatetime().split(" ")[0]);
                         dateText.setText(event.getDatetime().split(" ")[1]);
-//                        reasonText.setText(event.getReasonText());
-                        situationText.setText(event.getSituation());
-                        //only try to set teh image if the event has an image
-
-
+                        if(event.getSituation() != null){
+                            situationText.setText(event.getSituation());
+                        }
+                        if(event.getReasonText() != null){
+                            reasonText.setText(event.getReasonText());
+                        }
+                        //only try to set the image if the event has an image...
                         if(event.getReasonImageUrl() != null) {
 //                            //update photo view
                             try {
@@ -155,27 +152,17 @@ public class ViewMoodDetail extends BaseUIActivity {
                                         .into(reasonImage);
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Toast.makeText(ViewMoodDetail.this, "Error: Image cannot be displayed." + event.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ViewMoodDetail.this, "Error: Image cannot be displayed. " + event.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
                             }
-
-
-
-//
-//
-//
-//                            try {
-//                                String url = event.getReasonImageUrl();
-//                                Picasso.get().load(url).into(reasonImage);
-//
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                                Toast.makeText(ViewMoodDetail.this, "Error: Image cannot be displayed." + event.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
-//                            }
 
                         }
                         //only show the location if the event has a location
                         if(event.getLocation() != null){
-//
+                            //TO DO: ADD LOCATION STUFF...mini MAP??? or ADDRESS???
+                            //
+                            //
+                            //
+                            //
                         }
 
                     }
@@ -184,7 +171,12 @@ public class ViewMoodDetail extends BaseUIActivity {
             }
         });
 
-
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 

@@ -245,8 +245,6 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setSituation(social_situation.getSelectedItem().toString());
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
-
-
         mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
             public void onSuccess(ModelInterface modelInterface) {

@@ -91,7 +91,8 @@ public class MoodEventService implements MoodEventInterface {
     }
 
     public Task<List<MoodEventModel>> getEventWithId(String eventId) {
-        return this.events.where("internalId", eventId).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
+        return this.events.where("moodEvent", eventId).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
+            //("internalId", eventId).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
             @Override
             public List<MoodEventModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
                 List<MoodEventModel> results = new ArrayList<MoodEventModel>();

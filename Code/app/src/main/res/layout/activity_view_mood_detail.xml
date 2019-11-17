@@ -12,7 +12,7 @@
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#131B22">
+        android:background="#1A2531">
 
         <TextView
             android:id="@+id/mood_text"
@@ -21,7 +21,7 @@
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/courier_new_bold"
-            android:text="Happy"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="35dp" />
 
@@ -36,8 +36,17 @@
             android:layout_height="50dp">
         </TextView>
 
-
-
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/fui_transparent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:id="@+id/detail_view_back_button"
+            android:layout_marginRight="28dp"
+            android:src="@drawable/ic_back_button">
+        </ImageButton>
 
     </RelativeLayout>
 
@@ -116,6 +125,8 @@
                     style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:layout_weight="1"
                     android:ems="10"
                     android:textSize="20dp"
@@ -147,6 +158,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="center"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:textSize="20dp"
                     android:textColor="#FFFFFF" />
 
@@ -175,6 +188,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:gravity="center"
                     android:textColor="#FFFFFF" />
 
@@ -188,7 +203,6 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:scaleType="fitXY"
                     android:adjustViewBounds="true"
                     android:layout_gravity="center"
