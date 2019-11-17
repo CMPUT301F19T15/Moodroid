@@ -11,7 +11,7 @@
         android:id="@+id/wheel"
         android:layout_width="380dp"
         android:layout_height="481dp"
-        android:layout_marginTop="30sp"
+        android:layout_marginTop="20sp"
         android:layout_marginRight="40dp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <Button
             android:id="@+id/centerButton"
             android:layout_width="160dp"
             android:layout_height="160dp"
@@ -29,12 +29,13 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:layout_marginStart="133dp"
+            android:textSize="70dp"
             android:layout_marginLeft="133dp"
             android:layout_marginTop="189dp"
             android:background="@drawable/button_default" />
 
 
-        <ImageButton
+        <Button
             android:id="@+id/Annoyed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,76 +43,76 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="43dp"
+            android:textSize="70dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="119dp"
-            android:background="@drawable/button_default"
-            android:src="@drawable/annoyed" />
+            android:background="@color/fui_transparent"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/Happy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:textSize="70dp"
             android:layout_marginStart="169dp"
             android:layout_marginLeft="169dp"
             android:layout_marginTop="65dp"
-            android:background="@drawable/button_default"
-            android:src="@drawable/happy" />
+            android:background="@color/fui_transparent"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/Mad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
+            android:textSize="70dp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="43dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="316dp"
-            android:background="@drawable/button_default"
-            android:src="@drawable/mad" />
+            android:background="@color/fui_transparent"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/Sad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:textSize="70dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="169dp"
             android:layout_marginLeft="166dp"
             android:layout_marginTop="389dp"
-            android:background="@drawable/button_default"
-            android:src="@drawable/sad" />
+            android:background="@color/fui_transparent"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/Scared"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:textSize="70dp"
             android:layout_marginStart="292dp"
             android:layout_marginLeft="292dp"
             android:layout_marginTop="324dp"
-            android:background="@drawable/button_default"
-            android:src="@drawable/scared" />
+            android:background="@color/fui_transparent"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/Sick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
+            android:textSize="70dp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="292dp"
             android:layout_marginLeft="285dp"
             android:layout_marginTop="121dp"
             android:layout_marginRight="32dp"
-            android:background="@drawable/button_default"
-            android:src="@drawable/sick" />
+            android:background="@color/fui_transparent"/>
 
     </RelativeLayout>
 
