@@ -4,18 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-
-import android.media.ExifInterface;
 import android.net.Uri;
-
 import android.os.Build;
-
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -32,35 +25,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
 import java.util.Locale;
-
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -69,9 +47,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
-
 import static android.view.View.GONE;
-import static java.lang.Thread.sleep;
 
 /**
  * This activity follows immediately after AddMood. Once the User picks their emoji (which is
@@ -330,8 +306,6 @@ public class AddMoodDetail extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     /**
@@ -419,68 +393,18 @@ public class AddMoodDetail extends AppCompatActivity {
                 && data != null && data.getData() != null) {
             filePath = data.getData();
             //update photo view
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-//                photoView.setImageBitmap(bitmap);
-//                hasPhoto = true;
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            //upload photo to firestore
+            try {
+                Glide.with(AddMoodDetail.this)
+                        .load(filePath)
+                        .into(photoView);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(AddMoodDetail.this, "Error: Image cannot be displayed." + url, Toast.LENGTH_SHORT).show();
+            }
+            //upload photo to firestore
             uploadPhoto();
             addPhotoButton.setVisibility(GONE);
             removePhotoButton.setVisibility(View.VISIBLE);
-
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                ExifInterface exif = new ExifInterface(url);
-                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-                Log.d("EXIF", "Exif: " + orientation);
-                Matrix matrix = new Matrix();
-                if (orientation == 6) {
-                    matrix.postRotate(90);
-                }
-                else if (orientation == 3) {
-                    matrix.postRotate(180);
-                }
-                else if (orientation == 8) {
-                    matrix.postRotate(270);
-                }
-                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true); // rotating bitmap
-                photoView.setImageBitmap(bitmap);
-            }
-            catch (Exception e) {
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }
 
