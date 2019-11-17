@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "ca.ualberta.moodroid"
-        minSdkVersion 16
+        minSdkVersion 29
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -45,11 +45,12 @@ dependencies {
     // For example, to use Firebase Authentication and Cloud Firestore
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
 
     implementation "com.google.dagger:dagger:2.24"
     implementation "com.google.dagger:dagger-android:2.24"
     implementation "com.google.dagger:dagger-android-support:2.24"
-
+    
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -68,7 +69,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     //Glide
-    //Glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
@@ -80,6 +80,7 @@ dependencies {
 
     // Google play services for location information
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+
 
     //Testing
     testImplementation 'junit:junit:4.12'

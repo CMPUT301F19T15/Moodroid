@@ -5,37 +5,11 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#1A2531">
 
-        <ImageView
-            android:id="@+id/mood_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/annoyed">
+ <include
+     layout="@layout/add_mood_banner">
+ </include>
 
-        </ImageView>
-
-        <TextView
-            android:id="@+id/mood_text"
-            android:layout_width="152dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="116dp"
-            android:layout_marginLeft="116dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/courier_new_bold"
-            android:text="TBD"
-            android:textColor="#FFFFFF"
-            android:textSize="30dp" />
-
-
-    </RelativeLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -58,6 +32,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Date and Time"
+                    android:background="@color/colorSecondary"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
 
@@ -72,6 +47,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:clickable="true"
+                        android:hint="date"
+                        android:textColorHint="#585858"
                         android:editable="false"
                         android:ems="10"
                         android:focusable="false"
@@ -83,6 +60,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:hint="time"
+                        android:textColorHint="#585858"
                         android:clickable="true"
                         android:editable="false"
                         android:ems="10"
@@ -97,23 +76,94 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_marginTop="30dp"
                 android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
 
                 <TextView
                     android:id="@+id/reason_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:background="@color/colorSecondary"
                     android:text="Reason"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_photo_button"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:textSize="12sp"
+                    android:layout_alignBottom="@id/reason_text"
+                    android:text="add photo">
+                </Button>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/remove_photo_button"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        android:layout_alignBottom="@id/reason_text"
+                        android:text="remove photo">
+                    </Button>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/mood_detail_reason"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="Reason"
+                        android:maxLength="20"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#585858" />
+
+            </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Location_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/colorSecondary"
+                    android:text="Location"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp" />
                 <EditText
-                    android:id="@+id/mood_detail_reason"
+                    android:id="@+id/mood_detail_location"
                     style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColorHint="#585858"
+                    android:clickable="true"
+                    android:hint="location"
                     android:ems="10"
                     android:gravity="center"
                     android:textColor="#FFFFFF" />
@@ -122,23 +172,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="vertical">
-
-                <Switch
-                    android:id="@+id/use_current_location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|center_horizontal"
-                    android:text="Use Current Location"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_marginTop="30dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -147,6 +182,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Social Situation"
+                    android:background="@color/colorSecondary"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
 
@@ -159,6 +195,7 @@
 
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,8 +205,19 @@
                     android:id="@+id/add_detail_confirm_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="20dp"
                     android:text="Add To History" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    android:layout_gravity="center"
+                    android:id="@+id/photoView">
+
+                </ImageView>
             </LinearLayout>
         </LinearLayout>
 
