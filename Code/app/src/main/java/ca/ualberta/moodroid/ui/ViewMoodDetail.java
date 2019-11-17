@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -148,28 +149,28 @@ public class ViewMoodDetail extends BaseUIActivity {
 
                         if(event.getReasonImageUrl() != null) {
 //                            //update photo view
-//                            try {
-//                                Glide.with(AddMoodDetail.this)
-//                                        .load(filePath)
-//                                        .into(photoView);
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                                Toast.makeText(AddMoodDetail.this, "Error: Image cannot be displayed." + url, Toast.LENGTH_SHORT).show();
-//                            }
-//
-
-
-
-
-
                             try {
-                                String url = event.getReasonImageUrl();
-                                Picasso.get().load(url).into(reasonImage);
-
+                                Glide.with(ViewMoodDetail.this)
+                                        .load(event.getReasonImageUrl())
+                                        .into(reasonImage);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Toast.makeText(ViewMoodDetail.this, "Error: Image cannot be displayed." + event.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
                             }
+
+
+
+//
+//
+//
+//                            try {
+//                                String url = event.getReasonImageUrl();
+//                                Picasso.get().load(url).into(reasonImage);
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                Toast.makeText(ViewMoodDetail.this, "Error: Image cannot be displayed." + event.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
+//                            }
 
                         }
                         //only show the location if the event has a location
