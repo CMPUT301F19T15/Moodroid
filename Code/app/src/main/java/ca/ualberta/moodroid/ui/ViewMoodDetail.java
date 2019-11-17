@@ -63,7 +63,10 @@ public class ViewMoodDetail extends BaseUIActivity {
  */
 /////////////////////////TO DO: show the location...use a mini map? address???
 ///////////////////internalId in DB not updated?
+///////////////////////////
+    ///////////////////////////////////
 
+    
     /**
      * The mood event service.
      */
