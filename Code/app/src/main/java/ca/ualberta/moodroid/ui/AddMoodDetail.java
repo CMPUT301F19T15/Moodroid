@@ -6,8 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 
+import android.media.ExifInterface;
 import android.net.Uri;
 
 import android.os.Build;
@@ -417,17 +419,68 @@ public class AddMoodDetail extends AppCompatActivity {
                 && data != null && data.getData() != null) {
             filePath = data.getData();
             //update photo view
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                photoView.setImageBitmap(bitmap);
-                hasPhoto = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //upload photo to firestore
+//            try {
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+//                photoView.setImageBitmap(bitmap);
+//                hasPhoto = true;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            //upload photo to firestore
             uploadPhoto();
             addPhotoButton.setVisibility(GONE);
             removePhotoButton.setVisibility(View.VISIBLE);
+
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                ExifInterface exif = new ExifInterface(url);
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                Log.d("EXIF", "Exif: " + orientation);
+                Matrix matrix = new Matrix();
+                if (orientation == 6) {
+                    matrix.postRotate(90);
+                }
+                else if (orientation == 3) {
+                    matrix.postRotate(180);
+                }
+                else if (orientation == 8) {
+                    matrix.postRotate(270);
+                }
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true); // rotating bitmap
+                photoView.setImageBitmap(bitmap);
+            }
+            catch (Exception e) {
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 
