@@ -61,31 +61,23 @@ public class MoodService implements MoodInterface {
         });
     }
 
-
-    public Task<List<MoodModel>> getMood(String moodName) {
-
-        return this.moods.where("name", moodName).get().continueWith(new Continuation<List<ModelInterface>, List<MoodModel>>() {
+    /**
+     * Get a single mood by mood name.
+     *
+     * @param moodName
+     * @return mood the mood model
+     */
+    public Task<MoodModel> getMood(String moodName) {
+        return this.moods.where("name", moodName).one().continueWith(new Continuation<ModelInterface, MoodModel>() {
             @Override
-            public List<MoodModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
-                List<MoodModel> data = new ArrayList<>();
-
+            public MoodModel then(@NonNull Task<ModelInterface> task) throws Exception {
+                MoodModel mood = null;
                 if (task.isSuccessful()) {
-                    for (ModelInterface m : task.getResult()) {
-                        data.add((MoodModel) m);
-
-                    }
+                    ModelInterface m = task.getResult();
+                    mood = (MoodModel) m;
                 }
-
-
-                return data;
+                return mood;
             }
         });
     }
-
-
-
 }
-
-
-
-

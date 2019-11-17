@@ -61,40 +61,74 @@ public class ViewMoodDetail extends BaseUIActivity {
  * The mood event to be displayed is picked by the user in the MoodHistory activity
  * by clicking on the event.
  */
+/////////////////////////TO DO: show the location...use a mini map? address???
+///////////////////internalId in DB not updated?
 
-///////////////////internalId not updated?
-        //////////////////////show location
-        
+    /**
+     * The mood event service.
+     */
+    private MoodEventService eventService;
 
-        MoodEventService eventService;
-        MoodEventModel event;
-        String eventInternalId;
-        RelativeLayout banner;
-        TextView moodText;
-        TextView emoji;
-        TextView timeText;
-        TextView dateText;
-        TextView reasonText;
-        TextView situationText;
-        ImageView reasonImage;
-        ImageButton backButton;
-        String imageReasonUrl;
-        GeoPoint location;
+    /**
+     * The mood event model.
+     */
+    private MoodEventModel event;
 
+    /**
+     * The internal id of the mood event.
+     */
+    private String eventInternalId;
 
-//        @BindView(R.id.mood_img)
-//        protected TextView emoji;
+    /**
+     * The banner at the top of the screen displaying
+     * the emoji and the mood name.
+     */
+    private RelativeLayout banner;
 
-    //    /**
-//     * The initial UI is built here, using data from the last activity to dynamically display the
-//     * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
-//     * where the user is prompted to fill in all of the details of a mood event which were explained
-//     * in the variables above.
-//     *
-//     * @param savedInstanceState
-//     */
+    /**
+     * The mood name.
+     */
+    private TextView moodText;
 
+    /**
+     * The mood emoji.
+     */
+    private TextView emoji;
 
+    /**
+     * The text view displaying the time of the event.
+     */
+    private TextView timeText;
+
+    /**
+     * The text view displaying the date of the event.
+     */
+    private TextView dateText;
+
+    /**
+     * The text view displaying the reason for the mood event.
+     */
+    private TextView reasonText;
+
+    /**
+     * The text view displaying the socail situation.
+     */
+    private TextView situationText;
+
+    /**
+     * The image view displaying the mood event image.
+     */
+    private ImageView reasonImage;
+
+    /**
+     * The back button to return to the history activity.
+     */
+    private ImageButton backButton;
+
+    /**
+     * The mood event location.
+     */
+    private GeoPoint location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +141,7 @@ public class ViewMoodDetail extends BaseUIActivity {
 
         eventService = new MoodEventService();
 
+        //initialize all views
         emoji = findViewById(R.id.mood_img);
         banner = findViewById(R.id.banner);
         moodText = findViewById(R.id.mood_text);
@@ -117,34 +152,37 @@ public class ViewMoodDetail extends BaseUIActivity {
         reasonImage = findViewById(R.id.photoView);
         backButton = findViewById(R.id.detail_view_back_button);
 
-        ArrayList<MoodEventModel> moodList;
         MoodService moods = new MoodService();
-        moodList = new ArrayList<>();
-        eventService.getEventWithId(eventInternalId).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+
+        //get the mood event model to be displayed
+        eventService.getEventWithId(eventInternalId).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
             @Override
-            public void onSuccess(List<MoodEventModel> moodEventModels) {
-                Log.d("MOODHISTORY/GET", "Got mood Events: " + moodEventModels.size());
-                moods.getMood(moodEventModels.get(0).getMoodName()).addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+            public void onSuccess(MoodEventModel moodEventModel) {
+                Log.d("VIEWMOODDETAIL/GET", "Got mood Event: " + eventInternalId);
+                moods.getMood(moodEventModel.getMoodName()).addOnSuccessListener(new OnSuccessListener<MoodModel>() {
                     @Override
-                    public void onSuccess(List<MoodModel> moodModels) {
-                        moodList.addAll(moodEventModels);
-                        event = moodList.get(0);
+                    public void onSuccess(MoodModel moodModel) {
+                        event = moodEventModel;
                         //set the values for all views
-                        MoodModel moodModel = moodModels.get(0);
-                        String emojiString = moodModel.getEmoji();
+                        MoodModel mood = moodModel;
+                        String emojiString = mood.getEmoji();
                         emoji.setText(emojiString);
-                        banner.setBackgroundColor(parseColor(moodModel.getColor()));
-                        moodText.setText(moodModel.getName());
+                        banner.setBackgroundColor(parseColor(mood.getColor()));
+                        moodText.setText(mood.getName());
                         timeText.setText(event.getDatetime().split(" ")[0]);
                         dateText.setText(event.getDatetime().split(" ")[1]);
-                        if(event.getSituation() != null){
+                        if (event.getSituation() != null) {
                             situationText.setText(event.getSituation());
+                        } else {
+                            situationText.setText("not specified");
                         }
-                        if(event.getReasonText() != null){
+                        if (event.getReasonText() != null) {
                             reasonText.setText(event.getReasonText());
+                        } else {
+                            reasonText.setText("not specified");
                         }
                         //only try to set the image if the event has an image...
-                        if(event.getReasonImageUrl() != null) {
+                        if (event.getReasonImageUrl() != null) {
 //                            //update photo view
                             try {
                                 Glide.with(ViewMoodDetail.this)
@@ -154,11 +192,10 @@ public class ViewMoodDetail extends BaseUIActivity {
                                 e.printStackTrace();
                                 Toast.makeText(ViewMoodDetail.this, "Error: Image cannot be displayed. " + event.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
                             }
-
                         }
                         //only show the location if the event has a location
-                        if(event.getLocation() != null){
-                            //TO DO: ADD LOCATION STUFF...mini MAP??? or ADDRESS???
+                        if (event.getLocation() != null) {
+                            //TO DO: ADD LOCATION STUFF...mini MAP??? ADDRESS???
                             //
                             //
                             //
@@ -171,15 +208,12 @@ public class ViewMoodDetail extends BaseUIActivity {
             }
         });
 
+        //return to mood history activity on click of button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
     }
-
-
-
 }
