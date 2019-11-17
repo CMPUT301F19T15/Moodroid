@@ -64,8 +64,7 @@ public class ViewMoodDetail extends BaseUIActivity {
  * The mood event to be displayed is picked by the user in the MoodHistory activity
  * by clicking on the event.
  */
-/////////////////////////TO DO: show the location...use a mini map? address???
-///////////////////internalId in DB not updated?
+////////////////////////NOT YET IMPLEMENTED: show location...wait until map activity is done
 ///////////////////////////
     ///////////////////////////////////
 
@@ -204,7 +203,7 @@ public class ViewMoodDetail extends BaseUIActivity {
                         }
                         //only show the location if the event has a location
                         if (event.getLocation() != null) {
-                            //TO DO: ADD LOCATION STUFF...mini MAP??? ADDRESS???
+                            //TODO: show location...mini MAP??? ADDRESS??? wait until map activity is done...
                             //
                             //
                             //
