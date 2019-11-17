@@ -144,7 +144,24 @@ public class ViewMoodDetail extends BaseUIActivity {
 //                        reasonText.setText(event.getReasonText());
                         situationText.setText(event.getSituation());
                         //only try to set teh image if the event has an image
-                        if(event.getReasonImageUrl() != null) {
+
+
+//                        if(event.getReasonImageUrl() != null) {
+//                            //update photo view
+//                            try {
+//                                Glide.with(AddMoodDetail.this)
+//                                        .load(filePath)
+//                                        .into(photoView);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                Toast.makeText(AddMoodDetail.this, "Error: Image cannot be displayed." + url, Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+
+
+
                             try {
                                 String url = event.getReasonImageUrl();
                                 Picasso.get().load(url).into(reasonImage);
