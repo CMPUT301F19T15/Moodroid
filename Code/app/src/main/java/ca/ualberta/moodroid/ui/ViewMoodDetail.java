@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -154,6 +157,9 @@ public class ViewMoodDetail extends BaseUIActivity {
         situationText = findViewById(R.id.show_social_situation);
         reasonImage = findViewById(R.id.photoView);
         backButton = findViewById(R.id.detail_view_back_button);
+        backButton.setVisibility(View.VISIBLE);
+
+
 
         MoodService moods = new MoodService();
 
@@ -179,7 +185,7 @@ public class ViewMoodDetail extends BaseUIActivity {
                         } else {
                             situationText.setText("not specified");
                         }
-                        if (event.getReasonText() != null) {
+                        if (!event.getReasonText().equals("")) {
                             reasonText.setText(event.getReasonText());
                         } else {
                             reasonText.setText("not specified");
@@ -204,7 +210,13 @@ public class ViewMoodDetail extends BaseUIActivity {
                             //
                             //
                         }
-
+                        //change status bar color
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            Window window = getWindow();
+                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            window.setStatusBarColor(Color.parseColor(moodModel.getColor()));
+                        }
                     }
                 });
 
