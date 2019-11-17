@@ -304,6 +304,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             @Override
             public int compare(MoodEventModel mood1, MoodEventModel mood2) {
                 try {
+
                     return mood2.dateObject().compareTo(mood1.dateObject());      //reversed
                 } catch (Exception e) {
                     Log.e("MOODHISTORY/SORT", "Could not sort mood history: " + e.getMessage());

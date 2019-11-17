@@ -23,6 +23,8 @@ import com.google.firebase.firestore.auth.User;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -60,6 +62,8 @@ public class FriendsMoods extends MoodHistory {
      */
     ArrayList<MoodEventModel> events;
 
+    int currentUsers = 0;
+
 
     /**
      * Get all the users you follow, and get a list of each users moods - then sort and display the moods
@@ -92,7 +96,7 @@ public class FriendsMoods extends MoodHistory {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
-
+                final int totalUsers = followRequestModels.size();
                 for (FollowRequestModel user : followRequestModels) {
                     // TODO: I need to reinitiate this service otherwise it won't get all the objects.
                     MoodEventService eventsvc = new MoodEventService();
@@ -100,16 +104,15 @@ public class FriendsMoods extends MoodHistory {
                     eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                         @Override
                         public void onSuccess(List<MoodEventModel> moodEventModels) {
+                            currentUsers += 1;
                             Log.d("FRIENDSMOOD/TASK", "Task completed for: " + user.getRequesteeUsername() + ", size=" + moodEventModels.size());
                             events.addAll(moodEventModels);
-                            reverseSort();
-                            updateListView();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("FRIENDSMOOD/TASK", "Task failed for: " + user.getRequesteeUsername() + e.getMessage());
-
+                            if (currentUsers >= totalUsers) {
+                                Log.d("FRIENDSMOOD/USERCOUNT", currentUsers + "");
+                                Log.d("FRIENDSMOOD/SIZE", events.size() + "");
+                                reverseSort();
+                                updateListView();
+                            }
                         }
                     });
                 }
@@ -136,6 +139,23 @@ public class FriendsMoods extends MoodHistory {
 //            }
 //        });
     }
+
+    @Override
+    protected void reverseSort() {
+        Collections.sort(events, new Comparator<MoodEventModel>() {
+            @Override
+            public int compare(MoodEventModel mood1, MoodEventModel mood2) {
+                try {
+
+                    return mood2.dateObject().compareTo(mood1.dateObject());      //reversed
+                } catch (Exception e) {
+                    Log.e("MOODHISTORY/SORT", "Could not sort mood history: " + e.getMessage());
+                }
+                return 0;
+            }
+        });
+    }
+
 
     /**
      * Updates the internal list view items with a new listing of events

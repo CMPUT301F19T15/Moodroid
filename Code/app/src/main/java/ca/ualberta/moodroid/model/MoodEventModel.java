@@ -1,5 +1,7 @@
 package ca.ualberta.moodroid.model;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
@@ -13,8 +15,8 @@ public class MoodEventModel extends BaseModel {
 
 
     /**
-     *  datetime
-     *  A string value that represents the time of the users mood
+     * datetime
+     * A string value that represents the time of the users mood
      */
     private String datetime;
 
@@ -40,7 +42,7 @@ public class MoodEventModel extends BaseModel {
 
     /**
      * situation
-     *
+     * <p>
      * String data containing the current situation of a mood such as "Alone" or "in a crowd"
      */
 
@@ -48,7 +50,7 @@ public class MoodEventModel extends BaseModel {
 
     /**
      * location
-     *
+     * <p>
      * map data for pinpointing a mood events location, which will be integrated into the
      * map feature of the app
      */
@@ -57,7 +59,7 @@ public class MoodEventModel extends BaseModel {
 
     /**
      * username
-     *
+     * <p>
      * String value for the username of the person making the mood event.
      */
 
@@ -202,6 +204,7 @@ public class MoodEventModel extends BaseModel {
      * @throws Exception the exception
      */
     public Date dateObject() throws Exception {
-        return new SimpleDateFormat(MoodEventModel.DATE_FORMAT).parse(this.getDatetime());
+        Date date = new SimpleDateFormat(MoodEventModel.DATE_FORMAT).parse(this.getDatetime());
+        return date;
     }
 }
