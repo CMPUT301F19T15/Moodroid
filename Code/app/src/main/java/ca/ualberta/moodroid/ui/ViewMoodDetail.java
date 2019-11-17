@@ -146,7 +146,7 @@ public class ViewMoodDetail extends BaseUIActivity {
                         //only try to set teh image if the event has an image
 
 
-//                        if(event.getReasonImageUrl() != null) {
+                        if(event.getReasonImageUrl() != null) {
 //                            //update photo view
 //                            try {
 //                                Glide.with(AddMoodDetail.this)
