@@ -10,10 +10,11 @@
     <RelativeLayout
         android:layout_width="380dp"
         android:layout_height="481dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="117dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/centerButton"
