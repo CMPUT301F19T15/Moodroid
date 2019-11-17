@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:background="@color/colorSecondary"
-                    android:text="reason"
+                    android:text="Reason"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
 
@@ -152,7 +152,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:background="@color/colorSecondary"
-                    android:text="location"
+                    android:text="Location"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
                 <EditText
@@ -162,7 +162,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColorHint="#585858"
-                    android:hint="Location"
+                    android:clickable="true"
+                    android:hint="location"
                     android:ems="10"
                     android:gravity="center"
                     android:textColor="#FFFFFF" />

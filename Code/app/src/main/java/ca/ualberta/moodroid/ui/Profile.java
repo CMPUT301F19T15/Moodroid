@@ -1,4 +1,5 @@
 package ca.ualberta.moodroid.ui;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -75,13 +77,18 @@ public class Profile extends BaseUIActivity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 AuthUI.getInstance()
                         .signOut(Profile.this)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+                                /**
+                                 * Ensure we clear the username so they really are logged out
+                                 */
+                                AuthenticationService.getInstance().clearUsername();
                                 //finish all open activities & go to Sign In Screen (MainActivity)
-                               finish();
+                                finish();
                                 Intent intent = new Intent(Profile.this, MainActivity.class);
                                 startActivity(intent);
                             }
