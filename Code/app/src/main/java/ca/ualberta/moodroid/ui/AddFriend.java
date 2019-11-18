@@ -182,5 +182,6 @@ public class AddFriend extends AppCompatActivity {
                 }
             }
         });
+        users = new UserRepository();
     }
 }
