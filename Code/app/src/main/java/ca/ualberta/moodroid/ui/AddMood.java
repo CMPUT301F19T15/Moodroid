@@ -108,18 +108,25 @@ public class AddMood extends AppCompatActivity {
                 List<MoodModel> m = moodModels;
                 allMoods.addAll(m);
                 for (MoodModel moodModel : moodModels) {
-                    if (moodModel.getName().equals("Annoyed")) {
-                        annoyed_button.setText(moodModel.getEmoji());
-                    } else if (moodModel.getName().equals("Scared")) {
-                        scared_button.setText(moodModel.getEmoji());
-                    } else if (moodModel.getName().equals("Happy")) {
-                        happy_button.setText(moodModel.getEmoji());
-                    } else if (moodModel.getName().equals("Sad")) {
-                        sad_button.setText(moodModel.getEmoji());
-                    } else if (moodModel.getName().equals("Sick")) {
-                        sick_button.setText(moodModel.getEmoji());
-                    } else if (moodModel.getName().equals("Mad")) {
-                        mad_button.setText(moodModel.getEmoji());
+                    switch (moodModel.getName()){
+                        case "Annoyed":
+                            annoyed_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Scared":
+                            scared_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Happy":
+                            happy_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Sad":
+                            sad_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Sick":
+                            sick_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Mad":
+                            mad_button.setText(moodModel.getEmoji());
+                            break;
                     }
                 }
 
