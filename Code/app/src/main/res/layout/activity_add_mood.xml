@@ -12,13 +12,14 @@
         android:layout_width="380dp"
         android:layout_height="481dp"
         android:layout_marginTop="30sp"
-        android:layout_marginRight="40dp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
 
         <ImageButton
             android:id="@+id/centerButton"
@@ -28,11 +29,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
-            android:layout_marginStart="133dp"
-            android:layout_marginLeft="133dp"
-            android:layout_marginTop="189dp"
+            android:layout_marginStart="124dp"
+            android:layout_marginLeft="124dp"
+            android:layout_marginTop="194dp"
             android:background="@drawable/button_default" />
-
 
         <ImageButton
             android:id="@+id/Annoyed"
@@ -41,8 +41,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="43dp"
-            android:layout_marginLeft="32dp"
+            android:layout_marginStart="31dp"
+            android:layout_marginLeft="31dp"
             android:layout_marginTop="119dp"
             android:background="@drawable/button_default"
             android:src="@drawable/annoyed" />
@@ -54,9 +54,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="169dp"
-            android:layout_marginLeft="169dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginStart="166dp"
+            android:layout_marginLeft="166dp"
+            android:layout_marginTop="71dp"
             android:background="@drawable/button_default"
             android:src="@drawable/happy" />
 
@@ -67,9 +67,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="43dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="316dp"
+            android:layout_marginStart="31dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="332dp"
             android:background="@drawable/button_default"
             android:src="@drawable/mad" />
 
@@ -80,9 +80,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="169dp"
+            android:layout_marginStart="166dp"
             android:layout_marginLeft="166dp"
-            android:layout_marginTop="389dp"
+            android:layout_marginTop="395dp"
             android:background="@drawable/button_default"
             android:src="@drawable/sad" />
 
@@ -93,9 +93,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="292dp"
-            android:layout_marginLeft="292dp"
-            android:layout_marginTop="324dp"
+            android:layout_marginStart="299dp"
+            android:layout_marginLeft="299dp"
+            android:layout_marginTop="332dp"
             android:background="@drawable/button_default"
             android:src="@drawable/scared" />
 
@@ -106,8 +106,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="292dp"
-            android:layout_marginLeft="285dp"
+            android:layout_marginStart="288dp"
+            android:layout_marginLeft="288dp"
             android:layout_marginTop="121dp"
             android:layout_marginRight="32dp"
             android:background="@drawable/button_default"
