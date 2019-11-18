@@ -340,7 +340,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
     @Override
     public void onShortClick(int position) {
-        if(moodList.size() != 0) {  //if click too fast: size = 0 and app crashes
+        if(moodList.size() != 0) {  //else, if click too fast: size = 0 and app crashes
             MoodEventModel moodEventModel = moodList.get(position);
             moodEventModel.getInternalId();
             intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
