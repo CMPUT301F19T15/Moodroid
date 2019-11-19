@@ -1,13 +1,20 @@
 package ca.ualberta.moodroid.ui;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -51,13 +58,16 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     public Map() {
 
     }
-    // setting tag
+
+    /**
+     * setting the tag
+     */
     private static final String TAG = "Maps activity";
 
 
-
-
-    // any variable needed
+    /**
+     * any variable that are needed
+     */
     private GoogleMap mMap;
     /**
      * The Tool bar button left.
@@ -210,11 +220,41 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        // set user location true to show on the map
+        mMap.setMyLocationEnabled(true);
+
+        // disable the button on the top right that takes you to your location
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+        // create a new location manager to also get the Lat and Long of your location
+        LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        if( locationManager != null){
+            // find the location and save it
+            Location location = locationManager.getLastKnownLocation(locationManager
+                    .getBestProvider(criteria, false));
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+
+            // create a new LatLng variable
+            LatLng latLng = new LatLng(latitude,longitude);
+
+            // set the new LatLng variable to the camera view
+            setCameraView(latLng);
+        }
+
+
         // call to add to map
         addMapMarkers();
-
-        // call to set camera view
-        setCameraView();
 
     }
 
@@ -338,14 +378,14 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * TO DO
      * - make the initial camera view the current location of user
      */
-    private void setCameraView(){
+    private void setCameraView(LatLng latLng){
 
         // Set a boundary to start
         CameraUpdate center=
-                CameraUpdateFactory.newLatLng(new LatLng(53.525687, -113.125607));
+                CameraUpdateFactory.newLatLng(latLng);
 
         // changed the zoom of the camera
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(7);
+        CameraUpdate zoom=CameraUpdateFactory.zoomTo(4);
 
         // cant do both at once so we have to move camera first
         // then change the camera zoom
