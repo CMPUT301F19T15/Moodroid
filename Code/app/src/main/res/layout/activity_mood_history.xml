@@ -26,23 +26,37 @@
 
 
 
-            <include layout="@layout/app_bar_main"
-                android:visibility="gone">
+            <include layout="@layout/app_bar_main">
             </include>
 
-<!--//////////////////////////////make toolbar visible again-->
-<!--            -->
-<!---->
-<!---->
-<!---->
-            <include
-                layout="@layout/history_filter_spinner"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="120sp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="-15sp"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorSecondary"
+                android:layout_height="wrap_content">
+
+
+            <Spinner
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/toolbar"
-                android:layout_marginTop="50dp"
-                android:id="@+id/spinner_layout">
-            </include>
+                android:id="@+id/spinner">
+            </Spinner>
+
+            </LinearLayout>
+
+<!--            <include-->
+<!--                layout="@layout/history_filter_spinner"-->
+<!--                android:id="@+id/spinner_layout"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+
+<!--                >-->
+<!--            </include>-->
 
 
 

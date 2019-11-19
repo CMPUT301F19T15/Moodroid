@@ -61,13 +61,12 @@ public class CustomHistorySpinnerAdapter extends ArrayAdapter {
         }
         viewHolder.emojiText.setText(emojis[position]);
         viewHolder.moodText.setText(moodNames[position]);
-
         return convertView;
     }
 
 
     /**
-     * This will show the data when the user taps on the spinner.
+     * This will show the dropdown list when the user taps on the spinner.
      * @param position
      * @param convertView
      * @param parent

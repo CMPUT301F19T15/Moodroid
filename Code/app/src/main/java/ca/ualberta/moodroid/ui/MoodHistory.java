@@ -128,18 +128,8 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             }
         });
 
-
-//        toolBarButtonRight.setBackground(R.layout.history_filter_spinner);
-//        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                /////////////////////////////////////////////////
-//                /////////////////////////////////////////////////
-//                ////////////////////////////////////////////////
-//            }
-//        });
-
-
+        //hide right toolbar button to make space for spinner
+        toolBarButtonRight.setVisibility(View.GONE);
 
     }
     private void getMood(){
@@ -186,8 +176,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         ArrayList<String> arrayListMoodNames = new ArrayList<>();
         ArrayList<String> arrayListEmojis = new ArrayList<>();
         //first item in each list should be blank to indicate no filter selected
-        arrayListMoodNames.add("");
-        arrayListEmojis.add("");
+        arrayListMoodNames.add("No Filter");
+        arrayListEmojis.add("     ");
+
 
 
 
