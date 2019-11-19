@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                             .createSignInIntentBuilder()
                             .setAvailableProviders(providers)
                             .setTheme(R.style.LoginTheme)
+                            .setLogo(R.drawable.newlogo)
                             .build(),
                     123);
             AuthUI.getInstance()
