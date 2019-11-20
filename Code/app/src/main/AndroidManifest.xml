@@ -33,6 +33,7 @@
         <activity android:name=".ui.MoodHistory" />
         <activity android:name=".ui.SignUp" />
         <activity android:name=".ui.FriendsMoods" />
+        <activity android:name=".ui.AddLocation" />
         <activity android:name=".ui.Profile" />
         <activity android:name=".ui.AddMood" />
         <activity android:name=".ui.AddMoodDetail" />

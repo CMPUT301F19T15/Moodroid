@@ -206,6 +206,11 @@ public class AddMoodDetail extends AppCompatActivity {
     final Calendar calendar = Calendar.getInstance();
 
     /**
+     * new intent
+     */
+    private Intent intent;
+
+    /**
      * The initial UI is built here, using data from the last activity to dynamically display the
      * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
      * where the user is prompted to fill in all of the details of a mood event which were explained
@@ -243,11 +248,11 @@ public class AddMoodDetail extends AppCompatActivity {
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
 
-        Intent intent = getIntent();
+        final Intent[] intent = {getIntent()};
 
-        String image_id = intent.getExtras().getString("image_id");
-        String mood_name = intent.getExtras().getString("mood_name");
-        String hex = intent.getExtras().getString("hex");
+        String image_id = intent[0].getExtras().getString("image_id");
+        String mood_name = intent[0].getExtras().getString("mood_name");
+        String hex = intent[0].getExtras().getString("hex");
 
         int mood_imageRes = getResources().getIdentifier(image_id, null, getOpPackageName());
         Drawable res = getResources().getDrawable(mood_imageRes);
@@ -328,7 +333,8 @@ public class AddMoodDetail extends AppCompatActivity {
         addLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(AddMoodDetail.this, AddLocation.class);
+                startActivity(intent);
             }
         });
 
