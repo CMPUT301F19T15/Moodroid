@@ -1,17 +1,23 @@
 package ca.ualberta.moodroid.ui;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.ualberta.moodroid.R;
+import ca.ualberta.moodroid.model.MoodModel;
+import ca.ualberta.moodroid.service.MoodService;
 
 /**
  * This activity presents the initial UI for creating a mood event. It starts at
@@ -20,7 +26,7 @@ import ca.ualberta.moodroid.R;
  * mood selection, the user will tap the mood in the center and be brought to the AddMoodDetail
  * activity.
  */
-//TODO: Dynamically grab mood from Firestore
+
 public class AddMood extends AppCompatActivity {
 
 
@@ -29,46 +35,32 @@ public class AddMood extends AppCompatActivity {
      * corresponding emojis
      */
 
-    private ImageButton center_button;
-    private ImageButton annoyed_button;
-    private ImageButton happy_button;
-    private ImageButton sad_button;
-    private ImageButton mad_button;
-    private ImageButton scared_button;
-    private ImageButton sick_button;
+    private Button center_button;
+    private Button annoyed_button;
+    private Button happy_button;
+    private Button sad_button;
+    private Button mad_button;
+    private Button scared_button;
+    private Button sick_button;
 
-    /**
-     * All Strings below represent the emojis resource ID's which are used for display purposes
-     *
-     * NOT SURE IF WE ARE KEEPING THIS METHOD OF DISPLAY
-     */
-    String annoyed_drawable_id = "@drawable/annoyed";
-    String happy_drawable_id = "@drawable/happy";
-    String sad_drawable_id = "@drawable/sad";
-    String mad_drawable_id = "@drawable/mad";
-    String scared_drawable_id = "@drawable/scared";
-    String sick_drawable_id = "@drawable/sick";
 
     /**
      * This boolean indicates whether the center of the mood circle has been filled or not. The
      * user will not be able to proceed to the next activity if this boolean is false.
      */
 
-    private boolean center_filled = false;
+    private String centerMood = null;
 
+    /**
+     * The mood Service.
+     */
+    MoodService moodService;
 
     /**
-     * the string data for the selected image from the wheel, which will be one of the drawable Id's
+     * The list of mood models.
      */
-    String selected_img;
-    /**
-     * The string data for the name of the mood.
-     */
-    String mood_name;
-    /**
-     * The hex colour code for the corresponding mood
-     */
-    String hex;
+    ArrayList<MoodModel> allMoods;
+
 
     /**
      * Set a listener for each button, and on click but the drawable in the center. When the center is clicked, go to the mood detail screen.
@@ -90,7 +82,7 @@ public class AddMood extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         }
 
-
+        //initialize the views
         center_button = findViewById(R.id.centerButton);
         annoyed_button = findViewById(R.id.Annoyed);
         happy_button = findViewById(R.id.Happy);
@@ -99,7 +91,7 @@ public class AddMood extends AppCompatActivity {
         scared_button = findViewById(R.id.Scared);
         sick_button = findViewById(R.id.Sick);
 
-        /*
+        /**
          * The purpose of this code is to simply display the mood you tap in the center
          * of the screen, and then take that mood's image, color, and name and bring it to the next screen
          * where you will be able to set the details. Below are a few onclick listeners for
@@ -107,80 +99,83 @@ public class AddMood extends AppCompatActivity {
          * Drawable folder and draw that image in the center.
          */
 
+        //get mood models
+        moodService = new MoodService();
+        allMoods = new ArrayList<>();
+        moodService.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+            @Override
+            public void onSuccess(List<MoodModel> moodModels) {
+                List<MoodModel> m = moodModels;
+                allMoods.addAll(m);
+                for (MoodModel moodModel : moodModels) {
+                    switch (moodModel.getName()){
+                        case "Annoyed":
+                            annoyed_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Scared":
+                            scared_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Happy":
+                            happy_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Sad":
+                            sad_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Sick":
+                            sick_button.setText(moodModel.getEmoji());
+                            break;
+                        case "Mad":
+                            mad_button.setText(moodModel.getEmoji());
+                            break;
+                    }
+                }
+
+            }
+        });
+
+
         annoyed_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int annoyed_imageRes = getResources().getIdentifier(annoyed_drawable_id, null, getOpPackageName());
-                Drawable res = getResources().getDrawable(annoyed_imageRes);
-                center_button.setImageDrawable(res);
-                center_filled = true;
-                selected_img = annoyed_drawable_id;
-                mood_name = "Annoyed";
-                hex = "#830678";
-
-
+                center_button.setText(getMoodEmoji("Annoyed"));
+                centerMood = "Annoyed";
             }
         });
         happy_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int happy_imageRes = getResources().getIdentifier(happy_drawable_id, null, getOpPackageName());
-                Drawable res = getResources().getDrawable(happy_imageRes);
-                center_button.setImageDrawable(res);
-                center_filled = true;
-                selected_img = happy_drawable_id;
-                mood_name = "Happy";
-                hex = "#F3CA3E";
+                center_button.setText(getMoodEmoji("Happy"));
+                centerMood = "Happy";
             }
         });
         sad_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int sad_imageRes = getResources().getIdentifier(sad_drawable_id, null, getOpPackageName());
-                Drawable res = getResources().getDrawable(sad_imageRes);
-                center_button.setImageDrawable(res);
-                center_filled = true;
-                selected_img = sad_drawable_id;
-                mood_name = "Sad";
-                hex = "#1C1EEB";
+                center_button.setText(getMoodEmoji("Sad"));
+                centerMood = "Sad";
             }
         });
 
         mad_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int mad_imageRes = getResources().getIdentifier(mad_drawable_id, null, getOpPackageName());
-                Drawable res = getResources().getDrawable(mad_imageRes);
-                center_button.setImageDrawable(res);
-                center_filled = true;
-                selected_img = mad_drawable_id;
-                mood_name = "Mad";
-                hex = "#D61F1F";
+                center_button.setText(getMoodEmoji("Mad"));
+                centerMood = "Mad";
             }
         });
         scared_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int scared_imageRes = getResources().getIdentifier(scared_drawable_id, null, getOpPackageName());
-                Drawable res = getResources().getDrawable(scared_imageRes);
-                center_button.setImageDrawable(res);
-                center_filled = true;
-                selected_img = scared_drawable_id;
-                mood_name = "Scared";
-                hex = "#C5FFFF";
+                center_button.setText(getMoodEmoji("Scared"));
+                centerMood = "Scared";
             }
         });
 
         sick_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int sick_imageRes = getResources().getIdentifier(sick_drawable_id, null, getOpPackageName());
-                Drawable res = getResources().getDrawable(sick_imageRes);
-                center_button.setImageDrawable(res);
-                center_filled = true;
-                selected_img = sick_drawable_id;
-                mood_name = "Sick";
-                hex = "#97BD00";
+                center_button.setText(getMoodEmoji("Sick"));
+                centerMood = "Sick";
             }
         });
 
@@ -188,22 +183,44 @@ public class AddMood extends AppCompatActivity {
         center_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (center_filled) {
+                if (centerMood != null) {
                     Intent intent = new Intent(AddMood.this, AddMoodDetail.class);
-
-                    intent.putExtra("image_id", selected_img);
-                    intent.putExtra("mood_name", mood_name);
-                    intent.putExtra("hex", hex);
+                    intent.putExtra("emoji", getMoodEmoji(centerMood));
+                    intent.putExtra("mood_name", centerMood);
+                    intent.putExtra("hex", getMoodColor(centerMood));
                     startActivity(intent);
-
                 }
 
 
             }
         });
-
-
     }
 
+    /**
+     * Return the correct emoji corresponding to the moodName.
+     * @param moodName
+     * @return emoji String
+     */
+    private String getMoodEmoji(String moodName) {
+        for (MoodModel moodModel : allMoods) {
+            if (moodModel.getName().equals(moodName)) {
+                return moodModel.getEmoji();
+            }
+        }
+        return null;
+    }
 
+    /**
+     * Return the correct color for the mood.
+     * @param moodName
+     * @return color String
+     */
+    private String getMoodColor(String moodName) {
+        for (MoodModel moodModel : allMoods) {
+            if (moodModel.getName().equals(moodName)) {
+                return moodModel.getColor();
+            }
+        }
+        return null;
+    }
 }

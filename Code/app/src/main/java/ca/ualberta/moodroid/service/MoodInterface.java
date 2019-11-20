@@ -17,4 +17,11 @@ public interface MoodInterface {
      * @return all moods
      */
     public Task<List<MoodModel>> getAllMoods();
+
+    /**
+     * Get a single mood model by mood name
+     * @param moodName
+     * @return mood model
+     */
+    public Task<MoodModel> getMood(String moodName);
 }
