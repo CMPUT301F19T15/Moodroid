@@ -323,7 +323,7 @@ public class AddMoodDetail extends AppCompatActivity {
         addLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                openAddLocationDialog();
             }
         });
 
@@ -342,6 +342,12 @@ public class AddMoodDetail extends AppCompatActivity {
      * where the user can decide on what they want to do
      * either set current location or pick from a map
      */
+    public void openAddLocationDialog(){
+
+        AddLocationFragment addLocationFragment = new AddLocationFragment();
+        addLocationFragment.show(getSupportFragmentManager(), "Options");
+
+    }
 
     /**
      * Update date display.
