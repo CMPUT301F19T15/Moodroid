@@ -470,6 +470,18 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         openEditDeleteDialog();
     }
 
+    @Override
+    public void onShortClick(int position) {
+        if(moodList.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+            MoodEventModel moodEventModel = moodList.get(position);
+            moodEventModel.getInternalId();
+            intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
+            intent.putExtra("eventId", moodEventModel.getInternalId());
+            startActivity(intent);
+
+        }
+    }
+
     /**
      * this is to start the new edit deletefragment
      * where the user can decide on what they want to do with

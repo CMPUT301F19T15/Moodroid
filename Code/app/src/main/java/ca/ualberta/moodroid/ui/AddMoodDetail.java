@@ -60,7 +60,7 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The imageView.
      */
-    private ImageView mood_img;
+    private TextView mood_img;
 
     /**
      * The mood title for the banner.
@@ -226,14 +226,14 @@ public class AddMoodDetail extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String image_id = intent.getExtras().getString("image_id");
+        String emoji = intent.getExtras().getString("emoji");
         String mood_name = intent.getExtras().getString("mood_name");
         String hex = intent.getExtras().getString("hex");
 
-        int mood_imageRes = getResources().getIdentifier(image_id, null, getOpPackageName());
-        Drawable res = getResources().getDrawable(mood_imageRes);
+//        int mood_imageRes = getResources().getIdentifier(emoji, null, getOpPackageName());
+//        Drawable res = getResources().getDrawable(mood_imageRes);
 
-        mood_img.setImageDrawable(res);
+        mood_img.setText(emoji);
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
 
@@ -370,8 +370,6 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
         moodEvent.setReasonImageUrl(url);
-
-
         mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
             public void onSuccess(ModelInterface modelInterface) {

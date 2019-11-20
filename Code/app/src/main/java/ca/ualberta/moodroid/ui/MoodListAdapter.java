@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -56,7 +57,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     /**
      * The type View holder.
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
 
         /**
          * The field where the moods emoji will be displayed.
@@ -101,12 +102,18 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
 
             this.onListListener = onListListener;
             itemView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public boolean onLongClick(View view) {
             onListListener.onListClick(getAdapterPosition());
             return false;
+        }
+
+        @Override
+        public void onClick(View view) {
+            onListListener.onShortClick(getAdapterPosition());
         }
     }
 
@@ -162,6 +169,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
          * @param position the position
          */
         void onListClick(int position);
+        void onShortClick(int position);
     }
 
     /**
@@ -208,6 +216,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         holder.dateText.setText(dateStr);
         String timeStr = moodObject.getDatetime().split(" ")[1];
         holder.timeText.setText(timeStr);
+
     }
 
     @Override

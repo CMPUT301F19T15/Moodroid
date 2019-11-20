@@ -27,6 +27,12 @@ public interface MoodEventInterface {
      */
     public List<MoodEventModel> getMyEvents(MoodModel mood);
 
+    /**
+     * Get a single mood event by internal id
+     * @param eventId the internal id
+     * @return the single event
+     */
+    public Task<MoodEventModel> getEventWithId(String eventId);
 
     /**
      * Create a new mood event for the current user
