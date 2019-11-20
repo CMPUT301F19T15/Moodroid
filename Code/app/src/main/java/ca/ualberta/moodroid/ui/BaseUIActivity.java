@@ -114,7 +114,7 @@ public class BaseUIActivity extends AppCompatActivity {
                         startActivity(new Intent(me, Profile.class));
                         break;
                 }
-                return false;
+                return true;
             }
         });
     }
