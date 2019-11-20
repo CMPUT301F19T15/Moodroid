@@ -72,6 +72,8 @@ public class SignUp extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     usernameField.setError("That username is already taken.");
                 } else {
+                    Exception except = task.getException();
+                    Log.d("Task Failed", except.toString());
                     UserModel m = new UserModel();
                     m.setUsername(username);
                     users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
@@ -87,5 +89,6 @@ public class SignUp extends AppCompatActivity {
                 }
             }
         });
+        users = new UserRepository();
     }
 }
