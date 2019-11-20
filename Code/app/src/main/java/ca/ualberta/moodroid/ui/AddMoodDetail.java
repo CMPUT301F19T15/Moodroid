@@ -334,6 +334,9 @@ public class AddMoodDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddMoodDetail.this, AddLocation.class);
+                intent.putExtra("image_id", image_id);
+                intent.putExtra("mood_name", mood_name);
+                intent.putExtra("hex", hex);
                 startActivity(intent);
             }
         });

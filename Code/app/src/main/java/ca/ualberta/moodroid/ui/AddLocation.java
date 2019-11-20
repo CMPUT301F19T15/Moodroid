@@ -2,15 +2,16 @@ package ca.ualberta.moodroid.ui;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.location.Address;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.annotation.Nullable;
@@ -24,10 +25,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOException;
-import java.util.List;
 
 import ca.ualberta.moodroid.R;
 
@@ -37,6 +34,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
     GoogleMap mMap;
     SupportMapFragment mapFragment;
     SearchView searchView;
+
 
     /**
      * best provider
@@ -49,10 +47,43 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
         setContentView(R.layout.activity_add_location);
 
-        searchView = findViewById(R.id.sv_location);
+        ImageView emoji = (ImageView) findViewById(R.id.emoji);
+
+        // Below takes the intent from add_mood.java and displays the emoji, color and
+        // mood title in the banner based off what the user chooses in that activity
+
+        final Intent[] intent = {getIntent()};
+
+        String image_id = intent[0].getExtras().getString("image_id");
+        String mood_name = intent[0].getExtras().getString("mood_name");
+        String hex = intent[0].getExtras().getString("hex");
+
+        int mood_imageRes = getResources().getIdentifier(image_id, null, getOpPackageName());
+        Drawable res = getResources().getDrawable(mood_imageRes);
+
+        emoji.getLayoutParams().height = 80;
+        emoji.getLayoutParams().width = 80;
+
+        emoji.setImageDrawable(res);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.add_location_map);
 
+        /**
+        searchView = findViewById(R.id.sv_location);
+
+
+         * <SearchView
+         *         android:layout_width="match_parent"
+         *         android:layout_height="wrap_content"
+         *         android:id="@+id/sv_location"
+         *         android:queryHint="Search..."
+         *         android:iconifiedByDefault="false"
+         *         android:layout_margin="10dp"
+         *         android:elevation="5dp"
+         *         android:background="@drawable/bg_round"/>
+         *
+         *
+         *
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -92,7 +123,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
             public boolean onQueryTextChange(String s) {
                 return false;
             }
-        });
+        });**/
 
         mapFragment.getMapAsync(this);
 

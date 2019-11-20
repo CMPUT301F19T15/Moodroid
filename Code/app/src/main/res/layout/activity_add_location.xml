@@ -16,13 +16,34 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:context=".ui.AddLocation"/>
 
-    <SearchView
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        style="@style/MaterialSearchBarLight"
+        app:mt_speechMode="false"
+        app:mt_hint="Search a place"
+        app:mt_maxSuggestionsCount="10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/sv_location"
-        android:queryHint="Search..."
-        android:iconifiedByDefault="false"
-        android:layout_margin="10dp"
+        android:id="@+id/searchBar"
+        android:layout_margin="16dp"
+        app:mt_navIconEnabled="true"
         android:elevation="5dp"
-        android:background="@drawable/bg_round"/>
+        android:outlineProvider="bounds"
+        app:mt_placeholder="Search a place"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/emoji"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addLocationBtn"
+        android:layout_margin="16dp"
+        android:text="Add Location"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:background="@color/colorSecondary"
+        android:textAlignment="center"
+        android:layout_alignParentBottom="true"/>
+
     </RelativeLayout>
