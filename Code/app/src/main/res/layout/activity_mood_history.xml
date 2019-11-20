@@ -7,10 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.MoodHistory"
     tools:openDrawer="start">
-
-
-
-
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,14 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/colorSecondary">
-
-
-
-
-
             <include layout="@layout/app_bar_main">
             </include>
-
 
             <LinearLayout
                 android:orientation="vertical"
@@ -39,7 +30,6 @@
                 android:background="@color/colorSecondary"
                 android:layout_height="wrap_content">
 
-
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,31 +38,7 @@
 
             </LinearLayout>
 
-<!--            <include-->
-<!--                layout="@layout/history_filter_spinner"-->
-<!--                android:id="@+id/spinner_layout"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-
-<!--                >-->
-<!--            </include>-->
-
-
-
-
-
     </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
     <!-- middle section -->
         <RelativeLayout
             android:id="@+id/body"
