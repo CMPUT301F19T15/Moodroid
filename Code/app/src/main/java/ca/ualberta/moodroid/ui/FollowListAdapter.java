@@ -216,9 +216,8 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
      */
     public void setAccepted(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " is following your moods.");
-        holder.denyButton.setVisibility(View.INVISIBLE);
-        holder.acceptButton.setVisibility(View.INVISIBLE);
-
+        holder.denyButton.setVisibility(View.GONE);
+        holder.acceptButton.setVisibility(View.GONE);
     }
 
     /**
@@ -229,8 +228,8 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
      */
     public void setDenied(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " was declined.");
-        holder.denyButton.setVisibility(View.INVISIBLE);
-        holder.acceptButton.setVisibility(View.INVISIBLE);
+        holder.denyButton.setVisibility(View.GONE);
+        holder.acceptButton.setVisibility(View.GONE);
     }
 
     @Override
