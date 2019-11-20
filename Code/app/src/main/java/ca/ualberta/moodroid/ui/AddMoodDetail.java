@@ -232,6 +232,8 @@ public class AddMoodDetail extends AppCompatActivity {
         social_situation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, AddMoodDetail.situations));
         removePhotoButton.setVisibility(GONE);
         addPhotoButton.setVisibility(View.VISIBLE);
+        removeLocationButton.setVisibility(GONE);
+        addLocationButton.setVisibility(View.VISIBLE);
 
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
@@ -318,7 +320,28 @@ public class AddMoodDetail extends AppCompatActivity {
             }
         });
 
+        addLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        removeLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //deletes location from Firestore and updates imageView
+
+            }
+        });
+
     }
+
+    /**
+     * this is to start the new add location fragment
+     * where the user can decide on what they want to do
+     * either set current location or pick from a map
+     */
 
     /**
      * Update date display.
