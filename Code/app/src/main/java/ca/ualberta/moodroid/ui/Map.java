@@ -92,6 +92,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      */
     String myUserName;
 
+    /**
+     * best provider
+     */
     String bestProvider;
 
 

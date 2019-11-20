@@ -25,8 +25,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,11 +36,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 import java.util.Locale;
+import java.util.UUID;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,6 +51,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+
 import static android.view.View.GONE;
 
 /**
@@ -323,7 +328,7 @@ public class AddMoodDetail extends AppCompatActivity {
         addLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openAddLocationDialog();
+
             }
         });
 
@@ -337,17 +342,6 @@ public class AddMoodDetail extends AppCompatActivity {
 
     }
 
-    /**
-     * this is to start the new add location fragment
-     * where the user can decide on what they want to do
-     * either set current location or pick from a map
-     */
-    public void openAddLocationDialog(){
-
-        AddLocationFragment addLocationFragment = new AddLocationFragment();
-        addLocationFragment.show(getSupportFragmentManager(), "Options");
-
-    }
 
     /**
      * Update date display.
