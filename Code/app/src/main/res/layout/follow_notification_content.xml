@@ -51,6 +51,13 @@
                 android:gravity="end"
                 android:text="Accept" />
 
+            <TextView
+                android:id="@+id/mood_list_date"
+                android:layout_width="137dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#FFFFFF" />
+
         </LinearLayout>
     </LinearLayout>
 
