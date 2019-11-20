@@ -92,6 +92,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      */
     String myUserName;
 
+    String bestProvider;
+
 
     /**
      * New instance map.
@@ -237,19 +239,21 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
+        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
         if( locationManager != null){
             // find the location and save it
-            Location location = locationManager.getLastKnownLocation(locationManager
-                    .getBestProvider(criteria, false));
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if( location != null){
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
 
-            // create a new LatLng variable
-            LatLng latLng = new LatLng(latitude,longitude);
+                // create a new LatLng variable
+                LatLng latLng = new LatLng(latitude,longitude);
 
-            // set the new LatLng variable to the camera view
-            setCameraView(latLng);
+                // set the new LatLng variable to the camera view
+                setCameraView(latLng);
+            }
         }
 
 

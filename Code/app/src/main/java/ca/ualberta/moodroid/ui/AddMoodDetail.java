@@ -142,6 +142,18 @@ public class AddMoodDetail extends AppCompatActivity {
     @BindView(R.id.remove_photo_button)
     protected Button removePhotoButton;
 
+    /**
+     * Add location button
+     */
+    @BindView(R.id.add_location_button)
+    protected Button addLocationButton;
+
+    /**
+     * remove location button
+     */
+    @BindView(R.id.remove_location_button)
+    protected Button removeLocationButton;
+
 
     /**
      * The reason for the mood, given by the user.
