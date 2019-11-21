@@ -437,7 +437,6 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setReasonImageUrl(url);
         moodEvent.setLocation(moodLocation);
 
-
         mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
             public void onSuccess(ModelInterface modelInterface) {

@@ -60,8 +60,24 @@ public class MoodService implements MoodInterface {
             }
         });
     }
+
+    /**
+     * Get a single mood by mood name.
+     *
+     * @param moodName
+     * @return mood the mood model
+     */
+    public Task<MoodModel> getMood(String moodName) {
+        return this.moods.where("name", moodName).one().continueWith(new Continuation<ModelInterface, MoodModel>() {
+            @Override
+            public MoodModel then(@NonNull Task<ModelInterface> task) throws Exception {
+                MoodModel mood = null;
+                if (task.isSuccessful()) {
+                    ModelInterface m = task.getResult();
+                    mood = (MoodModel) m;
+                }
+                return mood;
+            }
+        });
+    }
 }
-
-
-
-

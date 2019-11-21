@@ -26,7 +26,7 @@ import ca.ualberta.moodroid.service.MoodService;
  * mood selection, the user will tap the mood in the center and be brought to the AddMoodDetail
  * activity.
  */
-//TODO: Dynamically grab mood from Firestore
+
 public class AddMood extends AppCompatActivity {
 
 
@@ -133,7 +133,6 @@ public class AddMood extends AppCompatActivity {
             }
         });
 
-
         annoyed_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +193,7 @@ public class AddMood extends AppCompatActivity {
 
             }
         });
+
     }
 
     /**
@@ -223,6 +223,4 @@ public class AddMood extends AppCompatActivity {
         }
         return null;
     }
-
-
 }

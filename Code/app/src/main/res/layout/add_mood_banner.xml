@@ -42,7 +42,8 @@
             android:visibility="gone"
             android:id="@+id/detail_view_back_button"
             android:layout_marginRight="28dp"
-            >
+            android:src="@drawable/ic_back_button">
+
         </ImageButton>
 
 

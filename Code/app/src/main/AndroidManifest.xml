@@ -37,7 +37,7 @@
         <activity android:name=".ui.Profile" />
         <activity android:name=".ui.AddMood" />
         <activity android:name=".ui.AddMoodDetail" />
-        <activity android:name=".ui.AddMoodReason" />
+        <activity android:name=".ui.ViewMoodDetail"/>
         <activity android:name=".ui.AddFriend" />
 
         <activity android:name=".MainActivity"

@@ -10,30 +10,27 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import butterknife.ButterKnife;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
-
 import static ca.ualberta.moodroid.ui.Constants.ERROR_DIALOG_REQUEST;
 import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -85,9 +82,45 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     List<MoodModel> allMoods;
 
     /**
+     * All mood models to be displayed in the drop down menu.
+     */
+    List<MoodModel> spinnerMoods;
+
+    /**
+     * Keeps all String moods names to be displayed in the drop down menu.
+     */
+    String[] spinnerMoodNames;
+
+    /**
+     * Keeps all emojis to be displayed in the drop down menu.
+     */
+    String[] spinnerEmojis;
+
+    /**
+     * The drop down menu.
+     */
+    Spinner spinner;
+
+    /**
+     * The custom spinner adapter.
+     */
+    CustomHistorySpinnerAdapter spinnerAdapter;
+
+    /**
+     * Boolean to indicate whether the user has interacted with the spinner.
+     */
+    private boolean isInteracting;
+
+    /**
+     * String holding the mood name to filter the list view by.
+     */
+    private String filterMood;
+
+    /**
      * boolean for our gps
      */
     private boolean mLocationPermissionGranted = false;
+
 
 
     @Override
@@ -99,52 +132,132 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         ButterKnife.bind(this);
 
         //Bottom Navigation Bar Listener
-        bottomNavigationView();
+        bottomNavigationView(1);
         setTitle("Mood History");
+        filterMood = null;
 
+        /**
+         * Initialize the top navigation bar buttons and set listeners for them.
+         */
         toolBarButtonLeft.setImageResource(R.drawable.ic_addmood);
         toolBarButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //navigate to MoodMap Activity
+                //navigate to AddMood Activity
                 intent = new Intent(MoodHistory.this, AddMood.class);
                 startActivity(intent);
             }
         });
 
-    }
-    private void getMood(){
-        //Recycler List View with all mood events of the user
-        moodList = new ArrayList<>();
-        moodEvents.getMyEvents().addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+        /**
+         * initialize the spinner (drop down menu)
+         */
+        toolBarButtonRight.setVisibility(View.GONE);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayList<String> arrayListMoodNames = new ArrayList<>();
+        ArrayList<String> arrayListEmojis = new ArrayList<>();
+
+        //set first item in list to No Filter
+        arrayListMoodNames.add("No Filter");
+        arrayListEmojis.add("     ");
+
+        //populate the drop down menu with all available mood types + 1 blank
+        moods.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
             @Override
-            public void onSuccess(List<MoodEventModel> moodEventModels) {
-
-                Log.d("MOODHISTORY/GET", "Got mood Events: " + moodEventModels.size());
-
-                moods.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
-                    @Override
-                    public void onSuccess(List<MoodModel> moodModels) {
-                        moodList.addAll(moodEventModels);
-                        allMoods = moodModels;
-                        reverseSort();
-                        updateListView();
-                    }
-                });
-
+            public void onSuccess(List<MoodModel> moodModels) {
+                spinnerMoods = moodModels;
+                for(MoodModel mood : spinnerMoods){
+                    arrayListMoodNames.add(mood.getName());
+                    arrayListEmojis.add(mood.getEmoji());
+                }
+                spinnerEmojis = arrayListEmojis.toArray(new String[0]);
+                spinnerMoodNames = arrayListMoodNames.toArray(new String[0]);
+                spinnerAdapter = new CustomHistorySpinnerAdapter(MoodHistory.this, spinnerEmojis, spinnerMoodNames);
+                spinner.setAdapter(spinnerAdapter);
             }
         });
+
+
+        /**
+         * This will filter the list view to only show the events of the type the user selected in the
+         * drop down menu.
+         */
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (isInteracting) {
+                    if(i == 0){
+                        filterMood = null;                      //first item = no filter
+                    } else{
+                        filterMood = spinnerMoodNames[i];
+                    }
+                    getMood();
+                }
+            }
+
+
+            /**
+             * This is a Callback method that is invoked when the selection disappears from this view.
+             * @param adapterView
+             */
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                filterMood = null;
+                getMood();
+            }
+        });
+
+
+/**
+ * This gets all mood events to be displayed and updates the list view.
+ */
+    }
+    private void getMood(){
+
+        //Recycler List View with all mood events of the user
+        moodList = new ArrayList<>();
+
+        if(filterMood == null){
+            moodEvents.getMyEvents().addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                @Override
+                public void onSuccess(List<MoodEventModel> moodEventModels) {
+
+                    Log.d("MOODHISTORY/GET", "Got mood Events: " + moodEventModels.size());
+
+                    moods.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+                        @Override
+                        public void onSuccess(List<MoodModel> moodModels) {
+                            moodList.addAll(moodEventModels);
+                            allMoods = moodModels;
+                            reverseSort();
+                            updateListView();
+                        }
+                    });
+                }
+            });
+        } else {
+            moodEvents.getMyEvents(filterMood).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                @Override
+                public void onSuccess(List<MoodEventModel> moodEventModels) {
+
+                    Log.d("MOODHISTORY/GET", "Got mood Events: " + moodEventModels.size());
+                            moodList.addAll(moodEventModels);
+                            reverseSort();
+                            updateListView();
+                }
+            });
+        }
     }
 
+
     /**
-     *
-     *
-     *
-     *                                  NVJNFJBRJFBJRBJBRJBVJRBVRVJRJBVJB
-     *
-     *
-     *
+     * This indicates whether the user has interacted with the dropdown menu.
      */
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        isInteracting = true;
+    }
 
     /**
      * check the map services
@@ -283,17 +396,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
                 }
             }
         }
-
     }
-    /**
-     *
-     *
-     *
-     *                                  NVJNFJBRJFBJRBJBRJBVJRBVRVJRJBVJB
-     *
-     *
-     *
-     */
 
 
     /**
@@ -327,6 +430,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
 
+
     /**
      * checking when the user clicks on the list
      * takes the certain postion
@@ -339,6 +443,19 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         openEditDeleteDialog();
     }
 
+    @Override
+    public void onShortClick(int position) {
+        if(moodList.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+            MoodEventModel moodEventModel = moodList.get(position);
+            moodEventModel.getInternalId();
+            intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
+            intent.putExtra("eventId", moodEventModel.getInternalId());
+            startActivity(intent);
+
+        }
+    }
+
+
     /**
      * this is to start the new edit deletefragment
      * where the user can decide on what they want to do with
@@ -349,6 +466,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
         editDeleteFragment.show(getSupportFragmentManager(), "Options");
     }
+
 
     /**
      * on resume get moods
