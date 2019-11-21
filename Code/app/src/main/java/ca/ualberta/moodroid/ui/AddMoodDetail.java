@@ -483,20 +483,12 @@ public class AddMoodDetail extends AppCompatActivity {
             Double longi = Double.parseDouble(lon);
             moodLocation = new GeoPoint(lati, longi);
 
-            uploadLocation();
-
             addLocationButton.setVisibility(GONE);
             removeLocationButton.setVisibility(View.VISIBLE);
 
         }
     }
 
-    private void uploadLocation(){
-
-        ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-
-    }
 
     /**
      * This uploads the photo the user picked from their library to the firebase storage.

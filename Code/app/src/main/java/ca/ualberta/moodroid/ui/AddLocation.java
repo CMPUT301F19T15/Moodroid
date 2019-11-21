@@ -309,18 +309,6 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
                 //intent.putExtra("latlng", latLng);
                 setResult(RESULT_OK, intent);
                 finish();
-                /**
-                 *
-                 *
-                 *
-                 *
-                 *
-                 *
-                 *
-                 * ADD HERE
-                 */
-
-                onBackPressed();
 
             }
         });
