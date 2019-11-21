@@ -20,6 +20,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -66,10 +68,20 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
         users = new UserService();
         requestList = new ArrayList<>();
 
-        users.getAllFollowRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+        new UserService().getAllFollowRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 Log.d("NOTIFICATIONS/GET", "Got follow requests: " + followRequestModels.size());
+                if (followRequestModels.size() > 0) {
+                    requestList.addAll(followRequestModels);
+                    updateListView();
+                }
+            }
+        });
+        new UserService().getAllFollowingRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+            @Override
+            public void onSuccess(List<FollowRequestModel> followRequestModels) {
+                Log.d("NOTIFICATIONS/GET", "Got following requests: " + followRequestModels.size());
                 if (followRequestModels.size() > 0) {
                     requestList.addAll(followRequestModels);
                     updateListView();
@@ -80,6 +92,14 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
 
 
     private void updateListView() {
+
+        Collections.sort(requestList, new Comparator<FollowRequestModel>() {
+            @Override
+            public int compare(FollowRequestModel t1, FollowRequestModel t2) {
+                return t2.dateObject().compareTo(t1.dateObject());
+            }
+        });
+
         moodListRecyclerView = findViewById(R.id.notification_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(Notifications.this);

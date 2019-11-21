@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * FollowRequestModel
- *
+ * <p>
  * Extends BaseModel, used to create and interpret friend requests, which can be
  * either accepted or denied by the user
  */
@@ -39,7 +39,7 @@ public class FollowRequestModel extends BaseModel {
     public static String DENY_STATE = "declined";
     /**
      * The constant REQUESTED_STATE.
-     *
+     * <p>
      * Stays in this state if the user does not act upon the request.
      */
     public static String REQUESTED_STATE = "undecided";
@@ -106,6 +106,7 @@ public class FollowRequestModel extends BaseModel {
     public String getCreatedAt() {
         return this.createdAt;
     }
+
 
     /**
      * Sets created at.
