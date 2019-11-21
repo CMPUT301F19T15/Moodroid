@@ -130,14 +130,15 @@ public class FriendsMoods extends MoodHistory {
                 startActivity(intent);
             }
         });
-//        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //navigate to MoodMap Activity
-//                intent = new Intent(FriendsMoods.this, MoodMap.class);
-//                startActivity(intent);
-//            }
-//        });
+        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
+        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to MoodMap Activity
+                intent = new Intent(FriendsMoods.this, FriendMap.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
