@@ -85,33 +85,21 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
      */
     private LocationCallback locationCallback;
 
-    /**
-     * the search bar
-     */
-    private MaterialSearchBar materialSearchBar;
 
     private View mapView;
     protected Button addLocation;
 
     private final float DEFAULT_ZOOM = 15;
-    Geocoder geocoder;
 
-
-    /**
-     * best provider
-     */
-    String bestProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_add_location);
-        //materialSearchBar = findViewById(R.id.searchBar);
         addLocation = findViewById(R.id.addLocationBtn);
 
         ImageView emoji = (ImageView) findViewById(R.id.emoji);
-
 
 
         // Below takes the intent from add_mood.java and displays the emoji, color and
@@ -144,162 +132,16 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
          * initialize the places
          */
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(),"AIzaSyCSp4zdtDsi7z0JeJGMEarMQXx_W-6iLZs");
+            Places.initialize(getApplicationContext(), "AIzaSyCSp4zdtDsi7z0JeJGMEarMQXx_W-6iLZs");
         }
 
-        // Create a new Places client instance.
-        PlacesClient placesClient = Places.createClient(this);
-
-        // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.searchBar);
-
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            }
-
-            @Override
-            public void onError(@NonNull Status status) {
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-
-        /**
-        placesClient = Places.createClient(this);
-
-        final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-
-        /**
-
-        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
-            @Override
-            public void onSearchStateChanged(boolean enabled) {
-
-            }
-
-            @Override
-            public void onSearchConfirmed(CharSequence text) {
-
-                startSearch(text.toString(), true, null, true);
-            }
-
-            @Override
-            public void onButtonClicked(int buttonCode) {
-                if(buttonCode == MaterialSearchBar.BUTTON_NAVIGATION){
-
-
-                } else if(buttonCode == MaterialSearchBar.BUTTON_BACK){
-                    materialSearchBar.disableSearch();
-                }
-            }
-        });
-
-        materialSearchBar.addTextChangeListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                FindAutocompletePredictionsRequest predictionsRequest = FindAutocompletePredictionsRequest.builder()
-                        .setCountry("CA")
-                        .setSessionToken(token)
-                        .setQuery(s.toString())
-                        .build();
-                placesClient.findAutocompletePredictions(predictionsRequest).addOnCompleteListener(new OnCompleteListener<FindAutocompletePredictionsResponse>() {
-                    @Override
-                    public void onComplete(@NonNull Task<FindAutocompletePredictionsResponse> task) {
-                        if (task.isSuccessful()) {
-                            FindAutocompletePredictionsResponse predictionsResponse = task.getResult();
-                            if (predictionsResponse != null) {
-                                predictionList = predictionsResponse.getAutocompletePredictions();
-                                List<String> suggestionsList = new ArrayList<>();
-                                for (int i = 0; i < predictionList.size(); i++) {
-                                    AutocompletePrediction prediction = predictionList.get(i);
-                                    suggestionsList.add(prediction.getFullText(null).toString());
-                                }
-                                materialSearchBar.updateLastSuggestions(suggestionsList);
-                                if (!materialSearchBar.isSuggestionsVisible()) {
-                                    materialSearchBar.showSuggestionsList();
-                                }
-                            }
-                        } else {
-                            Log.i("mytag", "prediction fetching task unsuccessful");
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        materialSearchBar.setSuggestionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
-            @Override
-            public void OnItemClickListener(int position, View v) {
-                if (position >= predictionList.size()) {
-                    return;
-                }
-                AutocompletePrediction selectedPrediction = predictionList.get(position);
-                String suggestion = materialSearchBar.getLastSuggestions().get(position).toString();
-                materialSearchBar.setText(suggestion);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        materialSearchBar.clearSuggestions();
-                    }
-                }, 1000);
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                if (imm != null)
-                    imm.hideSoftInputFromWindow(materialSearchBar.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-                final String placeId = selectedPrediction.getPlaceId();
-                List<Place.Field> placeFields = Arrays.asList(Place.Field.LAT_LNG);
-
-                FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(placeId, placeFields).build();
-                placesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-                    @Override
-                    public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                        Place place = fetchPlaceResponse.getPlace();
-                        Log.i("mytag", "Place found: " + place.getName());
-                        LatLng latLngOfPlace = place.getLatLng();
-                        if (latLngOfPlace != null) {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngOfPlace, DEFAULT_ZOOM));
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (e instanceof ApiException) {
-                            ApiException apiException = (ApiException) e;
-                            apiException.printStackTrace();
-                            int statusCode = apiException.getStatusCode();
-                            Log.i("mytag", "place not found: " + e.getMessage());
-                            Log.i("mytag", "status code: " + statusCode);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void OnItemDeleteListener(int position, View v) {
-
-            }
-
-        });**/
 
         addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LatLng latlng=mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
-                Log.d("addlocation","this is the lat " + latlng.latitude);
-                Log.d("addlocation","this is the long " + latlng.longitude);
+                LatLng latlng = mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
+                Log.d("addlocation", "this is the lat " + latlng.latitude);
+                Log.d("addlocation", "this is the long " + latlng.longitude);
                 Intent intent = new Intent();
                 String lat = String.valueOf(latlng.latitude);
                 String lon = String.valueOf(latlng.longitude);
@@ -349,13 +191,13 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         // move location button to place
-        if(mapView != null&& mapView.findViewById(Integer.parseInt("1")) != null){
+        if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) {
             View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
             // set to bottop
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP,0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
-            layoutParams.setMargins(0,0,40,180);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(0, 0, 40, 180);
         }
 
         // check for gps
@@ -380,49 +222,24 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         task.addOnFailureListener(AddLocation.this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                if(e instanceof ResolvableApiException){
+                if (e instanceof ResolvableApiException) {
                     ResolvableApiException resolvable = (ResolvableApiException) e;
                     try {
                         resolvable.startResolutionForResult(AddLocation.this, 51);
-                    } catch (IntentSender.SendIntentException el){
+                    } catch (IntentSender.SendIntentException el) {
                         el.printStackTrace();
                     }
                 }
             }
         });
-
-        /**
-        // create a new location manager to also get the Lat and Long of your location
-        LocationManager locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
-
-        if( locationManager != null){
-            // find the location and save it
-            Location location = locationManager.getLastKnownLocation(bestProvider);
-            if( location != null){
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-
-                // create a new LatLng variable
-                LatLng latLng = new LatLng(latitude,longitude);
-
-                // set the new LatLng variable to the camera view
-                setCameraView(latLng);
-            }
-        }**/
-
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 51){
-            if(resultCode == RESULT_OK){
+        if (requestCode == 51) {
+            if (resultCode == RESULT_OK) {
                 getDeviceLocation();
             }
         }
@@ -439,33 +256,33 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
                 .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             mLastKnownLocation = task.getResult();
                             // check if null
-                            if(mLastKnownLocation != null){
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            } else{
+                            if (mLastKnownLocation != null) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            } else {
                                 LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
                                 locationRequest.setFastestInterval(5000);
                                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                                locationCallback = new LocationCallback(){
+                                locationCallback = new LocationCallback() {
                                     @Override
                                     public void onLocationResult(LocationResult locationResult) {
                                         super.onLocationResult(locationResult);
-                                        if(locationResult == null){
+                                        if (locationResult == null) {
                                             return;
                                         }
                                         mLastKnownLocation = locationResult.getLastLocation();
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                                         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
                                     }
                                 };
-                                mFusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, null);
+                                mFusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
 
                             }
-                        }else{
-                            Toast.makeText(AddLocation.this,"unable to get location", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddLocation.this, "unable to get location", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -475,18 +292,18 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
     /**
      * this is where we set the initial camera view
-     *
+     * <p>
      * TO DO
      * - make the initial camera view the current location of user
      */
-    private void setCameraView(LatLng latLng){
+    private void setCameraView(LatLng latLng) {
 
         // Set a boundary to start
-        CameraUpdate center=
+        CameraUpdate center =
                 CameraUpdateFactory.newLatLng(latLng);
 
         // changed the zoom of the camera
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(4);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(4);
 
         // cant do both at once so we have to move camera first
         // then change the camera zoom
