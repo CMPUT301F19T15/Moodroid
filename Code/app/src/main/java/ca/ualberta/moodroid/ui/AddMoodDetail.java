@@ -366,6 +366,7 @@ public class AddMoodDetail extends AppCompatActivity {
                 locationText.setText("");
                 addLocationButton.setVisibility(View.VISIBLE);
                 removeLocationButton.setVisibility(GONE);
+                moodLocation = null;
             }
         });
 
