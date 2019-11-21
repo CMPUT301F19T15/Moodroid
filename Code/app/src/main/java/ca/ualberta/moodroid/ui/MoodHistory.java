@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -337,6 +336,18 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     @Override
     public void onListClick(int position) {
         openEditDeleteDialog();
+    }
+
+    @Override
+    public void onShortClick(int position) {
+        if(moodList.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+            MoodEventModel moodEventModel = moodList.get(position);
+            moodEventModel.getInternalId();
+            intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
+            intent.putExtra("eventId", moodEventModel.getInternalId());
+            startActivity(intent);
+
+        }
     }
 
     /**

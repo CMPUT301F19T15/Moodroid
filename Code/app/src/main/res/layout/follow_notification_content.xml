@@ -37,19 +37,37 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+
             <Button
                 android:id="@+id/follow_deny_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="Deny" />
+
+                android:text="DENY"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:background="@drawable/denybuttonshape"
+                android:shadowColor="#4256A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                />
 
             <Button
                 android:id="@+id/follow_accept_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="Accept" />
+
+                android:text="ACCEPT"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:background="@drawable/acceptbuttonshape"
+                android:shadowColor="#4256A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                />
 
             <TextView
                 android:id="@+id/mood_list_date"

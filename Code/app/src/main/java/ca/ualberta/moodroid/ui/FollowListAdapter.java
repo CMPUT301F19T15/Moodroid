@@ -1,11 +1,13 @@
 package ca.ualberta.moodroid.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -67,6 +69,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
          * The On list listener, which is just a listener object for an item in a list, works like
          * a listener for a button.
          */
+        public ImageView background;
         FollowListAdapter.OnListListener onListListener;
 
 
@@ -85,7 +88,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             this.denyButton = itemView.findViewById(R.id.follow_deny_btn);
             this.acceptButton = itemView.findViewById(R.id.follow_accept_btn);
             this.dateText = itemView.findViewById(R.id.mood_list_date);
-
+            this.background = itemView.findViewById(R.id.list_item_background);
 
         }
 
@@ -239,6 +242,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         holder.requestText.setText("@" + request.getRequesterUsername() + " is following your moods.");
         holder.denyButton.setVisibility(View.INVISIBLE);
         holder.acceptButton.setVisibility(View.INVISIBLE);
+        holder.background.setBackgroundColor(Color.parseColor("#056608"));
 
     }
 
@@ -252,6 +256,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         holder.requestText.setText("@" + request.getRequesterUsername() + " was declined.");
         holder.denyButton.setVisibility(View.INVISIBLE);
         holder.acceptButton.setVisibility(View.INVISIBLE);
+        holder.background.setBackgroundColor(Color.parseColor("#8b0000"));
     }
 
     @Override
