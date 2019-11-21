@@ -303,8 +303,10 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
                 Intent intent = new Intent();
                 String lat = String.valueOf(latlng.latitude);
                 String lon = String.valueOf(latlng.longitude);
+                //String latLng = String.valueOf(latlng);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lon", lon);
+                //intent.putExtra("latlng", latLng);
                 setResult(RESULT_OK, intent);
                 finish();
                 /**

@@ -187,14 +187,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <EditText
+                    <TextView
                         android:id="@+id/mood_detail_location"
                         style="@style/Widget.AppCompat.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textColorHint="#585858"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:hint="location"
                         android:ems="10"
                         android:gravity="center"

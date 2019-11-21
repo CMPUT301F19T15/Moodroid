@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -158,6 +159,13 @@ public class AddMoodDetail extends AppCompatActivity {
      */
     @BindView(R.id.remove_location_button)
     protected Button removeLocationButton;
+    /**
+     * location text
+     */
+    @BindView(R.id.mood_detail_location)
+    protected  TextView locationText;
+
+    protected GeoPoint moodLocation;
 
 
     /**
@@ -215,6 +223,7 @@ public class AddMoodDetail extends AppCompatActivity {
      */
     String lat;
     String lon;
+    String latLng;
 
     /**
      * The initial UI is built here, using data from the last activity to dynamically display the
@@ -251,6 +260,7 @@ public class AddMoodDetail extends AppCompatActivity {
         removeLocationButton.setVisibility(GONE);
         addLocationButton.setVisibility(View.VISIBLE);
 
+
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
 
@@ -266,6 +276,7 @@ public class AddMoodDetail extends AppCompatActivity {
         mood_img.setImageDrawable(res);
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
+
 
         /**
          * change status bar color
@@ -345,11 +356,6 @@ public class AddMoodDetail extends AppCompatActivity {
                 intent.putExtra("hex", hex);
                 startActivityForResult(intent, 2);
 
-//                Intent intent = new Intent(AddMoodDetail.this, AddLocation.class);
-//                intent.putExtra("image_id", image_id);
-//                intent.putExtra("mood_name", mood_name);
-//                intent.putExtra("hex", hex);
-//                startActivity(intent);
             }
         });
 
@@ -357,7 +363,9 @@ public class AddMoodDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //deletes location from Firestore and updates imageView
-
+                locationText.setText("");
+                addLocationButton.setVisibility(View.VISIBLE);
+                removeLocationButton.setVisibility(GONE);
             }
         });
 
@@ -426,6 +434,7 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
         moodEvent.setReasonImageUrl(url);
+        moodEvent.setLocation(moodLocation);
 
 
         mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
@@ -465,11 +474,28 @@ public class AddMoodDetail extends AppCompatActivity {
         else if(requestCode == 2 && resultCode == RESULT_OK){
             lat = data.getStringExtra("lat");
             lon = data.getStringExtra("lon");
-            Toast.makeText(this, "lat is " + lat + "lon is " + lon, Toast.LENGTH_SHORT).show();    ////delete this :)
+            //Toast.makeText(this, "lat is " + lat + "lon is " + lon, Toast.LENGTH_SHORT).show();    ////delete this :)
+            //latLng = data.getStringExtra("latlng");
+            String loc = lat + ","+ lon;
+            locationText.setText(loc);
 
-            
+            Double lati = Double.parseDouble(lat);
+            Double longi = Double.parseDouble(lon);
+            moodLocation = new GeoPoint(lati, longi);
+
+            uploadLocation();
+
+            addLocationButton.setVisibility(GONE);
+            removeLocationButton.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    private void uploadLocation(){
+
+        ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
     }
 
     /**
