@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -36,6 +35,10 @@ public class Profile extends BaseUIActivity {
     ValidationService validation;
 
     private int ACTIVITY_NUM = 3;
+
+    /**
+     * create intent
+     */
     private Intent intent;
 
     /**

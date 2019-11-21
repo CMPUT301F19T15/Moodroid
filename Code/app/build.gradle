@@ -81,6 +81,8 @@ dependencies {
     // Google play services for location information
     implementation 'com.google.android.gms:play-services-location:15.0.1'
 
+    implementation 'com.google.android.libraries.places:places:2.0.0'
+
 
     //Testing
     testImplementation 'junit:junit:4.12'
@@ -89,6 +91,9 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+
+    //implement searchbar
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
