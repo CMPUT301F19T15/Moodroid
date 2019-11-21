@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -45,13 +42,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ca.ualberta.moodroid.R;
@@ -99,25 +91,19 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         setContentView(R.layout.activity_add_location);
         addLocation = findViewById(R.id.addLocationBtn);
 
-        ImageView emoji = (ImageView) findViewById(R.id.emoji);
+        TextView emoji = (TextView) findViewById(R.id.emoji);
 
 
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
 
-        final Intent[] intent = {getIntent()};
+        Intent intent = getIntent();
 
-        String image_id = intent[0].getExtras().getString("image_id");
-        String mood_name = intent[0].getExtras().getString("mood_name");
-        String hex = intent[0].getExtras().getString("hex");
+        String emojii = intent.getExtras().getString("emoji");
+        String mood_name = intent.getExtras().getString("mood_name");
+        String hex = intent.getExtras().getString("hex");
 
-        int mood_imageRes = getResources().getIdentifier(image_id, null, getOpPackageName());
-        Drawable res = getResources().getDrawable(mood_imageRes);
-
-        emoji.getLayoutParams().height = 80;
-        emoji.getLayoutParams().width = 80;
-
-        emoji.setImageDrawable(res);
+        emoji.setText(emojii);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.add_location_map);
         mapFragment.getMapAsync(this);

@@ -16,7 +16,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:context=".ui.AddLocation"/>
 
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
