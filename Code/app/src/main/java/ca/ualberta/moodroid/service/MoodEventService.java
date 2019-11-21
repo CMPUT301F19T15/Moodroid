@@ -112,8 +112,7 @@ public class MoodEventService implements MoodEventInterface {
             }
         });
     }
-
-
+    
     /**
      * Get all mood events for a user, filtered by a single mood.
      * @param moodName the mood name
@@ -134,36 +133,10 @@ public class MoodEventService implements MoodEventInterface {
                     Log.d("MOODEVENT", "Task was not successful: " + task.getException().getMessage());
 
                 }
-
                 return results;
             }
         });
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Create a mood event via a model.
