@@ -59,7 +59,7 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
 
         ButterKnife.bind(this);
         this.setTitle("Notifications");
-        bottomNavigationView();
+        bottomNavigationView(0);
 
         users = new UserService();
         requestList = new ArrayList<>();

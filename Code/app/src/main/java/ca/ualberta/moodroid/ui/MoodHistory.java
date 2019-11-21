@@ -99,7 +99,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         ButterKnife.bind(this);
 
         //Bottom Navigation Bar Listener
-        bottomNavigationView();
+        bottomNavigationView(1);
         setTitle("Mood History");
 
 
