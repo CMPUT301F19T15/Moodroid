@@ -5,16 +5,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
@@ -24,8 +30,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import ca.ualberta.moodroid.R;
+import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.repository.FollowRequestRepository;
+import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 
 /**
  * This class sets up our apps navigation capability. It creates the bottom tool bar for the main
@@ -56,6 +67,10 @@ public class BaseUIActivity extends AppCompatActivity {
      */
     @BindView(R.id.toolbar_text_center)
     TextView toolBarTextView;
+
+    protected BottomNavigationViewEx bottomNavigationViewEx;
+
+    protected Badge badge;
 
 
     /**
@@ -91,10 +106,31 @@ public class BaseUIActivity extends AppCompatActivity {
      */
     protected void bottomNavigationView(int pageId) {
         //set up bottom navigation bar...go to corresponding activity
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
+        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
         final AppCompatActivity me = this.getMe();
         Menu menu = bottomNavigationViewEx.getMenu();
-        //Log.d("NAV", "Current Nav ID: " + this.getNavId());
+
+        FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", AuthenticationService.getInstance().getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e("NOTIFICATION/COUNT", e.getMessage());
+                }
+                Log.d("NOTIFICATION/UPDATE", "new data. Count=" + queryDocumentSnapshots.size());
+                if (queryDocumentSnapshots.size() == 0) {
+                    if (badge != null) {
+                        badge.hide(true);
+                    }
+                } else {
+                    if (badge != null) {
+                        badge.hide(false);
+                    }
+                    setNotificationCount(queryDocumentSnapshots.size());
+                }
+
+            }
+        });
+
         MenuItem menuItem = menu.getItem(pageId);
         menuItem.setChecked(true);
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -117,6 +153,17 @@ public class BaseUIActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    protected void setNotificationCount(int count) {
+        if (badge == null) {
+            badge = new QBadgeView(this)
+                    .setBadgeNumber(count)
+                    .setGravityOffset(12, 2, true)
+                    .bindTarget(bottomNavigationViewEx.getBottomNavigationItemView(0));
+        } else {
+            badge.setBadgeNumber(count);
+        }
     }
 
 }
