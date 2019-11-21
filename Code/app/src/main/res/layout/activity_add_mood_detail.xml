@@ -6,9 +6,9 @@
     android:orientation="vertical">
 
 
- <include
-     layout="@layout/add_mood_banner">
- </include>
+    <include
+        layout="@layout/add_mood_banner">
+    </include>
 
 
     <ScrollView
@@ -84,38 +84,38 @@
                     android:layout_height="wrap_content">
 
 
-                <TextView
-                    android:id="@+id/reason_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:background="@color/colorSecondary"
-                    android:text="Reason"
-                    android:textColor="#FFFFFF"
-                    android:textSize="25sp" />
+                    <TextView
+                        android:id="@+id/reason_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@color/colorSecondary"
+                        android:text="Reason"
+                        android:textColor="#FFFFFF"
+                        android:textSize="25sp" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_photo_button"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:textSize="12sp"
-                    android:layout_alignBottom="@id/reason_text"
-                    android:text="add photo">
-                </Button>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/add_photo_button"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:textSize="12sp"
+                        android:layout_alignBottom="@id/reason_text"
+                        android:text="add photo">
+                    </Button>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/remove_photo_button"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:textSize="11sp"
-                    android:visibility="gone"
-                    android:layout_alignBottom="@id/reason_text"
-                    android:text="remove photo">
-                </Button>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/remove_photo_button"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        android:layout_alignBottom="@id/reason_text"
+                        android:text="remove photo">
+                    </Button>
 
                 </RelativeLayout>
 
@@ -131,12 +131,12 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:gravity="center"
-                        android:hint="reason"
+                        android:hint="Reason"
                         android:maxLength="20"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#585858" />
 
-            </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -150,38 +150,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/Location_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:background="@color/colorSecondary"
-                    android:text="Location"
-                    android:textColor="#FFFFFF"
-                    android:textSize="25sp" />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_location_button"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:textSize="12sp"
-                    android:layout_alignBottom="@id/Location_text"
-                    android:text="add location">
-                </Button>
+                    <TextView
+                        android:id="@+id/Location_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@color/colorSecondary"
+                        android:text="Location"
+                        android:textColor="#FFFFFF"
+                        android:textSize="25sp" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/add_location_button"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:textSize="12sp"
+                        android:layout_alignBottom="@id/Location_text"
+                        android:text="add location">
+                    </Button>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/remove_location_button"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:textSize="11sp"
-                    android:visibility="gone"
-                    android:layout_alignBottom="@id/Location_text"
-                    android:text="remove location">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/remove_location_button"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        android:layout_alignBottom="@id/Location_text"
+                        android:text="remove location">
 
-                </Button>
+                    </Button>
                 </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
