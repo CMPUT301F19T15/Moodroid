@@ -331,6 +331,18 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         });
 
 
+        addLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                String lat = "123";  ////replace these with the strings you actually wanna send back, I'm just putting dummy variables..
+                String lon = "456";   /////////
+                intent.putExtra("lat", lat);
+                intent.putExtra("lon", lon);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
     }
 

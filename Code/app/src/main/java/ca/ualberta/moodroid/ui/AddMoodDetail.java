@@ -211,6 +211,12 @@ public class AddMoodDetail extends AppCompatActivity {
     private Intent intent;
 
     /**
+     * The location's latitude and longitude.
+     */
+    String lat;
+    String lon;
+
+    /**
      * The initial UI is built here, using data from the last activity to dynamically display the
      * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
      * where the user is prompted to fill in all of the details of a mood event which were explained
@@ -337,7 +343,13 @@ public class AddMoodDetail extends AppCompatActivity {
                 intent.putExtra("image_id", image_id);
                 intent.putExtra("mood_name", mood_name);
                 intent.putExtra("hex", hex);
-                startActivity(intent);
+                startActivityForResult(intent, 2);
+
+//                Intent intent = new Intent(AddMoodDetail.this, AddLocation.class);
+//                intent.putExtra("image_id", image_id);
+//                intent.putExtra("mood_name", mood_name);
+//                intent.putExtra("hex", hex);
+//                startActivity(intent);
             }
         });
 
@@ -449,6 +461,14 @@ public class AddMoodDetail extends AppCompatActivity {
             uploadPhoto();
             addPhotoButton.setVisibility(GONE);
             removePhotoButton.setVisibility(View.VISIBLE);
+        }
+        else if(requestCode == 2 && resultCode == RESULT_OK){
+            lat = data.getStringExtra("lat");
+            lon = data.getStringExtra("lon");
+            Toast.makeText(this, "lat is " + lat + "lon is " + lon, Toast.LENGTH_SHORT).show();    ////delete this :)
+
+            
+
         }
     }
 
