@@ -15,20 +15,14 @@
         android:id="@+id/add_location_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:context=".ui.AddLocation"/>
-
-    <com.mancj.materialsearchbar.MaterialSearchBar
-        style="@style/MaterialSearchBarLight"
-        app:mt_speechMode="false"
-        app:mt_hint="Search a place"
-        app:mt_maxSuggestionsCount="10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <fragment
         android:id="@+id/searchBar"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="match_parent"
         android:layout_margin="16dp"
-        app:mt_navIconEnabled="true"
         android:elevation="5dp"
-        android:outlineProvider="bounds"
-        app:mt_placeholder="Search a place"/>
+        android:layout_height="wrap_content"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

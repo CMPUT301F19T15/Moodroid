@@ -6,14 +6,11 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,8 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -48,17 +45,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FetchPlaceResponse;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
-import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -99,9 +91,11 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
     private MaterialSearchBar materialSearchBar;
 
     private View mapView;
-    private Button addLocation;
+    protected Button addLocation;
 
     private final float DEFAULT_ZOOM = 15;
+    Geocoder geocoder;
+
 
     /**
      * best provider
@@ -113,10 +107,12 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_add_location);
-        materialSearchBar = findViewById(R.id.searchBar);
+        //materialSearchBar = findViewById(R.id.searchBar);
         addLocation = findViewById(R.id.addLocationBtn);
 
         ImageView emoji = (ImageView) findViewById(R.id.emoji);
+
+
 
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
@@ -136,64 +132,6 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         emoji.setImageDrawable(res);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.add_location_map);
-
-        /**
-        searchView = findViewById(R.id.sv_location);
-
-
-         * <SearchView
-         *         android:layout_width="match_parent"
-         *         android:layout_height="wrap_content"
-         *         android:id="@+id/sv_location"
-         *         android:queryHint="Search..."
-         *         android:iconifiedByDefault="false"
-         *         android:layout_margin="10dp"
-         *         android:elevation="5dp"
-         *         android:background="@drawable/bg_round"/>
-         *
-         *
-         *
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                mMap.clear();
-                String location = searchView.getQuery().toString();
-
-                List<Address> addressList = null;
-
-                if(location != null || !location.equals("")){
-
-                    Geocoder geocoder = new Geocoder(AddLocation.this);
-
-                    try{
-
-                        addressList = geocoder.getFromLocationName(location, 1);
-
-                    } catch (IOException e) {
-
-                        e.printStackTrace();
-
-                    }
-
-                    Address address = addressList.get(0);
-
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-
-                }
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });**/
-
         mapFragment.getMapAsync(this);
         mapView = mapFragment.getView();
 
@@ -205,11 +143,37 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         /**
          * initialize the places
          */
-        Places.initialize(AddLocation.this,"AIzaSyCSp4zdtDsi7z0JeJGMEarMQXx_W-6iLZs");
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(),"AIzaSyCSp4zdtDsi7z0JeJGMEarMQXx_W-6iLZs");
+        }
 
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.searchBar);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+        /**
         placesClient = Places.createClient(this);
 
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+
+        /**
 
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -328,19 +292,34 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
             }
 
-        });
-
+        });**/
 
         addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LatLng latlng=mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
+                Log.d("addlocation","this is the lat " + latlng.latitude);
+                Log.d("addlocation","this is the long " + latlng.longitude);
                 Intent intent = new Intent();
-                String lat = "123";  ////replace these with the strings you actually wanna send back, I'm just putting dummy variables..
-                String lon = "456";   /////////
+                String lat = String.valueOf(latlng.latitude);
+                String lon = String.valueOf(latlng.longitude);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lon", lon);
                 setResult(RESULT_OK, intent);
                 finish();
+                /**
+                 *
+                 *
+                 *
+                 *
+                 *
+                 *
+                 *
+                 * ADD HERE
+                 */
+
+                onBackPressed();
+
             }
         });
 
@@ -443,6 +422,9 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
                 setCameraView(latLng);
             }
         }**/
+
+
+
     }
 
     @Override
