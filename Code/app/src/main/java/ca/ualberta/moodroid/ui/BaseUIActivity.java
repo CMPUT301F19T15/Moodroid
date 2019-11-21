@@ -89,13 +89,13 @@ public class BaseUIActivity extends AppCompatActivity {
     /**
      * Setup the bottom navigation bar view and navigation
      */
-    protected void bottomNavigationView() {
+    protected void bottomNavigationView(int pageId) {
         //set up bottom navigation bar...go to corresponding activity
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
         final AppCompatActivity me = this.getMe();
         Menu menu = bottomNavigationViewEx.getMenu();
-        Log.d("NAV", "Current Nav ID: " + this.getNavId());
-        MenuItem menuItem = menu.getItem(this.getNavId());
+        //Log.d("NAV", "Current Nav ID: " + this.getNavId());
+        MenuItem menuItem = menu.getItem(pageId);
         menuItem.setChecked(true);
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -103,16 +103,16 @@ public class BaseUIActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.ic_notif:
                         startActivity(new Intent(me, Notifications.class));
-                        break;
+                        return true;
                     case R.id.ic_moods:
                         startActivity(new Intent(me, MoodHistory.class));
-                        break;
+                        return true;
                     case R.id.ic_friends:
                         startActivity(new Intent(me, FriendsMoods.class));
-                        break;
+                        return true;
                     case R.id.ic_profile:
                         startActivity(new Intent(me, Profile.class));
-                        break;
+                        return true;
                 }
                 return false;
             }
