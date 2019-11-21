@@ -190,10 +190,10 @@ public class AddMood extends AppCompatActivity {
             public void onClick(View v) {
                 if (center_filled) {
                     Intent intent = new Intent(AddMood.this, AddMoodDetail.class);
-
-                    intent.putExtra("image_id", selected_img);
-                    intent.putExtra("mood_name", mood_name);
-                    intent.putExtra("hex", hex);
+                    intent.putExtra("emoji", getMoodEmoji(centerMood));
+                    intent.putExtra("mood_name", centerMood);
+                    intent.putExtra("hex", getMoodColor(centerMood));
+                    startActivity(intent);
                     startActivity(intent);
 
                 }
