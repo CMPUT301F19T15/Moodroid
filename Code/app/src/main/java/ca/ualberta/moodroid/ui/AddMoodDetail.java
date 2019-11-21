@@ -66,7 +66,7 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The imageView.
      */
-    private ImageView mood_img;
+    private TextView mood_img;
 
     /**
      * The mood title for the banner.
