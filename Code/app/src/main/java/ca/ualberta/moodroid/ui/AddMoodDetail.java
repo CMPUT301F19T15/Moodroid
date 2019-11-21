@@ -264,16 +264,16 @@ public class AddMoodDetail extends AppCompatActivity {
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
 
-        final Intent[] intent = {getIntent()};
+        Intent intent = getIntent();
 
-        String image_id = intent[0].getExtras().getString("image_id");
-        String mood_name = intent[0].getExtras().getString("mood_name");
-        String hex = intent[0].getExtras().getString("hex");
+        String emoji = intent.getExtras().getString("emoji");
+        String mood_name = intent.getExtras().getString("mood_name");
+        String hex = intent.getExtras().getString("hex");
 
-        int mood_imageRes = getResources().getIdentifier(image_id, null, getOpPackageName());
-        Drawable res = getResources().getDrawable(mood_imageRes);
+//        int mood_imageRes = getResources().getIdentifier(emoji, null, getOpPackageName());
+//        Drawable res = getResources().getDrawable(mood_imageRes);
 
-        mood_img.setImageDrawable(res);
+        mood_img.setText(emoji);
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
 
@@ -351,7 +351,7 @@ public class AddMoodDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddMoodDetail.this, AddLocation.class);
-                intent.putExtra("image_id", image_id);
+                intent.putExtra("emoji", emoji);
                 intent.putExtra("mood_name", mood_name);
                 intent.putExtra("hex", hex);
                 startActivityForResult(intent, 2);
