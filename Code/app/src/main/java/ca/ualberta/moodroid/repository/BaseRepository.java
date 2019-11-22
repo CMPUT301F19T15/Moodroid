@@ -262,7 +262,7 @@ abstract class BaseRepository implements RepositoryInterface {
      * @return
      */
     public Task<Void> delete(ModelInterface model) {
-        Log.d("REPO/DELETE", model.getInternalId());
+        //Log.d("REPO/DELETE", model.getInternalId());
         return this.collection.document(model.getInternalId()).delete();
     }
 

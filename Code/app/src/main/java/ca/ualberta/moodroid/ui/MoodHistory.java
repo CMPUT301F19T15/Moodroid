@@ -28,8 +28,10 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import ca.ualberta.moodroid.R;
+import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
+import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
 
@@ -335,7 +337,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      */
     @Override
     public void onListClick(int position) {
-        openEditDeleteDialog();
+        openEditDeleteDialog(position);
     }
 
     @Override
@@ -355,9 +357,15 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * where the user can decide on what they want to do with
      * the list item that has been clicked
      */
-    public void openEditDeleteDialog() {
+    public void openEditDeleteDialog(int position) {
 
+        MoodEventModel moodEvent = moodList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putString("eventId", moodEvent.getInternalId());
+
+        //create fragment
         EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
+        editDeleteFragment.setArguments(bundle);
         editDeleteFragment.show(getSupportFragmentManager(), "Options");
     }
 
