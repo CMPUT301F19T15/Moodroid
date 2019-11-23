@@ -172,4 +172,18 @@ public class FriendsMoods extends MoodHistory {
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
+
+    @Override
+    public void onShortClick(int position) {
+        if(events.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+            MoodEventModel moodEventModel = events.get(position);
+            moodEventModel.getInternalId();
+            intent = new Intent(FriendsMoods.this, ViewMoodDetail.class);
+            intent.putExtra("eventId", moodEventModel.getInternalId());
+            startActivity(intent);
+
+        }
+    }
+
+
 }
