@@ -64,11 +64,7 @@ public class ViewMoodDetail extends BaseUIActivity {
  * The mood event to be displayed is picked by the user in the MoodHistory activity
  * by clicking on the event.
  */
-////////////////////////NOT YET IMPLEMENTED: show location...wait until map activity is done
-///////////////////////////
-    ///////////////////////////////////
 
-    
     /**
      * The mood event service.
      */
