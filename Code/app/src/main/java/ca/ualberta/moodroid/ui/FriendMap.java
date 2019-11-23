@@ -230,7 +230,7 @@ public class FriendMap extends Map {
                                     // This could have a possible race condition
                                     for (MoodModel mood : moods) {
                                         if (mood.getName().equals(event.getMoodName())) {
-                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getUsername()+", "+event.getSituation());
+                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime()+", "+event.getSituation());
                                         }
                                     }
 
