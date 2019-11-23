@@ -36,7 +36,6 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodService;
 
@@ -71,7 +70,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     /**
      * any variable that are needed
      */
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     /**
      * The Tool bar button left.
      */
@@ -374,7 +373,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * TO DO
      * - make the initial camera view the current location of user
      */
-    private void setCameraView(LatLng latLng) {
+    public void setCameraView(LatLng latLng) {
 
         // Set a boundary to start
         CameraUpdate center =
