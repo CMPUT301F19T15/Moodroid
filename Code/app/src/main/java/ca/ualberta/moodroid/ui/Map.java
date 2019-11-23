@@ -271,7 +271,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             }
         }
 
-
         // call to add to map
         addMapMarkers();
 
@@ -307,6 +306,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onSuccess(List<ModelInterface> modelInterfaces) {
+
+                mMap.clear();
 
                 // for loop to loop through all of the MoodEventModels
                 for (ModelInterface m : modelInterfaces) {

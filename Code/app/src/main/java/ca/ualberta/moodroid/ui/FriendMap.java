@@ -86,6 +86,7 @@ public class FriendMap extends Map {
         super.onCreate(savedInstanceState);
 
         toolBarText = "Friends Moods";
+        toolBarTextView.setText(toolBarText);
 
 
         /**
@@ -181,9 +182,8 @@ public class FriendMap extends Map {
             }
         }
 
-
         // call to add to map
-        addMapMarkers();
+        addMapFriendsMarkers();
 
     }
 
@@ -204,7 +204,7 @@ public class FriendMap extends Map {
      * - date time as title
      * - situation as snippit
      */
-    private void addMapMarkers() {
+    private void addMapFriendsMarkers() {
 
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
@@ -216,6 +216,7 @@ public class FriendMap extends Map {
         new UserService().getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
+                mMap.clear();
                 ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
                 final int totalUsers = followRequestModels.size();
                 for (FollowRequestModel user : followRequestModels) {
