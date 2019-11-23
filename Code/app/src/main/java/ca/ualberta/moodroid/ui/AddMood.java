@@ -133,7 +133,6 @@ public class AddMood extends AppCompatActivity {
             }
         });
 
-
         annoyed_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +193,7 @@ public class AddMood extends AppCompatActivity {
 
             }
         });
+
     }
 
     /**

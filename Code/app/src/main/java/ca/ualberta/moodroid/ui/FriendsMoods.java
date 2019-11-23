@@ -79,7 +79,7 @@ public class FriendsMoods extends MoodHistory {
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 
-        bottomNavigationView();
+        bottomNavigationView(2);
         ButterKnife.bind(this);
         this.setTitle("Friends Mood");
 

@@ -25,20 +25,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 import java.util.Locale;
+import java.util.UUID;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,6 +52,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+
 import static android.view.View.GONE;
 
 /**
@@ -142,6 +148,25 @@ public class AddMoodDetail extends AppCompatActivity {
     @BindView(R.id.remove_photo_button)
     protected Button removePhotoButton;
 
+    /**
+     * Add location button
+     */
+    @BindView(R.id.add_location_button)
+    protected Button addLocationButton;
+
+    /**
+     * remove location button
+     */
+    @BindView(R.id.remove_location_button)
+    protected Button removeLocationButton;
+    /**
+     * location text
+     */
+    @BindView(R.id.mood_detail_location)
+    protected  TextView locationText;
+
+    protected GeoPoint moodLocation;
+
 
     /**
      * The reason for the mood, given by the user.
@@ -189,6 +214,18 @@ public class AddMoodDetail extends AppCompatActivity {
     final Calendar calendar = Calendar.getInstance();
 
     /**
+     * new intent
+     */
+    private Intent intent;
+
+    /**
+     * The location's latitude and longitude.
+     */
+    String lat;
+    String lon;
+    String latLng;
+
+    /**
      * The initial UI is built here, using data from the last activity to dynamically display the
      * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
      * where the user is prompted to fill in all of the details of a mood event which were explained
@@ -220,6 +257,9 @@ public class AddMoodDetail extends AppCompatActivity {
         social_situation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, AddMoodDetail.situations));
         removePhotoButton.setVisibility(GONE);
         addPhotoButton.setVisibility(View.VISIBLE);
+        removeLocationButton.setVisibility(GONE);
+        addLocationButton.setVisibility(View.VISIBLE);
+
 
         // Below takes the intent from add_mood.java and displays the emoji, color and
         // mood title in the banner based off what the user chooses in that activity
@@ -236,6 +276,7 @@ public class AddMoodDetail extends AppCompatActivity {
         mood_img.setText(emoji);
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
+
 
         /**
          * change status bar color
@@ -306,7 +347,31 @@ public class AddMoodDetail extends AppCompatActivity {
             }
         });
 
+        addLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddMoodDetail.this, AddLocation.class);
+                intent.putExtra("emoji", emoji);
+                intent.putExtra("mood_name", mood_name);
+                intent.putExtra("hex", hex);
+                startActivityForResult(intent, 2);
+
+            }
+        });
+
+        removeLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //deletes location from Firestore and updates imageView
+                locationText.setText("");
+                addLocationButton.setVisibility(View.VISIBLE);
+                removeLocationButton.setVisibility(GONE);
+                moodLocation = null;
+            }
+        });
+
     }
+
 
     /**
      * Update date display.
@@ -375,6 +440,8 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
         moodEvent.setReasonImageUrl(url);
+        moodEvent.setLocation(moodLocation);
+
         mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
             public void onSuccess(ModelInterface modelInterface) {
@@ -409,7 +476,24 @@ public class AddMoodDetail extends AppCompatActivity {
             addPhotoButton.setVisibility(GONE);
             removePhotoButton.setVisibility(View.VISIBLE);
         }
+        else if(requestCode == 2 && resultCode == RESULT_OK){
+            lat = data.getStringExtra("lat");
+            lon = data.getStringExtra("lon");
+            //Toast.makeText(this, "lat is " + lat + "lon is " + lon, Toast.LENGTH_SHORT).show();    ////delete this :)
+            //latLng = data.getStringExtra("latlng");
+            String loc = lat + ","+ lon;
+            locationText.setText(loc);
+
+            Double lati = Double.parseDouble(lat);
+            Double longi = Double.parseDouble(lon);
+            moodLocation = new GeoPoint(lati, longi);
+
+            addLocationButton.setVisibility(GONE);
+            removeLocationButton.setVisibility(View.VISIBLE);
+
+        }
     }
+
 
     /**
      * This uploads the photo the user picked from their library to the firebase storage.

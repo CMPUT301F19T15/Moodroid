@@ -1,5 +1,7 @@
 package ca.ualberta.moodroid.service;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
@@ -50,6 +52,29 @@ public class UserService implements UserInterface {
     public Task<List<FollowRequestModel>> getAllFollowRequests() {
 
         return this.requests.where("requesteeUsername", this.auth.getUsername()).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
+            @Override
+            public List<FollowRequestModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
+
+                List<FollowRequestModel> data = new ArrayList<FollowRequestModel>();
+                if (task.isSuccessful()) {
+                    for (ModelInterface m : task.getResult()) {
+                        data.add((FollowRequestModel) m);
+                    }
+                }
+
+                return data;
+            }
+        });
+    }
+
+    /**
+     * Get all requests I sent out to see the status
+     *
+     * @return
+     */
+    public Task<List<FollowRequestModel>> getAllFollowingRequests() {
+        Log.d("USERSERVICE/FOLLOWING", "Username=" + this.auth.getUsername());
+        return this.requests.where("requesterUsername", this.auth.getUsername()).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
             @Override
             public List<FollowRequestModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
 
