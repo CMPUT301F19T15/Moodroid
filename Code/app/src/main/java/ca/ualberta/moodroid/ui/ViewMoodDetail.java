@@ -64,11 +64,7 @@ public class ViewMoodDetail extends BaseUIActivity {
  * The mood event to be displayed is picked by the user in the MoodHistory activity
  * by clicking on the event.
  */
-////////////////////////NOT YET IMPLEMENTED: show location...wait until map activity is done
-///////////////////////////
-    ///////////////////////////////////
 
-    
     /**
      * The mood event service.
      */
@@ -121,6 +117,11 @@ public class ViewMoodDetail extends BaseUIActivity {
     private TextView situationText;
 
     /**
+     * The text view displaying the location.
+     */
+    private TextView locationText; 
+
+    /**
      * The image view displaying the mood event image.
      */
     private ImageView reasonImage;
@@ -155,6 +156,7 @@ public class ViewMoodDetail extends BaseUIActivity {
         reasonText = findViewById(R.id.mood_detail_reason);
         situationText = findViewById(R.id.show_social_situation);
         reasonImage = findViewById(R.id.photoView);
+        locationText = findViewById(R.id.show_location);
         backButton = findViewById(R.id.detail_view_back_button);
         backButton.setVisibility(View.VISIBLE);
 
@@ -203,11 +205,10 @@ public class ViewMoodDetail extends BaseUIActivity {
                         }
                         //only show the location if the event has a location
                         if (event.getLocation() != null) {
-                            //TODO: show location...mini MAP??? ADDRESS??? wait until map activity is done...
-                            //
-                            //
-                            //
-                            //
+                            GeoPoint geoPoint = event.getLocation();
+                            String latitude = String.valueOf(geoPoint.getLatitude());
+                            String longitude = String.valueOf(geoPoint.getLongitude());
+                            locationText.setText(latitude + "," + longitude);
                         }
                         //change status bar color
                         if (Build.VERSION.SDK_INT >= 21) {

@@ -34,8 +34,10 @@ import java.util.List;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.MoodService;
 
 /**
  * The type Map.
@@ -68,7 +70,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     /**
      * any variable that are needed
      */
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     /**
      * The Tool bar button left.
      */
@@ -85,12 +87,20 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * The Tool bar text.
      */
     String toolBarText;
-    private Intent intent;
+    protected Intent intent;
 
     /**
      * The My user name.
      */
     String myUserName;
+
+    /**
+     * best provider
+     */
+    String bestProvider;
+
+
+    List<MoodModel> moods;
 
 
     /**
@@ -108,9 +118,10 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * all the buttons
      * and any text views
      * that need to be changed
-     *
+     * <p>
      * also sets the on click listeners
      * for each button
+     *
      * @param savedInstanceState
      */
     @Override
@@ -119,6 +130,13 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
         // gets the username of the user and saves it to the string to use later
         myUserName = AuthenticationService.getInstance().getUsername();
+
+        new MoodService().getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+            @Override
+            public void onSuccess(List<MoodModel> moodModels) {
+                moods = moodModels;
+            }
+        });
 
         // setting the view to the mood maps view
         setContentView(R.layout.activity_my_mood_maps);
@@ -184,21 +202,20 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * This is where we can add markers or lines,
      * add listeners or move the camera. In this case,
      * we just add a marker near Edmonton.
-     *
+     * <p>
      * If Google Play services is not installed on the device,
      * the user will be prompted to install
      * it inside the SupportMapFragment.
      * This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
-     *
+     * <p>
      * Creates the map with the certain style of the map.
      * connects to the Map style json in raw
      * Can change the map style if needed just
      * need to change the mapstyle json
-     *
+     * <p>
      * then calls the add map markers
      * then calls the set camera view
-     *
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -237,21 +254,22 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
+        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
-        if( locationManager != null){
+        if (locationManager != null) {
             // find the location and save it
-            Location location = locationManager.getLastKnownLocation(locationManager
-                    .getBestProvider(criteria, false));
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
 
-            // create a new LatLng variable
-            LatLng latLng = new LatLng(latitude,longitude);
+                // create a new LatLng variable
+                LatLng latLng = new LatLng(latitude, longitude);
 
-            // set the new LatLng variable to the camera view
-            setCameraView(latLng);
+                // set the new LatLng variable to the camera view
+                setCameraView(latLng);
+            }
         }
-
 
         // call to add to map
         addMapMarkers();
@@ -260,22 +278,21 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     /**
      * this is to add the map markers to the map
-     *
+     * <p>
      * it creates an icon generator
-     *
+     * <p>
      * pulls all of the Mood events for that user
-     *
+     * <p>
      * loops through all of the event mood model
      * and then adds it by calling the addicon
-     *
+     * <p>
      * each mood will have
      * - emoji
      * - location
      * - date time as title
      * - situation as snippit
-     *
      */
-    private void addMapMarkers(){
+    private void addMapMarkers() {
 
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
@@ -283,61 +300,40 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         // creates new moodeventrepository to then be used to get all the even mood models
         MoodEventRepository moodEvents = new MoodEventRepository();
 
+
         // get all model interfaces (moodeventModel) then change it to a moodeventModel and get the location
         moodEvents.where("username", myUserName).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
 
             @Override
             public void onSuccess(List<ModelInterface> modelInterfaces) {
 
+                mMap.clear();
+
                 // for loop to loop through all of the MoodEventModels
-                for(ModelInterface m: modelInterfaces) {
+                for (ModelInterface m : modelInterfaces) {
 
                     // setting the MoodEventModel to event so it then can be used to
                     // call the get location, emoji,....
                     MoodEventModel event = (MoodEventModel) m;
 
                     // just making sure it actually works
-                    Log.d("MARKER", "NEW EVENT LOCATION: "+event.getLocation());
+                    Log.d("MARKER", "NEW EVENT LOCATION: " + event.getLocation());
 
                     // Need the try here because not every MoodEventModel will
                     // have a location and
                     // we only want the MoodEventModels with a location
                     // to show
                     try {
-
-                        // if mood name is mad set the icon
-                        if (event.getMoodName().equals("Mad")) {
-                            addIcon(iconFactory, "\uD83D\uDE21", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
+                        // This could have a possible race condition
+                        for (MoodModel mood : moods) {
+                            if (mood.getName().equals(event.getMoodName())) {
+                                addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
+                            }
                         }
 
-                        // if mood name is sad set the icon
-                        if (event.getMoodName().equals("Sad")) {
-                            addIcon(iconFactory, "\uD83D\uDE1E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
-                        }
-
-                        // if mood name is annoyed set the icon
-                        if (event.getMoodName().equals("Annoyed")) {
-                            addIcon(iconFactory, "\uD83D\uDE12", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
-                        }
-
-                        // if mood name is sick set the icon
-                        if (event.getMoodName().equals("Sick")) {
-                            addIcon(iconFactory, "\uD83E\uDD2E", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
-                        }
-
-                        // if mood name is happy set the icon
-                        if (event.getMoodName().equals("Happy")) {
-                            addIcon(iconFactory, "\uD83D\uDE0A", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
-                        }
-
-                        // if mood name is scared set the icon
-                        if (event.getMoodName().equals("Scared")) {
-                            addIcon(iconFactory, "\uD83D\uDE31", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getDatetime(), event.getSituation());
-                        }
-
-                     // just catching any locations that have null values for them
-                    }catch (NullPointerException e){
-                        Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
+                        // just catching any locations that have null values for them
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage());
                     }
                 }
             }
@@ -350,7 +346,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * this is to set the actual markers on the map
      * takes in the param below and adds it using
      * MarkerOptions
-     *
+     * <p>
      * TO DO
      * - make it look better
      * - maybe add an icon generator class to do that
@@ -361,7 +357,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * @param dateTime
      * @param socialSit
      */
-    private void addIcon(IconGenerator iconFactory, String text, LatLng position, String dateTime, String socialSit) {
+    protected void addIcon(IconGenerator iconFactory, String text, LatLng position, String dateTime, String socialSit) {
 
         // creates a new markerOptions with the desired title, location, snippit, emoji
         MarkerOptions markerOptions = new MarkerOptions().
@@ -374,18 +370,18 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     /**
      * this is where we set the initial camera view
-     *
+     * <p>
      * TO DO
      * - make the initial camera view the current location of user
      */
-    private void setCameraView(LatLng latLng){
+    public void setCameraView(LatLng latLng) {
 
         // Set a boundary to start
-        CameraUpdate center=
+        CameraUpdate center =
                 CameraUpdateFactory.newLatLng(latLng);
 
         // changed the zoom of the camera
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(4);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(4);
 
         // cant do both at once so we have to move camera first
         // then change the camera zoom

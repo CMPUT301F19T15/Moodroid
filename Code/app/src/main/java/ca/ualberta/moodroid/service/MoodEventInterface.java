@@ -18,14 +18,14 @@ public interface MoodEventInterface {
      * @return my events
      */
     public Task<List<MoodEventModel>> getMyEvents();
-
+    
     /**
      * Get a list of all your mood events filtered by a mood
      *
-     * @param mood the mood
+     * @param moodName the mood name
      * @return my events
      */
-    public List<MoodEventModel> getMyEvents(MoodModel mood);
+    public Task<List<MoodEventModel>> getMyEvents(String moodName);
 
     /**
      * Get a single mood event by internal id

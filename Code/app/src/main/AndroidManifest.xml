@@ -30,16 +30,19 @@
 
         <activity android:name=".ui.Notifications" />
         <activity android:name=".ui.Map" />
+        <activity android:name=".ui.FriendMap" />
         <activity android:name=".ui.MoodHistory" />
         <activity android:name=".ui.SignUp" />
         <activity android:name=".ui.FriendsMoods" />
+        <activity android:name=".ui.AddLocation" />
         <activity android:name=".ui.Profile" />
         <activity android:name=".ui.AddMood" />
         <activity android:name=".ui.AddMoodDetail" />
-        <activity android:name=".ui.ViewMoodDetail"/>
+        <activity android:name=".ui.ViewMoodDetail" />
         <activity android:name=".ui.AddFriend" />
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
