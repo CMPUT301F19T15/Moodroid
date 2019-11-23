@@ -29,6 +29,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
@@ -48,8 +49,10 @@ import butterknife.OnClick;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.MoodEventService;
 
 import static android.view.View.GONE;
 
@@ -186,6 +189,9 @@ public class EditMoodDetail extends AppCompatActivity {
      */
     final Calendar calendar = Calendar.getInstance();
 
+    //id of the moodEvent to edit
+    String id;
+
     /**
      * The initial UI is built here, using data from the last activity to dynamically display the
      * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
@@ -197,12 +203,37 @@ public class EditMoodDetail extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        id = getIntent().getStringExtra("eventId");
+        MoodEventService moodEvent = new MoodEventService();
+        //gets the mood event by id
+        moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
+            @Override
+            public void onSuccess(MoodEventModel moodEventModel) {
+                //For some reason internalid is set to null
+                moodEventModel.setInternalId(id);
+                //set social situation
+                moodEventModel.getSituation();
+                //set location
+                moodEventModel.getLocation();
+                //set reason
+                if(moodEventModel.getReasonText().length()>0){
+                    reason_text.setText(moodEventModel.getReasonText());
+                }
+                else if(moodEventModel.getReasonImageUrl().length()>0){
+                    url = moodEventModel.getReasonImageUrl();
+                }
+            }
+        });
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_mood_detail);
         ButterKnife.bind(this);
 
         this.date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(new Date()));
         this.time.setText(new SimpleDateFormat("HH:mm", Locale.US).format(new Date()));
+
+
 
         //initializing firebase storage
         storage = FirebaseStorage.getInstance();
@@ -268,17 +299,6 @@ public class EditMoodDetail extends AppCompatActivity {
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if a photo has previously been selected, delete that photo from Firestore before
-                //choosing a new one
-                if(hasPhoto){
-                    //delete current photo before proceeding
-                    ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("DELETION/","Photo deleted.");
-                        }
-                    });
-                }
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -358,21 +378,24 @@ public class EditMoodDetail extends AppCompatActivity {
     }
 
     /**
-     * On click of the confirm button, create the new mood event and direct the user to the mood history view
+     * On click of the confirm button, update the mood event
      */
     @OnClick(R.id.add_detail_confirm_btn)
     public void confirmClick() {
+        //set moodEvent
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
         moodEvent.setSituation(social_situation.getSelectedItem().toString());
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
         moodEvent.setReasonImageUrl(url);
-        mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+
+        //update MoodEvent
+        MoodEventRepository moodEventRepository = new MoodEventRepository();
+        moodEventRepository.update(moodEvent).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                Log.d("EVENT/CREATE", "Created new mood event: " + modelInterface.getInternalId());
-                startActivity(new Intent(EditMoodDetail.this, MoodHistory.class));
+            public void onComplete(ModelInterface modelInterface) {
+                Log.d("Update Result:", "Successful");
             }
         });
     }

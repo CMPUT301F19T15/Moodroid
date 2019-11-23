@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
+import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 
 import static android.graphics.Color.parseColor;
@@ -43,6 +45,7 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        //ViewGroup parent = ((ViewGroup) getView().getParent());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.edit_delete_fragment, null);
@@ -68,9 +71,22 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                             public void onSuccess(MoodEventModel moodEventModel) {
                                 //For some reason internalid is set to null
                                 moodEventModel.setInternalId(id);
+                                String mood = moodEventModel.getMoodName();
                                 Intent intent = new Intent(getActivity(), EditMoodDetail.class);
                                 intent.putExtra("eventId", moodEventModel.getInternalId());
-                                startActivity(intent);
+
+                                MoodRepository moodRepository = new MoodRepository();
+                                moodRepository.where("name", mood).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+                                    @Override
+                                    public void onSuccess(List<ModelInterface> modelInterfaces) {
+                                        MoodModel moodModel = (MoodModel) modelInterfaces;
+                                        intent.putExtra("emoji", moodModel.getEmoji());
+                                        intent.putExtra("mood_name", moodModel.getName());
+                                        intent.putExtra("hex", moodModel.getColor());
+                                        startActivity(intent);
+                                    }
+                                });
+
                             }
                         });
 
@@ -91,6 +107,8 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d("RESULT/DELETE", "Model Deleted");
+                                        //TODO: Need to update the list to show delete
+                                        //((MoodHistory) getActivity().updateListView());
                                     }
                                 });
                             }

@@ -32,6 +32,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
+import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
 
@@ -337,7 +338,35 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      */
     @Override
     public void onListClick(int position) {
-        openEditDeleteDialog(position);
+        MoodEventModel moodEventModel = moodList.get(position);
+        //gets the mood event by id
+        String id = moodEventModel.getInternalId();
+        MoodEventService moodEvent = new MoodEventService();
+        moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
+            @Override
+            public void onSuccess(MoodEventModel moodEventModel) {
+                //For some reason internalid is set to null
+                moodEventModel.setInternalId(id);
+                String mood = moodEventModel.getMoodName();
+                Intent intent = new Intent(MoodHistory.this, EditMoodDetail.class);
+                intent.putExtra("eventId", moodEventModel.getInternalId());
+
+                //gets mood details to pass in
+                MoodRepository moodRepository = new MoodRepository();
+                moodRepository.where("name", mood).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+                    @Override
+                    public void onSuccess(List<ModelInterface> modelInterfaces) {
+                        MoodModel moodModel = (MoodModel) modelInterfaces;
+                        intent.putExtra("emoji", moodModel.getEmoji());
+                        intent.putExtra("mood_name", moodModel.getName());
+                        intent.putExtra("hex", moodModel.getColor());
+                        startActivity(intent);
+                    }
+                });
+
+            }
+        });
+        //openEditDeleteDialog(position);
     }
 
     @Override
@@ -360,6 +389,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     public void openEditDeleteDialog(int position) {
 
         MoodEventModel moodEvent = moodList.get(position);
+        //Intent intent = new Intent(MoodHistory.this, EditDeleteFragment.class);
         Bundle bundle = new Bundle();
         bundle.putString("eventId", moodEvent.getInternalId());
 
