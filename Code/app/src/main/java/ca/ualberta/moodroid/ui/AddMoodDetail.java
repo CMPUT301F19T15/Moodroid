@@ -178,7 +178,7 @@ public class AddMoodDetail extends AppCompatActivity {
      * This is an array of situations, which are the only options the user gets to pick for the
      * moods "Social situation" data.
      */
-    protected static String[] situations = new String[]{"Alone", "One Other Person", "Two to Several People", "Crowd"};
+    protected static String[] situations = new String[]{"Please select... (optional)", "Alone", "One Other Person", "Two to Several People", "Crowd"};
 
     /**
      * The confirm button. when this button is clicked, it adds the mood to the firebase repository,
@@ -431,7 +431,12 @@ public class AddMoodDetail extends AppCompatActivity {
     public void confirmClick() {
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
-        moodEvent.setSituation(social_situation.getSelectedItem().toString());
+        //social situation is optional
+        if(social_situation.getSelectedItemPosition() == 0){  //position 0 = none selected
+            moodEvent.setSituation(null);
+        } else {
+            moodEvent.setSituation(social_situation.getSelectedItem().toString());
+        }
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
         moodEvent.setReasonImageUrl(url);

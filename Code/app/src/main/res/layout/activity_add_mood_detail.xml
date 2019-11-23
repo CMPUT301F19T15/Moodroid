@@ -219,11 +219,13 @@
                     android:textSize="25sp" />
 
                 <Spinner
-                    android:id="@+id/social_situation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
+                android:id="@+id/social_situation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown" />
 
             </LinearLayout>
 
