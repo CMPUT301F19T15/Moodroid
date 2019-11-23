@@ -153,7 +153,7 @@ public class AddMoodDetail extends AppCompatActivity {
      * This is an array of situations, which are the only options the user gets to pick for the
      * moods "Social situation" data.
      */
-    protected static String[] situations = new String[]{"Please Select a Social Situation (optional)", "Alone", "One Other Person", "Two to Several People", "Crowd"};
+    protected static String[] situations = new String[]{"Please select... (optional)", "Alone", "One Other Person", "Two to Several People", "Crowd"};
 
     /**
      * The confirm button. when this button is clicked, it adds the mood to the firebase repository,
