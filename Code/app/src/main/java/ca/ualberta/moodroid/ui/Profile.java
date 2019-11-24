@@ -65,7 +65,7 @@ public class Profile extends BaseUIActivity {
         ButterKnife.bind(this);
 
         //call to bottom navigation bar listener
-        bottomNavigationView(3);
+        bottomNavigationView(ACTIVITY_NUM);
         setTitle("Profile");
 
         toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);

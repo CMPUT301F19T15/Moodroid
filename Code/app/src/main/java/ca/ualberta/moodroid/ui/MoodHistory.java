@@ -123,6 +123,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,9 +133,8 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         moodEvents = new MoodEventService();
         moods = new MoodService();
         ButterKnife.bind(this);
-
         //Bottom Navigation Bar Listener
-        bottomNavigationView(1);
+        bottomNavigationView(ACTIVITY_NUM);
         setTitle("Mood History");
         filterMood = null;
 
