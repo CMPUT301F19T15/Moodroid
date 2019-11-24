@@ -460,6 +460,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             moodEventModel.getInternalId();
             intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
             intent.putExtra("eventId", moodEventModel.getInternalId());
+            intent.putExtra("caller", MoodHistory.class.toString());
             startActivity(intent);
 
         }
