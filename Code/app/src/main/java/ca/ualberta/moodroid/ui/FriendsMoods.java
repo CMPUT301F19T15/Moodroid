@@ -101,6 +101,7 @@ public class FriendsMoods extends MoodHistory {
             }
         });
 
+
         users.getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
@@ -108,9 +109,9 @@ public class FriendsMoods extends MoodHistory {
                 final int totalUsers = followRequestModels.size();
                 for (FollowRequestModel user : followRequestModels) {
                     // TODO: I need to reinitiate this service otherwise it won't get all the objects.
-                    MoodEventService eventsvc = new MoodEventService();
+
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                    moodEvents.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                         @Override
                         public void onSuccess(List<MoodEventModel> moodEventModels) {
                             currentUsers += 1;
@@ -186,7 +187,7 @@ public class FriendsMoods extends MoodHistory {
 
     @Override
     public void onShortClick(int position) {
-        if(events.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+        if (events.size() != 0) {  //else, if click too fast: size = 0 and app crashes
             MoodEventModel moodEventModel = events.get(position);
             moodEventModel.getInternalId();
             intent = new Intent(FriendsMoods.this, ViewMoodDetail.class);
