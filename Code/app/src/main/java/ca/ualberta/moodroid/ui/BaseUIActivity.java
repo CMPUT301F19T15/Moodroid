@@ -104,7 +104,7 @@ public class BaseUIActivity extends AppCompatActivity {
     /**
      * Setup the bottom navigation bar view and navigation
      */
-    protected void bottomNavigationView(int pageId) {
+    protected void bottomNavigationView(int pageID) {
         //set up bottom navigation bar...go to corresponding activity
         bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
         final AppCompatActivity me = this.getMe();
@@ -131,7 +131,7 @@ public class BaseUIActivity extends AppCompatActivity {
             }
         });
 
-        MenuItem menuItem = menu.getItem(pageId);
+        MenuItem menuItem = menu.getItem(pageID);
         menuItem.setChecked(true);
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

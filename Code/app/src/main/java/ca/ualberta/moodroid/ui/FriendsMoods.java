@@ -84,11 +84,15 @@ public class FriendsMoods extends MoodHistory {
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 
+
+        
+
         //set progress bar to visible until listview is ready to display items
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-        bottomNavigationView(2);
+     
+        bottomNavigationView(ACTIVITY_NUM);
         ButterKnife.bind(this);
         this.setTitle("Friends Mood");
 
@@ -196,6 +200,15 @@ public class FriendsMoods extends MoodHistory {
 
         }
     }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
+
+    }
+
 
 
 }

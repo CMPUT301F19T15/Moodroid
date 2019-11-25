@@ -128,6 +128,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     private ProgressBar progressBar;
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +144,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         progressBar.setVisibility(View.VISIBLE);
 
         //Bottom Navigation Bar Listener
-        bottomNavigationView(1);
+        bottomNavigationView(ACTIVITY_NUM);
         setTitle("Mood History");
         filterMood = null;
 
@@ -485,6 +488,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     @Override
     protected void onResume(){
         super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
         if(checkMapServices()){
             if(mLocationPermissionGranted){
                 getMood();
@@ -494,4 +498,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             }
         }
     }
+
+
+
+
+
 }
