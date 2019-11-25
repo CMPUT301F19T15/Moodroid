@@ -1,58 +1,28 @@
 package ca.ualberta.moodroid.ui;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.api.Authentication;
 import com.google.firebase.firestore.GeoPoint;
-import com.squareup.picasso.Picasso;
 
 
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
 
@@ -64,11 +34,7 @@ public class ViewMoodDetail extends BaseUIActivity {
  * The mood event to be displayed is picked by the user in the MoodHistory activity
  * by clicking on the event.
  */
-////////////////////////NOT YET IMPLEMENTED: show location...wait until map activity is done
-///////////////////////////
-    ///////////////////////////////////
 
-    
     /**
      * The mood event service.
      */
@@ -121,6 +87,11 @@ public class ViewMoodDetail extends BaseUIActivity {
     private TextView situationText;
 
     /**
+     * The text view displaying the location.
+     */
+    private TextView locationText; 
+
+    /**
      * The image view displaying the mood event image.
      */
     private ImageView reasonImage;
@@ -131,9 +102,24 @@ public class ViewMoodDetail extends BaseUIActivity {
     private ImageButton backButton;
 
     /**
+     * The scroll view.
+     */
+    ScrollView scrollView;
+
+    /**
      * The mood event location.
      */
     private GeoPoint location;
+
+    /**
+     * The caller activity.
+     */
+    String callerActivity;
+
+    /**
+     * The friend's user name.
+     */
+    private TextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +129,9 @@ public class ViewMoodDetail extends BaseUIActivity {
         //get the internal id for the mood to be displayed from the intent
         Intent intent = getIntent();
         eventInternalId = intent.getStringExtra("eventId");
+        callerActivity = intent.getStringExtra("caller");
+
+
 
         eventService = new MoodEventService();
 
@@ -154,11 +143,20 @@ public class ViewMoodDetail extends BaseUIActivity {
         dateText = findViewById(R.id.mood_detail_date);
         reasonText = findViewById(R.id.mood_detail_reason);
         situationText = findViewById(R.id.show_social_situation);
+        userName = findViewById(R.id.test);
         reasonImage = findViewById(R.id.photoView);
+        locationText = findViewById(R.id.show_location);
         backButton = findViewById(R.id.detail_view_back_button);
+        scrollView = findViewById(R.id.view_detail_layout);
+
+        //only show username for friend's moods
+        if(callerActivity.equals(FriendsMoods.class.toString())){
+            userName.setVisibility(View.VISIBLE);
+        }
+
         backButton.setVisibility(View.VISIBLE);
-
-
+        banner.setVisibility(View.INVISIBLE);
+        scrollView.setVisibility(View.INVISIBLE);
 
         MoodService moods = new MoodService();
 
@@ -179,6 +177,7 @@ public class ViewMoodDetail extends BaseUIActivity {
                         moodText.setText(mood.getName());
                         timeText.setText(event.getDatetime().split(" ")[0]);
                         dateText.setText(event.getDatetime().split(" ")[1]);
+                        userName.setText("@" + event.getUsername());
                         if (event.getSituation() != null) {
                             situationText.setText(event.getSituation());
                         } else {
@@ -203,11 +202,10 @@ public class ViewMoodDetail extends BaseUIActivity {
                         }
                         //only show the location if the event has a location
                         if (event.getLocation() != null) {
-                            //TODO: show location...mini MAP??? ADDRESS??? wait until map activity is done...
-                            //
-                            //
-                            //
-                            //
+                            GeoPoint geoPoint = event.getLocation();
+                            String latitude = String.valueOf(geoPoint.getLatitude());
+                            String longitude = String.valueOf(geoPoint.getLongitude());
+                            locationText.setText(latitude + "," + longitude);
                         }
                         //change status bar color
                         if (Build.VERSION.SDK_INT >= 21) {
@@ -216,6 +214,8 @@ public class ViewMoodDetail extends BaseUIActivity {
                             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                             window.setStatusBarColor(Color.parseColor(moodModel.getColor()));
                         }
+                        banner.setVisibility(View.VISIBLE);
+                        scrollView.setVisibility(View.VISIBLE);
                     }
                 });
 

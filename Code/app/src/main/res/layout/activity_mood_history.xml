@@ -48,6 +48,10 @@
             android:layout_above="@id/sth"
             android:background="@color/colorPrimary">
 
+            <include
+                layout="@layout/progress_bar">
+            </include>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mood_list_view"
                 android:layout_width="match_parent"

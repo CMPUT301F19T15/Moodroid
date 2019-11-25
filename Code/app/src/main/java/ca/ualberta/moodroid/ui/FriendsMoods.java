@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,6 +65,10 @@ public class FriendsMoods extends MoodHistory {
 
     int currentUsers = 0;
 
+    /**
+     * The progress bar.
+     */
+    private ProgressBar progressBar;
 
     /**
      * Get all the users you follow, and get a list of each users moods - then sort and display the moods
@@ -79,6 +84,14 @@ public class FriendsMoods extends MoodHistory {
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 
+
+        
+
+        //set progress bar to visible until listview is ready to display items
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+     
         bottomNavigationView(ACTIVITY_NUM);
         ButterKnife.bind(this);
         this.setTitle("Friends Mood");
@@ -130,14 +143,15 @@ public class FriendsMoods extends MoodHistory {
                 startActivity(intent);
             }
         });
-//        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //navigate to MoodMap Activity
-//                intent = new Intent(FriendsMoods.this, MoodMap.class);
-//                startActivity(intent);
-//            }
-//        });
+        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
+        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to MoodMap Activity
+                intent = new Intent(FriendsMoods.this, FriendMap.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -171,7 +185,22 @@ public class FriendsMoods extends MoodHistory {
         moodListAdapter = new MoodListAdapter(events, allMoods, true, FriendsMoods.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
+        progressBar.setVisibility(View.INVISIBLE);
     }
+
+    @Override
+    public void onShortClick(int position) {
+        if(events.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+            MoodEventModel moodEventModel = events.get(position);
+            moodEventModel.getInternalId();
+            intent = new Intent(FriendsMoods.this, ViewMoodDetail.class);
+            intent.putExtra("eventId", moodEventModel.getInternalId());
+            intent.putExtra("caller", FriendsMoods.class.toString());
+            startActivity(intent);
+
+        }
+    }
+
 
     @Override
     public void onResume(){
@@ -179,8 +208,6 @@ public class FriendsMoods extends MoodHistory {
         bottomNavigationView(ACTIVITY_NUM);
 
     }
-
-
 
 
 
