@@ -356,7 +356,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
                 moodRepository.where("name", mood).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
                     @Override
                     public void onSuccess(List<ModelInterface> modelInterfaces) {
-                        MoodModel moodModel = (MoodModel) modelInterfaces;
+                        MoodModel moodModel = (MoodModel) modelInterfaces.get(0);
                         intent.putExtra("emoji", moodModel.getEmoji());
                         intent.putExtra("mood_name", moodModel.getName());
                         intent.putExtra("hex", moodModel.getColor());

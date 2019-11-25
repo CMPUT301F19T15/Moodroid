@@ -116,38 +116,39 @@ public class EditMoodDetail extends AppCompatActivity {
     /**
      * The date of the mood, given by the user.
      */
-    @BindView(R.id.mood_detail_date)
+    @BindView(R.id.edit_mood_detail_date)
     protected EditText date;
 
     /**
      * The time of the mood, given by the user
      */
-    @BindView(R.id.mood_detail_time)
+    @BindView(R.id.edit_mood_detail_time)
     protected EditText time;
 
     /**
      * The social situation of the mood, given by the user.
      */
-    @BindView(R.id.social_situation)
+    @BindView(R.id.edit_social_situation)
     protected Spinner social_situation;
+
 
     /**
      * The add photo button.
      */
-    @BindView(R.id.add_photo_button)
+    @BindView(R.id.edit_add_photo_button)
     protected Button addPhotoButton;
 
     /**
      * The remove photo button.
      */
-    @BindView(R.id.remove_photo_button)
+    @BindView(R.id.edit_remove_photo_button)
     protected Button removePhotoButton;
 
 
     /**
      * The reason for the mood, given by the user.
      */
-    @BindView(R.id.mood_detail_reason)
+    @BindView(R.id.edit_mood_detail_reason)
     protected EditText reason_text;
 
     /**
@@ -160,13 +161,13 @@ public class EditMoodDetail extends AppCompatActivity {
      * The confirm button. when this button is clicked, it adds the mood to the firebase repository,
      * and brings the user back to the activity MoodHistory.
      */
-    @BindView(R.id.add_detail_confirm_btn)
+    @BindView(R.id.edit_add_detail_confirm_btn)
     protected Button confirmBtn;
 
     /**
      * The Reason image.
      */
-    @BindView(R.id.photoView)
+    @BindView(R.id.edit_photoView)
     protected ImageView photoView;
 
     /**
@@ -222,6 +223,7 @@ public class EditMoodDetail extends AppCompatActivity {
                 else if(moodEventModel.getReasonImageUrl().length()>0){
                     url = moodEventModel.getReasonImageUrl();
                 }
+
             }
         });
 
@@ -361,7 +363,7 @@ public class EditMoodDetail extends AppCompatActivity {
     /**
      * Show the date picker dialog
      */
-    @OnClick(R.id.mood_detail_date)
+    @OnClick(R.id.edit_mood_detail_date)
     public void dateClick() {
         Log.d("MOODDETAIL/DATE", "Date clicked!");
         new DatePickerDialog(EditMoodDetail.this, dateDialog, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -371,7 +373,7 @@ public class EditMoodDetail extends AppCompatActivity {
     /**
      * Show the time picker dialog
      */
-    @OnClick(R.id.mood_detail_time)
+    @OnClick(R.id.edit_mood_detail_time)
     public void timeClick() {
         Log.d("MOODDETAIL/DATE", "Time clicked!");
         new TimePickerDialog(EditMoodDetail.this, timeDialog, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
@@ -380,7 +382,7 @@ public class EditMoodDetail extends AppCompatActivity {
     /**
      * On click of the confirm button, update the mood event
      */
-    @OnClick(R.id.add_detail_confirm_btn)
+    @OnClick(R.id.edit_add_detail_confirm_btn)
     public void confirmClick() {
         //set moodEvent
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
@@ -390,6 +392,7 @@ public class EditMoodDetail extends AppCompatActivity {
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
         moodEvent.setReasonImageUrl(url);
 
+
         //update MoodEvent
         MoodEventRepository moodEventRepository = new MoodEventRepository();
         moodEventRepository.update(moodEvent).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
@@ -398,6 +401,7 @@ public class EditMoodDetail extends AppCompatActivity {
                 Log.d("Update Result:", "Successful");
             }
         });
+
     }
 
 

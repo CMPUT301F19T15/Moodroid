@@ -27,7 +27,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/date_time_text"
+                    android:id="@+id/edit_date_time_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -42,7 +42,7 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/mood_detail_date"
+                        android:id="@+id/edit_mood_detail_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -56,7 +56,7 @@
                         android:textColor="#FFFFFF" />
 
                     <EditText
-                        android:id="@+id/mood_detail_time"
+                        android:id="@+id/edit_mood_detail_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -85,7 +85,7 @@
 
 
                     <TextView
-                        android:id="@+id/reason_text"
+                        android:id="@+id/edit_reason_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -97,23 +97,23 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/add_photo_button"
+                        android:id="@+id/edit_add_photo_button"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentRight="true"
                         android:textSize="12sp"
-                        android:layout_alignBottom="@id/reason_text"
+                        android:layout_alignBottom="@id/edit_reason_text"
                         android:text="add photo">
                     </Button>
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/remove_photo_button"
+                        android:id="@+id/edit_remove_photo_button"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentRight="true"
                         android:textSize="11sp"
                         android:visibility="gone"
-                        android:layout_alignBottom="@id/reason_text"
+                        android:layout_alignBottom="@id/edit_reason_text"
                         android:text="remove photo">
                     </Button>
 
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/mood_detail_reason"
+                        android:id="@+id/edit_mood_detail_reason"
                         style="@style/Widget.AppCompat.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/Location_text"
+                    android:id="@+id/edit_location_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -156,7 +156,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
                 <EditText
-                    android:id="@+id/mood_detail_location"
+                    android:id="@+id/edit_mood_detail_location"
                     style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/situation_text"
+                    android:id="@+id/edit_situation_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -187,7 +187,7 @@
                     android:textSize="25sp" />
 
                 <Spinner
-                    android:id="@+id/social_situation"
+                    android:id="@+id/edit_social_situation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/btn_dropdown"
@@ -202,7 +202,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/add_detail_confirm_btn"
+                    android:id="@+id/edit_add_detail_confirm_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -215,7 +215,7 @@
                     android:scaleType="fitXY"
                     android:adjustViewBounds="true"
                     android:layout_gravity="center"
-                    android:id="@+id/photoView">
+                    android:id="@+id/edit_photoView">
 
                 </ImageView>
             </LinearLayout>
