@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -132,6 +133,11 @@ public class ViewMoodDetail extends BaseUIActivity {
     private ImageButton backButton;
 
     /**
+     * The scroll view.
+     */
+    ScrollView scrollView;
+
+    /**
      * The mood event location.
      */
     private GeoPoint location;
@@ -158,9 +164,11 @@ public class ViewMoodDetail extends BaseUIActivity {
         reasonImage = findViewById(R.id.photoView);
         locationText = findViewById(R.id.show_location);
         backButton = findViewById(R.id.detail_view_back_button);
+        scrollView = findViewById(R.id.view_detail_layout);
+
         backButton.setVisibility(View.VISIBLE);
-
-
+        banner.setVisibility(View.INVISIBLE);
+        scrollView.setVisibility(View.INVISIBLE);
 
         MoodService moods = new MoodService();
 
@@ -217,6 +225,8 @@ public class ViewMoodDetail extends BaseUIActivity {
                             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                             window.setStatusBarColor(Color.parseColor(moodModel.getColor()));
                         }
+                        banner.setVisibility(View.VISIBLE);
+                        scrollView.setVisibility(View.VISIBLE);
                     }
                 });
 
