@@ -116,7 +116,9 @@ public class FriendsMoods extends MoodHistory {
                         public void onSuccess(List<MoodEventModel> moodEventModels) {
                             currentUsers += 1;
                             Log.d("FRIENDSMOOD/TASK", "Task completed for: " + user.getRequesteeUsername() + ", size=" + moodEventModels.size());
-                            events.addAll(moodEventModels);
+                            // only get the latest one
+                            reverseSort(moodEventModels);
+                            events.add(moodEventModels.get(0));
                             if (currentUsers >= totalUsers) {
                                 Log.d("FRIENDSMOOD/USERCOUNT", currentUsers + "");
                                 Log.d("FRIENDSMOOD/SIZE", events.size() + "");
@@ -153,6 +155,10 @@ public class FriendsMoods extends MoodHistory {
 
     @Override
     protected void reverseSort() {
+        this.reverseSort(this.events);
+    }
+
+    protected void reverseSort(List<MoodEventModel> events) {
         Collections.sort(events, new Comparator<MoodEventModel>() {
             @Override
             public int compare(MoodEventModel mood1, MoodEventModel mood2) {
