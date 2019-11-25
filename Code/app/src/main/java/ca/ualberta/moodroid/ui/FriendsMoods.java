@@ -172,4 +172,16 @@ public class FriendsMoods extends MoodHistory {
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
+
+    }
+
+
+
+
+
 }

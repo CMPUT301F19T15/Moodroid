@@ -476,6 +476,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     @Override
     protected void onResume(){
         super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
         if(checkMapServices()){
             if(mLocationPermissionGranted){
                 getMood();
@@ -485,4 +486,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             }
         }
     }
+
+
+
+
+
 }

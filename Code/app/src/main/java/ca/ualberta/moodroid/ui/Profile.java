@@ -112,6 +112,18 @@ public class Profile extends BaseUIActivity {
         });
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
+
+    }
+
+
+
+
+
+
 }
 
 

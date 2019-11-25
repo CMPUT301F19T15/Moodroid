@@ -113,7 +113,14 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
         return;
     }
 
-    
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
+
+    }
 
 
 }
