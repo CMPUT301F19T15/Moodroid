@@ -191,6 +191,7 @@ public class FriendsMoods extends MoodHistory {
             moodEventModel.getInternalId();
             intent = new Intent(FriendsMoods.this, ViewMoodDetail.class);
             intent.putExtra("eventId", moodEventModel.getInternalId());
+            intent.putExtra("caller", FriendsMoods.class.toString());
             startActivity(intent);
 
         }
