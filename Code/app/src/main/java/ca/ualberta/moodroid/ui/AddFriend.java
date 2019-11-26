@@ -43,11 +43,6 @@ public class AddFriend extends AppCompatActivity {
     Intent intent;
 
     /**
-     * the repository that stores user data
-     */
-    UserRepository users;
-
-    /**
      * The repository that stores all request related data.
      */
     FollowRequestRepository requests;
@@ -76,7 +71,7 @@ public class AddFriend extends AppCompatActivity {
 
     /**
      * This is the edit text field that the user interacts with, filling out the username of the
-     *  person they wish to add to their friends list.
+     * person they wish to add to their friends list.
      */
     @BindView(R.id.username)
     EditText usernameField;
@@ -98,7 +93,6 @@ public class AddFriend extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
         ButterKnife.bind(this);
-        this.users = new UserRepository();
         this.requests = new FollowRequestRepository();
         this.me = AuthenticationService.getInstance().getUsername();
 
@@ -130,14 +124,14 @@ public class AddFriend extends AppCompatActivity {
         final String name = this.usernameField.getText().toString();
 
         // TODO: refactor to use the userService
-        users.where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+        new UserRepository().where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
             public void onComplete(@NonNull Task<ModelInterface> task) {
                 // We were able to find the user
                 if (task.isSuccessful()) {
                     UserModel user = (UserModel) task.getResult();
                     Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
-                    requests.where("requesteeUsername", user.getUsername()).where("requesterUsername", me).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+                    new FollowRequestRepository().where("requesteeUsername", user.getUsername()).where("requesterUsername", me).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
                         @Override
                         public void onComplete(@NonNull Task<ModelInterface> task) {
                             if (task.isSuccessful()) {
@@ -148,7 +142,7 @@ public class AddFriend extends AppCompatActivity {
                                 Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                             } else {
                                 //check if user is trying to follow themselves
-                                if (!me.equals(name)){
+                                if (!me.equals(name)) {
                                     // create a new follow request
                                     Log.d("ADDUSER/REQUEST", "Request non-existent");
                                     FollowRequestModel request = new FollowRequestModel();
@@ -167,21 +161,19 @@ public class AddFriend extends AppCompatActivity {
                                     });
                                 }
                                 //If you try to follow yourself
-                                else{
+                                else {
                                     statusField.setText("You cannot follow yourself.");
                                 }
 
                             }
                         }
                     });
-                }
-                else {
+                } else {
                     // the specified user doesn't exist
                     usernameField.setError("That username does not exist.");
                     Log.d("ADDUSER/FAILURE", "Couldn't find the user: " + name);
                 }
             }
         });
-        users = new UserRepository();
     }
 }

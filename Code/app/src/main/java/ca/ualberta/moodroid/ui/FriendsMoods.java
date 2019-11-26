@@ -79,7 +79,7 @@ public class FriendsMoods extends MoodHistory {
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 
-        bottomNavigationView();
+        bottomNavigationView(2);
         ButterKnife.bind(this);
         this.setTitle("Friends Mood");
 
@@ -130,14 +130,15 @@ public class FriendsMoods extends MoodHistory {
                 startActivity(intent);
             }
         });
-//        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //navigate to MoodMap Activity
-//                intent = new Intent(FriendsMoods.this, MoodMap.class);
-//                startActivity(intent);
-//            }
-//        });
+        toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
+        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navigate to MoodMap Activity
+                intent = new Intent(FriendsMoods.this, FriendMap.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -172,4 +173,18 @@ public class FriendsMoods extends MoodHistory {
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
+
+    @Override
+    public void onShortClick(int position) {
+        if(events.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+            MoodEventModel moodEventModel = events.get(position);
+            moodEventModel.getInternalId();
+            intent = new Intent(FriendsMoods.this, ViewMoodDetail.class);
+            intent.putExtra("eventId", moodEventModel.getInternalId());
+            startActivity(intent);
+
+        }
+    }
+
+
 }

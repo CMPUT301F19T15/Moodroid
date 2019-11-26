@@ -51,7 +51,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
      * The Context.
      */
     static Context context;
-
     private OnListListener mOnListListener;
 
     /**
@@ -83,8 +82,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
          * Same as an onClickListener but for items in a custom array display.
          */
         OnListListener onListListener;
-
-
+        
         /**
          * Instantiates a new View holder.
          *
@@ -101,7 +99,11 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
             listItemBackgroundView = itemView.findViewById(R.id.list_item_background);
 
             this.onListListener = onListListener;
-            itemView.setOnLongClickListener(this);
+
+            //do not allow longClick (which starts the Edit/Delete fragment) for the FriendsMoods list
+            if(!(onListListener instanceof FriendsMoods)){
+                itemView.setOnLongClickListener(this);
+            }
             itemView.setOnClickListener(this);
         }
 
@@ -130,8 +132,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
         this.showUsername = showUsername;
         context = context;
         this.moods = moods;
-
-
         this.mOnListListener = onListListener;
 
     }
@@ -141,18 +141,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //pass content view in
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mood_history_content, parent, false);
-        //view.setOnLongClickListener(new View.OnLongClickListener() {
-        //    @Override
-        //    public boolean onLongClick(View view) {
-        ///////////////////////////////////////////////
-////////////////////////////////go to fragment....delete from db using moodEventService.deleteEvent
-        ////////////////////////////////////////////////////
-        //        openEditDeleteDialog();
-        //        return false;
-        //    }
-        //});
-
-
         ViewHolder viewHolder = new ViewHolder(view, mOnListListener);
         return viewHolder;
     }

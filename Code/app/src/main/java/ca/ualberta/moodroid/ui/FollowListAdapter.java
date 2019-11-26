@@ -1,11 +1,13 @@
 package ca.ualberta.moodroid.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,8 @@ import java.util.Locale;
 
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
+import ca.ualberta.moodroid.model.MoodEventModel;
+import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
 /**
@@ -58,10 +62,14 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
          * The Accept button. A user can click this button to accept a follow request.
          */
         public Button acceptButton;
+
+        public TextView dateText;
+
         /**
          * The On list listener, which is just a listener object for an item in a list, works like
          * a listener for a button.
          */
+        public ImageView background;
         FollowListAdapter.OnListListener onListListener;
 
 
@@ -79,7 +87,8 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             this.requestText = itemView.findViewById(R.id.mood_list_view_moodText);
             this.denyButton = itemView.findViewById(R.id.follow_deny_btn);
             this.acceptButton = itemView.findViewById(R.id.follow_accept_btn);
-
+            this.dateText = itemView.findViewById(R.id.mood_list_date);
+            this.background = itemView.findViewById(R.id.list_item_background);
 
         }
 
@@ -158,18 +167,33 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         //assign values and display items in list
         // TODO: show background color base on state and hide buttons if state != undecided
         FollowRequestModel moodObject = requestList.get(position);
+        holder.dateText.setText(new SimpleDateFormat("MM/dd/yyyy hh:mm a").format(moodObject.dateObject()));
+        if (moodObject.getRequesteeUsername().equals(AuthenticationService.getInstance().getUsername())) {
+            if (moodObject.getState().equals(FollowRequestModel.REQUESTED_STATE)) {
+                holder.requestText.setText("@" + moodObject.getRequesterUsername() + " requested to be friends on " + new SimpleDateFormat("MMMM dd yyyy").format(moodObject.dateObject()));
+            } else if (moodObject.getState().equals(FollowRequestModel.ACCEPT_STATE)) {
+                setAccepted(holder, moodObject);
+            } else if (moodObject.getState().equals(FollowRequestModel.DENY_STATE)) {
+                setDenied(holder, moodObject);
+            } else {
+                holder.requestText.setText("Request from @" + moodObject.getRequesterUsername());
 
-        if (moodObject.getState().equals(FollowRequestModel.REQUESTED_STATE)) {
-            holder.requestText.setText("@" + moodObject.getRequesterUsername() + " requested to be friends on " + new SimpleDateFormat("MMMM dd yyyy").format(moodObject.dateObject()));
-        } else if (moodObject.getState().equals(FollowRequestModel.ACCEPT_STATE)) {
-            setAccepted(holder, moodObject);
-        } else if (moodObject.getState().equals(FollowRequestModel.DENY_STATE)) {
-            setDenied(holder, moodObject);
+                Log.e("NOTICATIONS/STATE", "Unknown state for " + moodObject.getInternalId() + " state=" + moodObject.getState());
+            }
+        } else if (moodObject.getRequesterUsername().equals(AuthenticationService.getInstance().getUsername())) {
+            // this isn't our object, so we should be able to alter state
+            holder.denyButton.setVisibility(View.INVISIBLE);
+            holder.acceptButton.setVisibility(View.INVISIBLE);
+
+            if (moodObject.getState().equals(FollowRequestModel.REQUESTED_STATE)) {
+                holder.requestText.setText("Awaiting @" + moodObject.getRequesteeUsername() + "'s response.");
+            } else {
+                holder.requestText.setText("@" + moodObject.getRequesteeUsername() + " " + moodObject.getState() + " your follow request.");
+            }
         } else {
-            holder.requestText.setText("Request from @" + moodObject.getRequesterUsername());
-
-            Log.e("NOTICATIONS/STATE", "Unknown state for " + moodObject.getInternalId() + " state=" + moodObject.getState());
+            Log.e("NOTIFICATIONS/DATA", "user recieved a notification for a request not belonging to them...");
         }
+
 
         holder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,8 +240,10 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
      */
     public void setAccepted(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " is following your moods.");
-        holder.denyButton.setVisibility(View.INVISIBLE);
-        holder.acceptButton.setVisibility(View.INVISIBLE);
+
+        holder.denyButton.setVisibility(View.GONE);
+        holder.acceptButton.setVisibility(View.GONE);
+        holder.background.setBackgroundColor(Color.parseColor("#056608"));
 
     }
 
@@ -229,8 +255,11 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
      */
     public void setDenied(ViewHolder holder, FollowRequestModel request) {
         holder.requestText.setText("@" + request.getRequesterUsername() + " was declined.");
-        holder.denyButton.setVisibility(View.INVISIBLE);
-        holder.acceptButton.setVisibility(View.INVISIBLE);
+
+        holder.denyButton.setVisibility(View.GONE);
+        holder.acceptButton.setVisibility(View.GONE);
+        holder.background.setBackgroundColor(Color.parseColor("#8b0000"));
+
     }
 
     @Override
