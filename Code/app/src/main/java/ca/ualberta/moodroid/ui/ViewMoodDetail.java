@@ -20,6 +20,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
@@ -38,7 +41,12 @@ public class ViewMoodDetail extends BaseUIActivity {
     /**
      * The mood event service.
      */
-    private MoodEventService eventService;
+    @Inject
+    MoodEventService eventService;
+
+
+    @Inject
+    MoodService moods;
 
     /**
      * The mood event model.
@@ -89,7 +97,7 @@ public class ViewMoodDetail extends BaseUIActivity {
     /**
      * The text view displaying the location.
      */
-    private TextView locationText; 
+    private TextView locationText;
 
     /**
      * The image view displaying the mood event image.
@@ -125,6 +133,7 @@ public class ViewMoodDetail extends BaseUIActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_mood_detail);
+        ContextGrabber.get().di().inject(ViewMoodDetail.this);
 
         //get the internal id for the mood to be displayed from the intent
         Intent intent = getIntent();
@@ -132,8 +141,7 @@ public class ViewMoodDetail extends BaseUIActivity {
         callerActivity = intent.getStringExtra("caller");
 
 
-
-        eventService = new MoodEventService();
+//        eventService = new MoodEventService();
 
         //initialize all views
         emoji = findViewById(R.id.mood_img);
@@ -150,15 +158,13 @@ public class ViewMoodDetail extends BaseUIActivity {
         scrollView = findViewById(R.id.view_detail_layout);
 
         //only show username for friend's moods
-        if(callerActivity.equals(FriendsMoods.class.toString())){
+        if (callerActivity.equals(FriendsMoods.class.toString())) {
             userName.setVisibility(View.VISIBLE);
         }
 
         backButton.setVisibility(View.VISIBLE);
         banner.setVisibility(View.INVISIBLE);
         scrollView.setVisibility(View.INVISIBLE);
-
-        MoodService moods = new MoodService();
 
         //get the mood event model to be displayed
         eventService.getEventWithId(eventInternalId).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {

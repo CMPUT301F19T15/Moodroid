@@ -116,7 +116,6 @@ public class FriendMap extends Map {
     }
 
 
-
     /**
      * this is to add the map markers to the map
      * <p>
@@ -143,37 +142,37 @@ public class FriendMap extends Map {
         MoodEventRepository moodEvents = new MoodEventRepository();
 
 
-        new UserService().getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
-            @Override
-            public void onSuccess(List<FollowRequestModel> followRequestModels) {
-                mMap.clear();
-                ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
-                final int totalUsers = followRequestModels.size();
-                final MoodEventService eventsvc = new MoodEventService();
-                for (FollowRequestModel user : followRequestModels) 
-                    Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
-                        @Override
-                        public void onSuccess(List<MoodEventModel> moodEventModels) {
-                            for (MoodEventModel event : moodEventModels) {
-                                try {
-                                    // This could have a possible race condition
-                                    for (MoodModel mood : moods) {
-                                        if (mood.getName().equals(event.getMoodName())) {
-                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime() + ", " + event.getSituation());
-                                        }
-                                    }
-
-                                    // just catching any locations that have null values for them
-                                } catch (NullPointerException e) {
-                                    Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage());
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        });
+//        new UserService().getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+//            @Override
+//            public void onSuccess(List<FollowRequestModel> followRequestModels) {
+//                mMap.clear();
+//                ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
+//                final int totalUsers = followRequestModels.size();
+//                final MoodEventService eventsvc = new MoodEventService();
+//                for (FollowRequestModel user : followRequestModels)
+//                    Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
+//                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+//                        @Override
+//                        public void onSuccess(List<MoodEventModel> moodEventModels) {
+//                            for (MoodEventModel event : moodEventModels) {
+//                                try {
+//                                    // This could have a possible race condition
+//                                    for (MoodModel mood : moods) {
+//                                        if (mood.getName().equals(event.getMoodName())) {
+//                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime() + ", " + event.getSituation());
+//                                        }
+//                                    }
+//
+//                                    // just catching any locations that have null values for them
+//                                } catch (NullPointerException e) {
+//                                    Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage());
+//                                }
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//        });
     }
 
 }

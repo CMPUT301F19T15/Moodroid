@@ -17,8 +17,8 @@ public class ServiceModule {
      * @param service the service
      * @return the mood event service
      */
-    @Provides
-    MoodEventService moodEventService(MoodEventService service) {
-        return service;
-    }
+//    @Provides
+//    MoodEventService moodEventService(MoodEventService service) {
+//        return service;
+//    }
 }
