@@ -149,9 +149,8 @@ public class FriendMap extends Map {
                 mMap.clear();
                 ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
                 final int totalUsers = followRequestModels.size();
-                for (FollowRequestModel user : followRequestModels) {
-                    // TODO: I need to reinitiate this service otherwise fit won't get all the objects.
-                    MoodEventService eventsvc = new MoodEventService();
+                final MoodEventService eventsvc = new MoodEventService();
+                for (FollowRequestModel user : followRequestModels) 
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
                     eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                         @Override
@@ -161,7 +160,7 @@ public class FriendMap extends Map {
                                     // This could have a possible race condition
                                     for (MoodModel mood : moods) {
                                         if (mood.getName().equals(event.getMoodName())) {
-                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime()+", "+event.getSituation());
+                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime() + ", " + event.getSituation());
                                         }
                                     }
 

@@ -116,16 +116,18 @@ public class BaseUIActivity extends AppCompatActivity {
                 if (e != null) {
                     Log.e("NOTIFICATION/COUNT", e.getMessage());
                 }
-                Log.d("NOTIFICATION/UPDATE", "new data. Count=" + queryDocumentSnapshots.size());
-                if (queryDocumentSnapshots.size() == 0) {
-                    if (badge != null) {
-                        badge.hide(true);
+                if (queryDocumentSnapshots != null) {
+                    Log.d("NOTIFICATION/UPDATE", "new data. Count=" + queryDocumentSnapshots.size());
+                    if (queryDocumentSnapshots.size() == 0) {
+                        if (badge != null) {
+                            badge.hide(true);
+                        }
+                    } else {
+                        if (badge != null) {
+                            badge.hide(false);
+                        }
+                        setNotificationCount(queryDocumentSnapshots.size());
                     }
-                } else {
-                    if (badge != null) {
-                        badge.hide(false);
-                    }
-                    setNotificationCount(queryDocumentSnapshots.size());
                 }
 
             }
