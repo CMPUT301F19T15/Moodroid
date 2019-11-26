@@ -9,6 +9,7 @@ import ca.ualberta.moodroid.model.MoodModel;
 
 /**
  * We may want to eventually have a filter for geolocation.
+ * implemented in MoodEventService
  */
 public interface MoodEventInterface {
 

@@ -2,6 +2,7 @@ package ca.ualberta.moodroid.service;
 
 /**
  * The interface Authentication interface.
+ * implemented in AuthenticationService
  */
 public interface AuthenticationInterface {
 

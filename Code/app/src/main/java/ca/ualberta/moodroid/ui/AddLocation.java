@@ -48,6 +48,12 @@ import java.util.List;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ * This class creates the main location attributes like the users location, the google map, and
+ * sets up  the UI for the location tasks that are implemented. This file is the main java
+ * source for the users mood locations that are represented on the map
+ */
+
 public class AddLocation extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "Addlocation";

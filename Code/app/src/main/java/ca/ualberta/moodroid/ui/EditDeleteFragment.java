@@ -16,6 +16,10 @@ import ca.ualberta.moodroid.R;
 /**
  * NOT FULLY IMPLEMENTED
  *
+ * the function of this class is to create a simple fragment that appears after the user taps
+ * a mood event in their list, which allows the user to choose to either edit or delete
+ * a mood event.
+ *
  * a fragment for editing data
  */
 public class EditDeleteFragment extends AppCompatDialogFragment {

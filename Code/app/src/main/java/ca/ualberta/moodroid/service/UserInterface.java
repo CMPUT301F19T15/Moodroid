@@ -9,6 +9,7 @@ import ca.ualberta.moodroid.model.UserModel;
 
 /**
  * The interface User interface.
+ * Implemented in UserService
  */
 public interface UserInterface {
 

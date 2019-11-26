@@ -115,6 +115,8 @@ public class AddFriend extends AppCompatActivity {
 
     /**
      * When the send button is clicked, attempt to follow the user.
+     * This creates a request from our app and when the "send" button is tapped it will send
+     * a friend request.
      *
      * @param view the view
      */
@@ -180,7 +182,11 @@ public class AddFriend extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * This sends the request and notifies the user that the request has been
+     * sent. the request pends approval.
+     * @param name
+     */
     protected void sendRequest(String name) {
 
         FollowRequestModel request = new FollowRequestModel();

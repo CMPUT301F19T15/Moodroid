@@ -4,6 +4,7 @@ import android.location.Location;
 
 /**
  * The interface Geolocation interface.
+ * implemented in GeolocationService
  */
 public interface GeolocationInterface {
 

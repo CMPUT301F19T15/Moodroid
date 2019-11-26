@@ -14,6 +14,11 @@ import org.w3c.dom.Text;
 
 import ca.ualberta.moodroid.R;
 
+/**
+ *  This class implements a custom list for our moods to be presentable to the user, it
+ *  uses an array adapter type function to make the spinner match our applications UI
+ */
+
 public class CustomHistorySpinnerAdapter extends ArrayAdapter {
 
     String[] emojis;

@@ -150,7 +150,7 @@ public class FriendMap extends Map {
                 ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
                 final int totalUsers = followRequestModels.size();
                 final MoodEventService eventsvc = new MoodEventService();
-                for (FollowRequestModel user : followRequestModels) 
+                for (FollowRequestModel user : followRequestModels){
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
                     eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                         @Override

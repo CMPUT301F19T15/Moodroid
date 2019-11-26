@@ -2,6 +2,7 @@ package ca.ualberta.moodroid.service;
 
 /**
  * The interface Validation interface.
+ * Implemented in ValidationService
  */
 public interface ValidationInterface {
 

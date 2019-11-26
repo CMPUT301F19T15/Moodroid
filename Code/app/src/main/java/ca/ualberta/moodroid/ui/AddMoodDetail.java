@@ -287,7 +287,10 @@ public class AddMoodDetail extends AppCompatActivity {
             window.setStatusBarColor(Color.parseColor(hex));
         }
 
-
+        /**
+         * below are the listeners that the user will interact with to set all of the specific
+         * details of their mood event.
+         */
         dateDialog = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {

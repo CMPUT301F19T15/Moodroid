@@ -103,6 +103,7 @@ public class BaseUIActivity extends AppCompatActivity {
 
     /**
      * Setup the bottom navigation bar view and navigation
+     * This sets the bottom nav bar that is used in our 4 main activities.
      */
     protected void bottomNavigationView(int pageID) {
         //set up bottom navigation bar...go to corresponding activity
@@ -110,6 +111,10 @@ public class BaseUIActivity extends AppCompatActivity {
         final AppCompatActivity me = this.getMe();
         Menu menu = bottomNavigationViewEx.getMenu();
 
+        /**
+         * the block below updates the nav bar visually if there are any notifications that
+         * have come in for the user to check
+         */
         FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", AuthenticationService.getInstance().getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -132,7 +137,13 @@ public class BaseUIActivity extends AppCompatActivity {
 
             }
         });
-
+        /**
+         * This block below is the main logic for the nav bars function, it uses a switch
+         * that detects the tap from the user on any of the main 4 pages, and switches to
+         * the correct activity, each icon on the nav bar reflects the correct page the app
+         * is displaying, and the bar also functions correctly visually if the user uses the back
+         * button.
+         */
         MenuItem menuItem = menu.getItem(pageID);
         menuItem.setChecked(true);
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

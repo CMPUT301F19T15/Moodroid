@@ -43,6 +43,8 @@ import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 /**
  * Get the mood history for a logged in user
+ * This is the main page the user will see after logging into the app. the user
+ * will always be brought to this page first when the app is run.
  */
 public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
 

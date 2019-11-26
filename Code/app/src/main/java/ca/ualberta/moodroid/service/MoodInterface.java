@@ -8,6 +8,7 @@ import ca.ualberta.moodroid.model.MoodModel;
 
 /**
  * The interface Mood interface.
+ * Implemented in MoodService
  */
 public interface MoodInterface {
 
