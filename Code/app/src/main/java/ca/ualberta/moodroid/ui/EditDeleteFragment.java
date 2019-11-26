@@ -108,13 +108,11 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                                     public void onSuccess(Void aVoid) {
                                         Log.d("RESULT/DELETE", "Model Deleted");
                                         //TODO: Need to update the list to show delete
-                                        //((MoodHistory) getActivity().updateListView());
+                                        ((MoodHistory) getActivity()).getMood();
                                     }
                                 });
                             }
                         });
-
-
 
                     }
                 });

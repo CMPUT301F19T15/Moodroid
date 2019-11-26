@@ -215,7 +215,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
  * This gets all mood events to be displayed and updates the list view.
  */
     }
-    private void getMood(){
+    public void getMood(){
 
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();
@@ -443,35 +443,8 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      */
     @Override
     public void onListClick(int position) {
-        MoodEventModel moodEventModel = moodList.get(position);
-        //gets the mood event by id
-        String id = moodEventModel.getInternalId();
-        MoodEventService moodEvent = new MoodEventService();
-        moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
-            @Override
-            public void onSuccess(MoodEventModel moodEventModel) {
-                //For some reason internalid is set to null
-                moodEventModel.setInternalId(id);
-                String mood = moodEventModel.getMoodName();
-                Intent intent = new Intent(MoodHistory.this, EditMoodDetail.class);
-                intent.putExtra("eventId", moodEventModel.getInternalId());
 
-                //gets mood details to pass in
-                MoodRepository moodRepository = new MoodRepository();
-                moodRepository.where("name", mood).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
-                    @Override
-                    public void onSuccess(List<ModelInterface> modelInterfaces) {
-                        MoodModel moodModel = (MoodModel) modelInterfaces.get(0);
-                        intent.putExtra("emoji", moodModel.getEmoji());
-                        intent.putExtra("mood_name", moodModel.getName());
-                        intent.putExtra("hex", moodModel.getColor());
-                        startActivity(intent);
-                    }
-                });
-
-            }
-        });
-        //openEditDeleteDialog(position);
+        openEditDeleteDialog(position);
     }
 
     @Override

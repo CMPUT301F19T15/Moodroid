@@ -111,7 +111,7 @@ public class EditMoodDetail extends AppCompatActivity {
      * it is an object that stores all details filled out by the user in this activity, and
      * is what the main mood feed in MoodHistory is made of.
      */
-    MoodEventModel moodEvent = new MoodEventModel();
+    MoodEventModel moodEvent;
 
     /**
      * The date of the mood, given by the user.
@@ -193,6 +193,12 @@ public class EditMoodDetail extends AppCompatActivity {
     //id of the moodEvent to edit
     String id;
 
+
+
+    protected void setInitialMoodEvent(MoodEventModel model){
+        this.moodEvent = model;
+    }
+
     /**
      * The initial UI is built here, using data from the last activity to dynamically display the
      * mood colour, emoji, and title (this method may change). the rest of the UI is made below,
@@ -210,8 +216,8 @@ public class EditMoodDetail extends AppCompatActivity {
         moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
             @Override
             public void onSuccess(MoodEventModel moodEventModel) {
-                //For some reason internalid is set to null
-                moodEventModel.setInternalId(id);
+
+                setInitialMoodEvent(moodEventModel);
                 //set social situation
                 moodEventModel.getSituation();
                 //set location
@@ -220,7 +226,7 @@ public class EditMoodDetail extends AppCompatActivity {
                 if(moodEventModel.getReasonText().length()>0){
                     reason_text.setText(moodEventModel.getReasonText());
                 }
-                else if(moodEventModel.getReasonImageUrl().length()>0){
+                if(moodEventModel.getReasonImageUrl() != null){
                     url = moodEventModel.getReasonImageUrl();
                 }
 
@@ -395,10 +401,12 @@ public class EditMoodDetail extends AppCompatActivity {
 
         //update MoodEvent
         MoodEventRepository moodEventRepository = new MoodEventRepository();
-        moodEventRepository.update(moodEvent).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+        moodEventRepository.update(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
-            public void onComplete(ModelInterface modelInterface) {
-                Log.d("Update Result:", "Successful");
+            public void onSuccess(ModelInterface modelInterface) {
+                MoodEventModel m = (MoodEventModel) modelInterface;
+
+                Log.d("MOODEVENT/EDIT", "Updated reason: "+m.getReasonText());
             }
         });
 
