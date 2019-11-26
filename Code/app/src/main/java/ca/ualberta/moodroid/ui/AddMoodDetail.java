@@ -66,44 +66,44 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The imageView.
      */
-    private TextView mood_img;
+    protected TextView mood_img;
 
     /**
      * The mood title for the banner.
      */
-    private TextView mood_title;
+    protected TextView mood_title;
 
     /**
      * The banner.
      */
-    private RelativeLayout banner;
+    protected RelativeLayout banner;
 
     /**
 
      * The URI file path to the library photo .
      */
-    private Uri filePath;
+    protected Uri filePath;
 
     /**
      * The url for the photo as a String.
      */
-    private String url;
+    protected String url;
 
     /**
      * A boolean. True indicates that a photo has been uploaded.
      */
-    private boolean hasPhoto;
+    protected boolean hasPhoto;
 
     /**
      * The Firestore Uri for the photo.
      */
-    private Uri urll;
+    protected Uri urll;
 
     /**
      * The firebase storage references.
      */
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
+    protected FirebaseStorage storage;
+    protected StorageReference storageReference;
 
     /**
      * The mood repository is activated below.
@@ -216,7 +216,7 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * new intent
      */
-    private Intent intent;
+    protected Intent intent;
 
     /**
      * The location's latitude and longitude.
@@ -498,7 +498,7 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * This uploads the photo the user picked from their library to the firebase storage.
      */
-    private void uploadPhoto() {
+    protected void uploadPhoto() {
         if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");

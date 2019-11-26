@@ -2,6 +2,7 @@ package ca.ualberta.moodroid.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -36,14 +37,16 @@ import static android.graphics.Color.parseColor;
 
 /**
  * NOT FULLY IMPLEMENTED
- *
+ * <p>
  * a fragment for editing data
  */
 public class EditDeleteFragment extends AppCompatDialogFragment {
 
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //ViewGroup parent = ((ViewGroup) getView().getParent());
 
@@ -52,7 +55,7 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
         Bundle bundle = getArguments();
         final String id = bundle.getString("eventId");
 
-        builder.setView(view)
+        return new AlertDialog.Builder(getActivity()).setView(view)
                 .setTitle("Options")
                 .setMessage("What would you like to do?")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -64,32 +67,13 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                 .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        MoodEventService moodEvent = new MoodEventService();
                         //gets the mood event by id
-                        moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
-                            @Override
-                            public void onSuccess(MoodEventModel moodEventModel) {
-                                //For some reason internalid is set to null
-                                moodEventModel.setInternalId(id);
-                                String mood = moodEventModel.getMoodName();
-                                Intent intent = new Intent(getActivity(), EditMoodDetail.class);
-                                intent.putExtra("eventId", moodEventModel.getInternalId());
-
-                                MoodRepository moodRepository = new MoodRepository();
-                                moodRepository.where("name", mood).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
-                                    @Override
-                                    public void onSuccess(List<ModelInterface> modelInterfaces) {
-                                        MoodModel moodModel = (MoodModel) modelInterfaces;
-                                        intent.putExtra("emoji", moodModel.getEmoji());
-                                        intent.putExtra("mood_name", moodModel.getName());
-                                        intent.putExtra("hex", moodModel.getColor());
-                                        startActivity(intent);
-                                    }
-                                });
-
-                            }
-                        });
-
+                        Intent intent = new Intent(getActivity(), EditMoodDetail.class);
+                        intent.putExtra("eventId", id);
+                        intent.putExtra("emoji", bundle.getString("emoji"));
+                        intent.putExtra("mood_name", bundle.getString("mood_name"));
+                        intent.putExtra("hex", bundle.getString("hex"));
+                        startActivity(intent);
                     }
                 })
                 .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
@@ -115,7 +99,6 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                         });
 
                     }
-                });
-        return builder.create();
+                }).create();
     }
 }
