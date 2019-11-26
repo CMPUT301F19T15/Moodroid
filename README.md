@@ -1,4 +1,4 @@
-https://travis-ci.com/CMPUT301F19T15/Moodroid.svg?branch=master
+![CI Status](https://travis-ci.com/CMPUT301F19T15/Moodroid.svg?branch=master)
 
 # Moodroid
 
