@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -455,6 +454,10 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * After choosing a photo from the library, this displays the image in the photoView field,
      * and saves the path to the photo in the filePath variable.
+     *
+     * After adding a location this will display remove location button
+     * and get rid of add location button
+     * it will also turn the lat and lon to a geopoint
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
