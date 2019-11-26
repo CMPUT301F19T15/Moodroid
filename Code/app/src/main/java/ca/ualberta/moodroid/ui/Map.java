@@ -131,12 +131,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         // gets the username of the user and saves it to the string to use later
         myUserName = AuthenticationService.getInstance().getUsername();
 
-        new MoodService().getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
-            @Override
-            public void onSuccess(List<MoodModel> moodModels) {
-                moods = moodModels;
-            }
-        });
 
         // setting the view to the mood maps view
         setContentView(R.layout.activity_my_mood_maps);
@@ -271,8 +265,15 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             }
         }
 
-        // call to add to map
-        addMapMarkers();
+        new MoodService().getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+            @Override
+            public void onSuccess(List<MoodModel> moodModels) {
+                moods = moodModels;
+                // call to add to map
+                addMapMarkers();
+            }
+        });
+
 
     }
 
@@ -292,7 +293,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * - date time as title
      * - situation as snippit
      */
-    private void addMapMarkers() {
+    protected void addMapMarkers() {
 
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
