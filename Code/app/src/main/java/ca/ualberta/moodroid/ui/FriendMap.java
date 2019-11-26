@@ -13,6 +13,9 @@ import com.google.maps.android.ui.IconGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
@@ -47,6 +50,13 @@ public class FriendMap extends Map {
      */
     private static final String TAG = "Friend maps activity";
 
+    @Inject
+    UserService users;
+
+
+    @Inject
+    MoodEventService events;
+
 
     /**
      * New instance map.
@@ -72,6 +82,7 @@ public class FriendMap extends Map {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContextGrabber.get().di().inject(FriendMap.this);
 
         toolBarText = "Friends Moods";
         toolBarTextView.setText(toolBarText);
@@ -142,37 +153,36 @@ public class FriendMap extends Map {
         MoodEventRepository moodEvents = new MoodEventRepository();
 
 
-//        new UserService().getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
-//            @Override
-//            public void onSuccess(List<FollowRequestModel> followRequestModels) {
-//                mMap.clear();
-//                ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
-//                final int totalUsers = followRequestModels.size();
-//                final MoodEventService eventsvc = new MoodEventService();
-//                for (FollowRequestModel user : followRequestModels)
-//                    Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-//                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
-//                        @Override
-//                        public void onSuccess(List<MoodEventModel> moodEventModels) {
-//                            for (MoodEventModel event : moodEventModels) {
-//                                try {
-//                                    // This could have a possible race condition
-//                                    for (MoodModel mood : moods) {
-//                                        if (mood.getName().equals(event.getMoodName())) {
-//                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime() + ", " + event.getSituation());
-//                                        }
-//                                    }
-//
-//                                    // just catching any locations that have null values for them
-//                                } catch (NullPointerException e) {
-//                                    Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage());
-//                                }
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        });
+        users.getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+            @Override
+            public void onSuccess(List<FollowRequestModel> followRequestModels) {
+                mMap.clear();
+                ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
+                final int totalUsers = followRequestModels.size();
+                for (FollowRequestModel user : followRequestModels) {
+                    Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
+                    events.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                        @Override
+                        public void onSuccess(List<MoodEventModel> moodEventModels) {
+                            for (MoodEventModel event : moodEventModels) {
+                                try {
+                                    // This could have a possible race condition
+                                    for (MoodModel mood : moods) {
+                                        if (mood.getName().equals(event.getMoodName())) {
+                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime() + ", " + event.getSituation());
+                                        }
+                                    }
+
+                                    // just catching any locations that have null values for them
+                                } catch (NullPointerException e) {
+                                    Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage());
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
 }

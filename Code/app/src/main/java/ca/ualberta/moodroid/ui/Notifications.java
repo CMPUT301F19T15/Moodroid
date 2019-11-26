@@ -111,7 +111,7 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
         moodListRecyclerView = findViewById(R.id.notification_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(Notifications.this);
-        moodListAdapter = new FollowListAdapter(requestList, users, Notifications.this);
+        moodListAdapter = new FollowListAdapter(requestList, Notifications.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }

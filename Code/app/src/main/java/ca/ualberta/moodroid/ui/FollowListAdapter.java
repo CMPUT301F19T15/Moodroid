@@ -111,13 +111,11 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
      * Instantiates a new Follow list adapter.
      *
      * @param requestList    the request list
-     * @param userService    the user service
      * @param onListListener the on list listener
      */
-    public FollowListAdapter(ArrayList<FollowRequestModel> requestList, UserService userService, OnListListener onListListener) {
+    public FollowListAdapter(ArrayList<FollowRequestModel> requestList, OnListListener onListListener) {
 
         this.requestList = requestList;
-        this.userService = userService;
         context = context;
         this.mOnListListener = onListListener;
 
