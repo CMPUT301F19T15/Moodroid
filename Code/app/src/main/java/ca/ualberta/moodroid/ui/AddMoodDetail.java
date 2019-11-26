@@ -43,9 +43,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -78,7 +81,6 @@ public class AddMoodDetail extends AppCompatActivity {
     private RelativeLayout banner;
 
     /**
-
      * The URI file path to the library photo .
      */
     private Uri filePath;
@@ -107,8 +109,12 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The mood repository is activated below.
      */
-// creating the mood repo
-    final MoodEventRepository mood = new MoodEventRepository();
+    @Inject
+    MoodEventRepository mood;
+
+
+    @Inject
+    AuthenticationService auth;
 
     /**
      * The mood event model is created below. This is essentially the frame for a mood event
@@ -162,7 +168,7 @@ public class AddMoodDetail extends AppCompatActivity {
      * location text
      */
     @BindView(R.id.mood_detail_location)
-    protected  TextView locationText;
+    protected TextView locationText;
 
     protected GeoPoint moodLocation;
 
@@ -189,8 +195,8 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The Reason image.
      */
-     @BindView(R.id.photoView)
-     protected ImageView photoView;
+    @BindView(R.id.photoView)
+    protected ImageView photoView;
 
     /**
      * The Firestore storage reference.
@@ -238,6 +244,7 @@ public class AddMoodDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_mood_detail);
         ButterKnife.bind(this);
+        ContextGrabber.get().di().inject(AddMoodDetail.this);
 
         this.date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(new Date()));
         this.time.setText(new SimpleDateFormat("HH:mm", Locale.US).format(new Date()));
@@ -312,12 +319,12 @@ public class AddMoodDetail extends AppCompatActivity {
             public void onClick(View view) {
                 //if a photo has previously been selected, delete that photo from Firestore before
                 //choosing a new one
-                if(hasPhoto){
+                if (hasPhoto) {
                     //delete current photo before proceeding
                     ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d("DELETION/","Photo deleted.");
+                            Log.d("DELETION/", "Photo deleted.");
                         }
                     });
                 }
@@ -431,13 +438,13 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
         //social situation is optional
-        if(social_situation.getSelectedItemPosition() == 0){  //position 0 = none selected
+        if (social_situation.getSelectedItemPosition() == 0) {  //position 0 = none selected
             moodEvent.setSituation(null);
         } else {
             moodEvent.setSituation(social_situation.getSelectedItem().toString());
         }
         moodEvent.setMoodName(mood_title.getText().toString());
-        moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
+        moodEvent.setUsername(auth.getUsername());
         moodEvent.setReasonImageUrl(url);
         moodEvent.setLocation(moodLocation);
 
@@ -454,7 +461,7 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * After choosing a photo from the library, this displays the image in the photoView field,
      * and saves the path to the photo in the filePath variable.
-     *
+     * <p>
      * After adding a location this will display remove location button
      * and get rid of add location button
      * it will also turn the lat and lon to a geopoint
@@ -478,13 +485,12 @@ public class AddMoodDetail extends AppCompatActivity {
             uploadPhoto();
             addPhotoButton.setVisibility(GONE);
             removePhotoButton.setVisibility(View.VISIBLE);
-        }
-        else if(requestCode == 2 && resultCode == RESULT_OK){
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
             lat = data.getStringExtra("lat");
             lon = data.getStringExtra("lon");
             //Toast.makeText(this, "lat is " + lat + "lon is " + lon, Toast.LENGTH_SHORT).show();    ////delete this :)
             //latLng = data.getStringExtra("latlng");
-            String loc = lat + ","+ lon;
+            String loc = lat + "," + lon;
             locationText.setText(loc);
 
             Double lati = Double.parseDouble(lat);
@@ -544,7 +550,7 @@ public class AddMoodDetail extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(hasPhoto){
+        if (hasPhoto) {
             ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -557,6 +563,7 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * Checks for valid input for the reason_text field. If more than 3 words are entered, it will
      * disable the confirm button.
+     *
      * @param charSequence
      * @param i
      * @param i1

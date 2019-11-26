@@ -28,7 +28,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -46,11 +49,15 @@ public class FriendsMoods extends MoodHistory {
     /**
      * the user service item that represents the users who have moods displayed.
      */
+    @Inject
     UserService users;
     /**
      * The mood event items that display the details of the moods from said users.
      */
+    @Inject
     MoodEventService moodEvents;
+
+
     private int ACTIVITY_NUM = 2;
     /**
      * An intent item, this item starts the AddFriend activity which is only reachable from this
@@ -79,19 +86,17 @@ public class FriendsMoods extends MoodHistory {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_moods);
-        users = new UserService();
-        moodEvents = new MoodEventService();
+        ContextGrabber.get().di().inject(FriendsMoods.this);
+//        moodEvents = new MoodEventService();
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 
-
-        
 
         //set progress bar to visible until listview is ready to display items
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-     
+
         bottomNavigationView(ACTIVITY_NUM);
         ButterKnife.bind(this);
         this.setTitle("Friends Mood");
@@ -210,12 +215,11 @@ public class FriendsMoods extends MoodHistory {
 
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         bottomNavigationView(ACTIVITY_NUM);
 
     }
-
 
 
 }

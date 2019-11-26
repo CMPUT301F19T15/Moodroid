@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.model.ModelInterface;
@@ -21,6 +22,7 @@ import ca.ualberta.moodroid.repository.UserRepository;
 /**
  * Singleton pattern to get a user's username
  */
+@Singleton
 public class AuthenticationService implements AuthenticationInterface {
 
     /**
@@ -39,12 +41,8 @@ public class AuthenticationService implements AuthenticationInterface {
      *
      * @return the instance
      */
-    public static synchronized AuthenticationService getInstance() {
-        if (service == null) {
-            service = new AuthenticationService();
-        }
-
-        return service;
+    @Inject
+    public AuthenticationService() {
     }
 
     /**

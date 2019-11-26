@@ -20,9 +20,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
@@ -44,14 +47,8 @@ public class AddFriend extends AppCompatActivity {
     Intent intent;
 
     /**
-     * The repository that stores all request related data.
-     */
-    FollowRequestRepository requests;
-
-    /**
      * String data that stores the users username
      */
-// TODO: Get my username and wait until it is grabbed
     String me;
 
     /**
@@ -83,6 +80,13 @@ public class AddFriend extends AppCompatActivity {
     @BindView(R.id.instruction)
     TextView statusField;
 
+
+    @Inject
+    AuthenticationService auth;
+
+    @Inject
+    FollowRequestRepository requests;
+
     /**
      * the code below builds the UI, and implements all of the logic that comes with it. As
      * stated above, this class is meant to give the user the option to add a friend by using that
@@ -93,9 +97,9 @@ public class AddFriend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        ContextGrabber.get().di().inject(AddFriend.this);
         ButterKnife.bind(this);
-        this.requests = new FollowRequestRepository();
-        this.me = AuthenticationService.getInstance().getUsername();
+        this.me = auth.getUsername();
 
         toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
         toolBarTextView = findViewById(R.id.toolbar_text_center);

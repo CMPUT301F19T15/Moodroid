@@ -19,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -35,7 +38,13 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
      * The User service type, used for handling data and situations with friends
      * and following
      */
+    @Inject
     UserService userService;
+
+    @Inject
+    AuthenticationService auth;
+
+
     /**
      * The Context.
      */
@@ -102,14 +111,15 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
      * Instantiates a new Follow list adapter.
      *
      * @param requestList    the request list
-     * @param userService    the user service
      * @param onListListener the on list listener
      */
-    public FollowListAdapter(ArrayList<FollowRequestModel> requestList, UserService userService, OnListListener onListListener) {
+    public FollowListAdapter(ArrayList<FollowRequestModel> requestList, OnListListener onListListener) {
+
         this.requestList = requestList;
-        this.userService = userService;
         context = context;
         this.mOnListListener = onListListener;
+
+        ContextGrabber.get().di().inject(FollowListAdapter.this);
     }
 
     @NonNull
@@ -168,7 +178,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         // TODO: show background color base on state and hide buttons if state != undecided
         FollowRequestModel moodObject = requestList.get(position);
         holder.dateText.setText(new SimpleDateFormat("MM/dd/yyyy hh:mm a").format(moodObject.dateObject()));
-        if (moodObject.getRequesteeUsername().equals(AuthenticationService.getInstance().getUsername())) {
+        if (moodObject.getRequesteeUsername().equals(auth.getUsername())) {
             if (moodObject.getState().equals(FollowRequestModel.REQUESTED_STATE)) {
                 holder.requestText.setText("@" + moodObject.getRequesterUsername() + " requested to be friends on " + new SimpleDateFormat("MMMM dd yyyy").format(moodObject.dateObject()));
             } else if (moodObject.getState().equals(FollowRequestModel.ACCEPT_STATE)) {
@@ -180,7 +190,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
                 Log.e("NOTICATIONS/STATE", "Unknown state for " + moodObject.getInternalId() + " state=" + moodObject.getState());
             }
-        } else if (moodObject.getRequesterUsername().equals(AuthenticationService.getInstance().getUsername())) {
+        } else if (moodObject.getRequesterUsername().equals(auth.getUsername())) {
             // this isn't our object, so we should be able to alter state
             holder.denyButton.setVisibility(View.INVISIBLE);
             holder.acceptButton.setVisibility(View.INVISIBLE);

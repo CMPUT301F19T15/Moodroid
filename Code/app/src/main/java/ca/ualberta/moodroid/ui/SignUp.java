@@ -15,9 +15,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
@@ -34,7 +37,11 @@ public class SignUp extends AppCompatActivity {
     /**
      * The repository that holds user data
      */
+    @Inject
     UserRepository users;
+
+    @Inject
+    AuthenticationService auth;
     /**
      * the user object as firebase knows it.
      */
@@ -52,7 +59,7 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-        users = new UserRepository();
+        ContextGrabber.get().di().inject(SignUp.this);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
 
@@ -81,7 +88,7 @@ public class SignUp extends AppCompatActivity {
                         public void onSuccess(ModelInterface modelInterface) {
                             UserModel m = (UserModel) modelInterface;
                             Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
-                            AuthenticationService.getInstance().setUsername(username);
+                            auth.setUsername(username);
                             startActivity(new Intent(SignUp.this, MoodHistory.class));
                         }
 
@@ -89,6 +96,5 @@ public class SignUp extends AppCompatActivity {
                 }
             }
         });
-        users = new UserRepository();
     }
 }
