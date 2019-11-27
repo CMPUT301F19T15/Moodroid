@@ -1,4 +1,5 @@
-package ca.ualberta.moodroid.ui;
+package ca
+        .ualberta.moodroid.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -61,7 +62,6 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
         ContextGrabber.get().di().inject(EditDeleteFragment.this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //ViewGroup parent = ((ViewGroup) getView().getParent());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.edit_delete_fragment, null);
@@ -101,7 +101,6 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                                     public void onSuccess(Void aVoid) {
                                         //TODO: Need to update the list to show delete
                                         ((MoodHistory) getActivity()).getMood();
-
                                     }
                                 });
                             }

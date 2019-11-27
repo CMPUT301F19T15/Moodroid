@@ -64,6 +64,7 @@ import static android.view.View.GONE;
  */
 public class EditMoodDetail extends AddMoodDetail {
 
+    protected ImageView img;
     /**
      * Initialize the mood event service
      */
@@ -113,7 +114,7 @@ public class EditMoodDetail extends AddMoodDetail {
         initializeDialogs(emoji, mood_name, hex);
 
         // Set the design based on the mood
-        mood_img.setText(emoji);
+        mood_img.setText(intent.getExtras().getString("emoji"));
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
 
@@ -133,17 +134,55 @@ public class EditMoodDetail extends AddMoodDetail {
 
                 // setup the mood model
                 setInitialMoodEvent(moodEventModel);
-
                 //set social situation
-                moodEventModel.getSituation();
+                String val = moodEventModel.getSituation();
+                if (!(val == null)) {
+                    if (val.equals("Alone")) {
+                        social_situation.setSelection(1);
+                    } else if (val.equals("One Other Person")) {
+                        social_situation.setSelection(2);
+                    } else if (val.equals("Two to Several People")) {
+                        social_situation.setSelection(3);
+                    } else if (val.equals("Crowd")) {
+                        social_situation.setSelection(4);
+                    }
+                }
+
                 //set location
-                moodEventModel.getLocation();
+                if (moodEventModel.getLocation() != null) {
+                    double latt = moodEventModel.getLocation().getLatitude();
+                    double longt = moodEventModel.getLocation().getLongitude();
+                    String loc = String.valueOf(latt) + ", " + String.valueOf(longt);
+                    locationText.setText(loc);
+                    removeLocationButton.setVisibility(View.VISIBLE);
+                    moodLocation = moodEventModel.getLocation();
+                    addLocationButton.setVisibility(GONE);
+
+                } else {
+                    removeLocationButton.setVisibility(GONE);
+                    addLocationButton.setVisibility(View.VISIBLE);
+                }
                 //set reason
                 if (moodEventModel.getReasonText().length() > 0) {
                     reason_text.setText(moodEventModel.getReasonText());
                 }
                 if (moodEventModel.getReasonImageUrl() != null) {
+                    try {
+                        Glide.with(EditMoodDetail.this)
+                                .load(moodEventModel.getReasonImageUrl())
+                                .into(img);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(EditMoodDetail.this, "Error: Image cannot be displayed. " + moodEventModel.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
+                    }
                     url = moodEventModel.getReasonImageUrl();
+                    removePhotoButton.setVisibility(View.VISIBLE);
+                    addPhotoButton.setVisibility(GONE);
+
+                } else {
+                    removePhotoButton.setVisibility(GONE);
+                    addPhotoButton.setVisibility(View.VISIBLE);
+
                 }
 
             }
@@ -156,6 +195,7 @@ public class EditMoodDetail extends AddMoodDetail {
      */
     protected void initializeViews() {
         //initializing firebase storage
+        // TODO use the storageService instead
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -163,14 +203,13 @@ public class EditMoodDetail extends AddMoodDetail {
         reason_text.addTextChangedListener(textWatcher);
 
         // initializing the views that will be set from the last activity
+        img = findViewById(R.id.photoView);
         mood_img = findViewById(R.id.mood_img);
         mood_title = findViewById(R.id.mood_text);
         banner = findViewById(R.id.banner);
         social_situation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, EditMoodDetail.situations));
-        removePhotoButton.setVisibility(GONE);
-        addPhotoButton.setVisibility(View.VISIBLE);
-        removeLocationButton.setVisibility(GONE);
-        addLocationButton.setVisibility(View.VISIBLE);
+
+
     }
 
     /**
@@ -271,16 +310,15 @@ public class EditMoodDetail extends AddMoodDetail {
     @OnClick(R.id.add_detail_confirm_btn)
     public void confirmClick() {
         //set moodEvent
-        moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
         moodEvent.setSituation(social_situation.getSelectedItem().toString());
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(auth.getUsername());
-        moodEvent.setReasonImageUrl(url);
         moodEvent.setLocation(moodLocation);
+        moodEvent.setReasonImageUrl(url);
 
 
-        //update MoodEvent
+        //TODO not in the service
         MoodEventRepository moodEventRepository = new MoodEventRepository();
         moodEventRepository.update(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
             @Override
