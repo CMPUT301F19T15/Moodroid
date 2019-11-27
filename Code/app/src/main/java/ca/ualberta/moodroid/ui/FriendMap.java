@@ -1,22 +1,11 @@
 package ca.ualberta.moodroid.ui;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.core.app.ActivityCompat;
-
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.ui.IconGenerator;
@@ -24,7 +13,9 @@ import com.google.maps.android.ui.IconGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.ualberta.moodroid.R;
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
@@ -59,6 +50,13 @@ public class FriendMap extends Map {
      */
     private static final String TAG = "Friend maps activity";
 
+    @Inject
+    UserService users;
+
+
+    @Inject
+    MoodEventService events;
+
 
     /**
      * New instance map.
@@ -84,6 +82,7 @@ public class FriendMap extends Map {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContextGrabber.get().di().inject(FriendMap.this);
 
         toolBarText = "Friends Moods";
         toolBarTextView.setText(toolBarText);
@@ -127,66 +126,6 @@ public class FriendMap extends Map {
 
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        super.onMapReady(googleMap);
-
-        //setting the googlemap to mMap
-        mMap = googleMap;
-
-        try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
-            boolean success = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.mapstyle));
-
-            if (!success) {
-                Log.e(TAG, "Style parsing failed.");
-            }
-        } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Can't find style. Error: ", e);
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        // set user location true to show on the map
-        mMap.setMyLocationEnabled(true);
-
-        // disable the button on the top right that takes you to your location
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-        // create a new location manager to also get the Lat and Long of your location
-        LocationManager locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
-
-        if (locationManager != null) {
-            // find the location and save it
-            Location location = locationManager.getLastKnownLocation(bestProvider);
-            if (location != null) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-
-                // create a new LatLng variable
-                LatLng latLng = new LatLng(latitude, longitude);
-
-                // set the new LatLng variable to the camera view
-                setCameraView(latLng);
-            }
-        }
-
-        // call to add to map
-        addMapFriendsMarkers();
-
-    }
-
 
     /**
      * this is to add the map markers to the map
@@ -204,7 +143,8 @@ public class FriendMap extends Map {
      * - date time as title
      * - situation as snippit
      */
-    private void addMapFriendsMarkers() {
+    @Override
+    protected void addMapMarkers() {
 
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
@@ -213,17 +153,15 @@ public class FriendMap extends Map {
         MoodEventRepository moodEvents = new MoodEventRepository();
 
 
-        new UserService().getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+        users.getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 mMap.clear();
                 ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
                 final int totalUsers = followRequestModels.size();
                 for (FollowRequestModel user : followRequestModels) {
-                    // TODO: I need to reinitiate this service otherwise it won't get all the objects.
-                    MoodEventService eventsvc = new MoodEventService();
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                    events.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                         @Override
                         public void onSuccess(List<MoodEventModel> moodEventModels) {
                             for (MoodEventModel event : moodEventModels) {
@@ -231,7 +169,7 @@ public class FriendMap extends Map {
                                     // This could have a possible race condition
                                     for (MoodModel mood : moods) {
                                         if (mood.getName().equals(event.getMoodName())) {
-                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime()+", "+event.getSituation());
+                                            addIcon(iconFactory, mood.getEmoji(), new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()), event.getUsername(), event.getDatetime() + ", " + event.getSituation());
                                         }
                                     }
 

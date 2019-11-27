@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +26,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
@@ -44,7 +49,10 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
     /**
      * The Users.
      */
+    @Inject
     UserService users;
+
+
     private static final int ACTIVITY_NUM = 0;
 
     private RecyclerView moodListRecyclerView;
@@ -60,15 +68,15 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+        ContextGrabber.get().di().inject(Notifications.this);
 
         ButterKnife.bind(this);
         this.setTitle("Notifications");
-        bottomNavigationView(0);
+        bottomNavigationView(ACTIVITY_NUM);
 
-        users = new UserService();
         requestList = new ArrayList<>();
 
-        new UserService().getAllFollowRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+        users.getAllFollowRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 Log.d("NOTIFICATIONS/GET", "Got follow requests: " + followRequestModels.size());
@@ -78,7 +86,7 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
                 }
             }
         });
-        new UserService().getAllFollowingRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+        users.getAllFollowingRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 Log.d("NOTIFICATIONS/GET", "Got following requests: " + followRequestModels.size());
@@ -103,7 +111,7 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
         moodListRecyclerView = findViewById(R.id.notification_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(Notifications.this);
-        moodListAdapter = new FollowListAdapter(requestList, users, Notifications.this);
+        moodListAdapter = new FollowListAdapter(requestList, Notifications.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
@@ -112,5 +120,14 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
     public void onListClick(int position) {
         return;
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
+
+    }
+
 
 }

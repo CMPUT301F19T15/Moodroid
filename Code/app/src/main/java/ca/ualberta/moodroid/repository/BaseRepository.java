@@ -29,7 +29,6 @@ import ca.ualberta.moodroid.model.ModelInterface;
 abstract class BaseRepository implements RepositoryInterface {
 
     /**
-     *
      * This contains data for the name of a collection in our database
      */
     protected String collectionName;
@@ -90,6 +89,13 @@ abstract class BaseRepository implements RepositoryInterface {
         return this.query;
     }
 
+    protected Query getQueryAndReset() {
+        Query q = this.getQuery();
+        this.reset();
+
+        return q;
+    }
+
     /**
      * Set the current query to find specific data
      *
@@ -136,12 +142,9 @@ abstract class BaseRepository implements RepositoryInterface {
 
         final Class<ModelInterface> modelClass = this.getModelClass();
 
-        final RepositoryInterface r = this;
-
-        return this.getQuery().get().continueWith(new Continuation<QuerySnapshot, List<ModelInterface>>() {
+        return this.getQueryAndReset().get().continueWith(new Continuation<QuerySnapshot, List<ModelInterface>>() {
             @Override
             public List<ModelInterface> then(@NonNull Task<QuerySnapshot> task) throws Exception {
-                r.reset();
                 List<ModelInterface> ret = new ArrayList<ModelInterface>();
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                     Log.d("REPO/GET", doc.getId());
@@ -164,7 +167,7 @@ abstract class BaseRepository implements RepositoryInterface {
         final Class<ModelInterface> modelClass = this.getModelClass();
         final RepositoryInterface r = this;
 
-        return this.getQuery().limit(1).get().continueWith(new Continuation<QuerySnapshot, ModelInterface>() {
+        return this.getQueryAndReset().limit(1).get().continueWith(new Continuation<QuerySnapshot, ModelInterface>() {
             @Override
             public ModelInterface then(@NonNull Task<QuerySnapshot> task) throws Exception {
                 DocumentSnapshot doc = task.getResult().getDocuments().get(0);

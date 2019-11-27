@@ -77,20 +77,38 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
      */
     private LocationCallback locationCallback;
 
-
+    /**
+     * create a map view
+     */
     private View mapView;
+
+    /**
+     * create a add location button
+     */
     protected Button addLocation;
 
+    /**
+     * set default zoom
+     */
     private final float DEFAULT_ZOOM = 15;
 
-
+    /**
+     * on create it will setup the map and setup the users location on the map
+     * and center the map on the users location
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // set content view to the layout
         setContentView(R.layout.activity_add_location);
+
+        // connect the add button to the add button on the layout
         addLocation = findViewById(R.id.addLocationBtn);
 
+        // create a text view for the emoji
         TextView emoji = (TextView) findViewById(R.id.emoji);
 
 
@@ -105,6 +123,10 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
         emoji.setText(emojii);
 
+        /**
+         * setup the support fragment manager
+         * and mapasync
+         */
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.add_location_map);
         mapFragment.getMapAsync(this);
         mapView = mapFragment.getView();
@@ -121,7 +143,12 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
             Places.initialize(getApplicationContext(), "AIzaSyCSp4zdtDsi7z0JeJGMEarMQXx_W-6iLZs");
         }
 
-
+        /**
+         * when user clicks on add location
+         * it saves the centre location where the emoji is
+         * saves the lat and lon and puts it into a intent
+         * and goes back to the other activity and close this activity
+         */
         addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +170,12 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
     }
 
+    /**
+     * on map ready
+     * it creates the map with the style
+     * and checks if location has been granted
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -163,6 +196,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
+        // check that location is enabled on the users phone
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -192,11 +226,14 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        // request to see current location builder
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
 
+        // check settings for the location on users phone
         SettingsClient settingsClient = LocationServices.getSettingsClient(AddLocation.this);
         Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(builder.build());
 
+        // if everything works it will get the device location
         task.addOnSuccessListener(AddLocation.this, new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
@@ -220,6 +257,13 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         });
     }
 
+    /**
+     * check if device has location enabled
+     * if its enabled then get device location
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -234,7 +278,9 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
 
     /**
-     * depends on location permission
+     * getting device latest known location
+     * and set camera view to the current location
+     * so the emoji is set on the users location
      */
     private void getDeviceLocation() {
 
@@ -259,6 +305,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
                                         if (locationResult == null) {
                                             return;
                                         }
+                                        // move camera to the current location
                                         mLastKnownLocation = locationResult.getLastLocation();
                                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                                         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);

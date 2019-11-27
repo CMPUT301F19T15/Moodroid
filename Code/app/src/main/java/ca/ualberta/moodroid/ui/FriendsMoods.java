@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,7 +28,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -45,11 +49,15 @@ public class FriendsMoods extends MoodHistory {
     /**
      * the user service item that represents the users who have moods displayed.
      */
+    @Inject
     UserService users;
     /**
      * The mood event items that display the details of the moods from said users.
      */
+    @Inject
     MoodEventService moodEvents;
+
+
     private int ACTIVITY_NUM = 2;
     /**
      * An intent item, this item starts the AddFriend activity which is only reachable from this
@@ -64,6 +72,10 @@ public class FriendsMoods extends MoodHistory {
 
     int currentUsers = 0;
 
+    /**
+     * The progress bar.
+     */
+    private ProgressBar progressBar;
 
     /**
      * Get all the users you follow, and get a list of each users moods - then sort and display the moods
@@ -74,12 +86,18 @@ public class FriendsMoods extends MoodHistory {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_moods);
-        users = new UserService();
-        moodEvents = new MoodEventService();
+        ContextGrabber.get().di().inject(FriendsMoods.this);
+//        moodEvents = new MoodEventService();
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 
-        bottomNavigationView(2);
+
+        //set progress bar to visible until listview is ready to display items
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+
+        bottomNavigationView(ACTIVITY_NUM);
         ButterKnife.bind(this);
         this.setTitle("Friends Mood");
 
@@ -92,6 +110,7 @@ public class FriendsMoods extends MoodHistory {
             }
         });
 
+
         users.getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
@@ -99,14 +118,16 @@ public class FriendsMoods extends MoodHistory {
                 final int totalUsers = followRequestModels.size();
                 for (FollowRequestModel user : followRequestModels) {
                     // TODO: I need to reinitiate this service otherwise it won't get all the objects.
-                    MoodEventService eventsvc = new MoodEventService();
+
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                    moodEvents.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                         @Override
                         public void onSuccess(List<MoodEventModel> moodEventModels) {
                             currentUsers += 1;
                             Log.d("FRIENDSMOOD/TASK", "Task completed for: " + user.getRequesteeUsername() + ", size=" + moodEventModels.size());
-                            events.addAll(moodEventModels);
+                            // only get the latest one
+                            reverseSort(moodEventModels);
+                            events.add(moodEventModels.get(0));
                             if (currentUsers >= totalUsers) {
                                 Log.d("FRIENDSMOOD/USERCOUNT", currentUsers + "");
                                 Log.d("FRIENDSMOOD/SIZE", events.size() + "");
@@ -143,6 +164,10 @@ public class FriendsMoods extends MoodHistory {
 
     @Override
     protected void reverseSort() {
+        this.reverseSort(this.events);
+    }
+
+    protected void reverseSort(List<MoodEventModel> events) {
         Collections.sort(events, new Comparator<MoodEventModel>() {
             @Override
             public int compare(MoodEventModel mood1, MoodEventModel mood2) {
@@ -172,18 +197,28 @@ public class FriendsMoods extends MoodHistory {
         moodListAdapter = new MoodListAdapter(events, allMoods, true, FriendsMoods.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onShortClick(int position) {
-        if(events.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+        if (events.size() != 0) {  //else, if click too fast: size = 0 and app crashes
             MoodEventModel moodEventModel = events.get(position);
             moodEventModel.getInternalId();
             intent = new Intent(FriendsMoods.this, ViewMoodDetail.class);
             intent.putExtra("eventId", moodEventModel.getInternalId());
+            intent.putExtra("caller", FriendsMoods.class.toString());
             startActivity(intent);
 
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
+
     }
 
 

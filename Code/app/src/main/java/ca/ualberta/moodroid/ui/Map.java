@@ -31,6 +31,10 @@ import com.google.maps.android.ui.IconGenerator;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -43,6 +47,14 @@ import ca.ualberta.moodroid.service.MoodService;
  * The type Map.
  */
 public class Map extends FragmentActivity implements OnMapReadyCallback {
+
+
+    @Inject
+    AuthenticationService auth;
+
+
+    @Inject
+    MoodService moodService;
 
     /**
      * Map activity where it creates the map with the
@@ -57,8 +69,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * to take the user to view all of the mood details for that mood
      * - if time then add clusters
      */
-    public Map() {
 
+    public Map() {
     }
 
     /**
@@ -127,16 +139,11 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContextGrabber.get().di().inject(Map.this);
 
         // gets the username of the user and saves it to the string to use later
-        myUserName = AuthenticationService.getInstance().getUsername();
+        myUserName = auth.getUsername();
 
-        new MoodService().getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
-            @Override
-            public void onSuccess(List<MoodModel> moodModels) {
-                moods = moodModels;
-            }
-        });
 
         // setting the view to the mood maps view
         setContentView(R.layout.activity_my_mood_maps);
@@ -271,8 +278,15 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             }
         }
 
-        // call to add to map
-        addMapMarkers();
+        moodService.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+            @Override
+            public void onSuccess(List<MoodModel> moodModels) {
+                moods = moodModels;
+                // call to add to map
+                addMapMarkers();
+            }
+        });
+
 
     }
 
@@ -292,7 +306,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * - date time as title
      * - situation as snippit
      */
-    private void addMapMarkers() {
+    protected void addMapMarkers() {
 
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);

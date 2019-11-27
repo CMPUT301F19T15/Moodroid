@@ -13,15 +13,19 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
@@ -43,14 +47,8 @@ public class AddFriend extends AppCompatActivity {
     Intent intent;
 
     /**
-     * The repository that stores all request related data.
-     */
-    FollowRequestRepository requests;
-
-    /**
      * String data that stores the users username
      */
-// TODO: Get my username and wait until it is grabbed
     String me;
 
     /**
@@ -82,6 +80,13 @@ public class AddFriend extends AppCompatActivity {
     @BindView(R.id.instruction)
     TextView statusField;
 
+
+    @Inject
+    AuthenticationService auth;
+
+    @Inject
+    FollowRequestRepository requests;
+
     /**
      * the code below builds the UI, and implements all of the logic that comes with it. As
      * stated above, this class is meant to give the user the option to add a friend by using that
@@ -92,9 +97,9 @@ public class AddFriend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        ContextGrabber.get().di().inject(AddFriend.this);
         ButterKnife.bind(this);
-        this.requests = new FollowRequestRepository();
-        this.me = AuthenticationService.getInstance().getUsername();
+        this.me = auth.getUsername();
 
         toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
         toolBarTextView = findViewById(R.id.toolbar_text_center);
@@ -136,8 +141,23 @@ public class AddFriend extends AppCompatActivity {
                         public void onComplete(@NonNull Task<ModelInterface> task) {
                             if (task.isSuccessful()) {
                                 FollowRequestModel request = (FollowRequestModel) task.getResult();
-                                // the request already exists - maybe notify the user that they already created one.
-                                statusField.setText("Your request has already been sent to " + name + ". The state of your request is: " + request.getState());
+                                // If a follow request was previously declined, let the another one be sent (but only update the existing one)
+                                if (request.getState().equals(FollowRequestModel.DENY_STATE)) {
+                                    request.setState(FollowRequestModel.REQUESTED_STATE);
+                                    // update the date
+                                    request.setCreatedAt((String.valueOf((new Date()).getTime())));
+                                    // Update the existing follow request, and notify the end user.
+                                    requests.update(request).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                                        @Override
+                                        public void onSuccess(ModelInterface modelInterface) {
+                                            statusField.setText("Your request was resent to " + name + ". It was previously declined.");
+
+                                        }
+                                    });
+                                } else {
+                                    // the request already exists - maybe notify the user that they already created one.
+                                    statusField.setText("Your request has already been sent to " + name + ". The state of your request is: " + request.getState());
+                                }
 
                                 Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                             } else {
@@ -145,20 +165,7 @@ public class AddFriend extends AppCompatActivity {
                                 if (!me.equals(name)) {
                                     // create a new follow request
                                     Log.d("ADDUSER/REQUEST", "Request non-existent");
-                                    FollowRequestModel request = new FollowRequestModel();
-                                    request.setRequesteeUsername(name);
-                                    request.setRequesterUsername(me);
-                                    request.setState(FollowRequestModel.REQUESTED_STATE);
-                                    request.setCreatedAt((String.valueOf((new Date()).getTime())));
-                                    requests.create(request).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<ModelInterface> task) {
-                                            if (task.isSuccessful()) {
-                                                statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
-                                                Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
-                                            }
-                                        }
-                                    });
+                                    sendRequest(name);
                                 }
                                 //If you try to follow yourself
                                 else {
@@ -175,5 +182,30 @@ public class AddFriend extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    protected void sendRequest(String name) {
+
+        FollowRequestModel request = new FollowRequestModel();
+        request.setRequesteeUsername(name);
+        request.setRequesterUsername(me);
+        request.setState(FollowRequestModel.REQUESTED_STATE);
+        request.setCreatedAt((String.valueOf((new
+
+                Date()).
+
+                getTime())));
+        requests.create(request).
+
+                addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ModelInterface> task) {
+                        if (task.isSuccessful()) {
+                            statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
+                            Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
+                        }
+                    }
+                });
     }
 }

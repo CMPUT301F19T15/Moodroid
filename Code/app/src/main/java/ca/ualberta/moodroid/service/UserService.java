@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
@@ -23,20 +24,20 @@ import ca.ualberta.moodroid.repository.UserRepository;
  * This class implements user operations such as handling username functions as well as
  * dealing with follow requests from other users, and sending your own follow request.
  */
+@Singleton
 public class UserService implements UserInterface {
 
 
     private AuthenticationInterface auth;
-    private UserRepository users;
     private FollowRequestRepository requests;
 
     /**
      * Initialize all required services
      */
-    public UserService() {
-        this.auth = AuthenticationService.getInstance();
-        this.users = new UserRepository();
-        this.requests = new FollowRequestRepository();
+    @Inject
+    public UserService(AuthenticationService auth, FollowRequestRepository requests) {
+        this.auth = auth;
+        this.requests = requests;
     }
 
 

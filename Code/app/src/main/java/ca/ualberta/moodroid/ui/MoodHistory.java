@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,13 +32,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.MoodRepository;
+
+import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
 
@@ -62,12 +66,15 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * one button for adding a new mood event
      * another for filtering the mood list by a certain mood
      */
-// variables needed
+    @Inject
     MoodEventService moodEvents;
-    /**
-     * The Moods.
-     */
+
+    @Inject
     MoodService moods;
+
+    @Inject
+    AuthenticationService auth;
+
     private int ACTIVITY_NUM = 1;
     private Intent intent;
     /**
@@ -127,21 +134,29 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     private String filterMood;
 
     /**
-     * boolean for our gps
+     * Boolean for our gps.
      */
     private boolean mLocationPermissionGranted = false;
 
+    /**
+     * The progress bar.
+     */
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood_history);
-        moodEvents = new MoodEventService();
-        moods = new MoodService();
+        ContextGrabber.get().di().inject(MoodHistory.this);
+//        moodEvents = new MoodEventService();
         ButterKnife.bind(this);
 
+        //set progress bar to visible until listview is ready to display items
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
         //Bottom Navigation Bar Listener
-        bottomNavigationView(1);
+        bottomNavigationView(ACTIVITY_NUM);
         setTitle("Mood History");
         filterMood = null;
 
@@ -223,6 +238,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     }
 
     public void getMood() {
+
 
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();
@@ -440,6 +456,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         moodListAdapter = new MoodListAdapter(moodList, allMoods, false, MoodHistory.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
+        progressBar.setVisibility(View.GONE);
     }
 
 
@@ -464,6 +481,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
             intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
             intent.putExtra("eventId", moodEventModel.getInternalId());
+            intent.putExtra("caller", MoodHistory.class.toString());
             startActivity(intent);
 
         }
@@ -505,6 +523,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     @Override
     protected void onResume() {
         super.onResume();
+        bottomNavigationView(ACTIVITY_NUM);
         if (checkMapServices()) {
             if (mLocationPermissionGranted) {
                 getMood();
@@ -513,4 +532,6 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             }
         }
     }
+
+
 }

@@ -5,17 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,18 +19,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import javax.inject.Inject;
 
 import butterknife.BindView;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
-import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
-import ca.ualberta.moodroid.service.MoodEventService;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
@@ -68,9 +59,18 @@ public class BaseUIActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_text_center)
     TextView toolBarTextView;
 
+    @Inject
+    AuthenticationService auth;
+
     protected BottomNavigationViewEx bottomNavigationViewEx;
 
     protected Badge badge;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
 
     /**
@@ -104,34 +104,38 @@ public class BaseUIActivity extends AppCompatActivity {
     /**
      * Setup the bottom navigation bar view and navigation
      */
-    protected void bottomNavigationView(int pageId) {
+    protected void bottomNavigationView(int pageID) {
+        ContextGrabber.get().di().inject(BaseUIActivity.this);
+
         //set up bottom navigation bar...go to corresponding activity
         bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
         final AppCompatActivity me = this.getMe();
         Menu menu = bottomNavigationViewEx.getMenu();
 
-        FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", AuthenticationService.getInstance().getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", auth.getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.e("NOTIFICATION/COUNT", e.getMessage());
                 }
-                Log.d("NOTIFICATION/UPDATE", "new data. Count=" + queryDocumentSnapshots.size());
-                if (queryDocumentSnapshots.size() == 0) {
-                    if (badge != null) {
-                        badge.hide(true);
+                if (queryDocumentSnapshots != null) {
+                    Log.d("NOTIFICATION/UPDATE", "new data. Count=" + queryDocumentSnapshots.size());
+                    if (queryDocumentSnapshots.size() == 0) {
+                        if (badge != null) {
+                            badge.hide(true);
+                        }
+                    } else {
+                        if (badge != null) {
+                            badge.hide(false);
+                        }
+                        setNotificationCount(queryDocumentSnapshots.size());
                     }
-                } else {
-                    if (badge != null) {
-                        badge.hide(false);
-                    }
-                    setNotificationCount(queryDocumentSnapshots.size());
                 }
 
             }
         });
 
-        MenuItem menuItem = menu.getItem(pageId);
+        MenuItem menuItem = menu.getItem(pageID);
         menuItem.setChecked(true);
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -25,6 +25,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -36,16 +39,26 @@ import ca.ualberta.moodroid.service.MoodEventService;
 import static android.graphics.Color.parseColor;
 
 /**
- * NOT FULLY IMPLEMENTED
- * <p>
  * a fragment for editing data
  */
 public class EditDeleteFragment extends AppCompatDialogFragment {
 
 
+    @Inject
+    MoodEventService moodEvent;
+
+
+    /**
+     * Create and display the dialog for mood event actions
+     *
+     * @param savedInstanceState
+     * @return
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
+        ContextGrabber.get().di().inject(EditDeleteFragment.this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //ViewGroup parent = ((ViewGroup) getView().getParent());
@@ -58,7 +71,7 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
         return new AlertDialog.Builder(getActivity()).setView(view)
                 .setTitle("Options")
                 .setMessage("What would you like to do?")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -79,20 +92,16 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                 .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        MoodEventService moodEvent = new MoodEventService();
                         //gets the mood event by id
                         moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
                             @Override
                             public void onSuccess(MoodEventModel moodEventModel) {
-                                //For some reason internalid is set to null
-                                moodEventModel.setInternalId(id);
-                                MoodEventRepository mood = new MoodEventRepository();
-                                mood.delete(moodEventModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                moodEvent.deleteEvent(moodEventModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Log.d("RESULT/DELETE", "Model Deleted");
                                         //TODO: Need to update the list to show delete
                                         ((MoodHistory) getActivity()).getMood();
+
                                     }
                                 });
                             }

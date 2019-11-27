@@ -43,9 +43,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -64,7 +67,12 @@ public class EditMoodDetail extends AddMoodDetail {
     /**
      * Initialize the mood event service
      */
-    protected MoodEventService moodEvents = new MoodEventService();
+    @Inject
+    MoodEventService moodEvents;
+
+
+    @Inject
+    AuthenticationService auth;
 
 
     /**
@@ -88,6 +96,7 @@ public class EditMoodDetail extends AddMoodDetail {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContextGrabber.get().di().inject(EditMoodDetail.this);
 
         setContentView(R.layout.activity_add_mood_detail);
         ButterKnife.bind(this);
@@ -266,8 +275,9 @@ public class EditMoodDetail extends AddMoodDetail {
         moodEvent.setReasonText(reason_text.getText().toString());
         moodEvent.setSituation(social_situation.getSelectedItem().toString());
         moodEvent.setMoodName(mood_title.getText().toString());
-        moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
+        moodEvent.setUsername(auth.getUsername());
         moodEvent.setReasonImageUrl(url);
+        moodEvent.setLocation(moodLocation);
 
 
         //update MoodEvent

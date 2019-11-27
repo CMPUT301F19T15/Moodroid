@@ -28,7 +28,6 @@
             android:layout_marginLeft="116dp"
             android:layout_marginBottom="15dp"
             android:fontFamily="@font/courier_new_bold"
-            android:text="TBD"
             android:textColor="#FFFFFF"
             android:textSize="30dp" />
 
