@@ -39,13 +39,13 @@ public class SignUp extends AppCompatActivity {
      * The repository that holds user data
      */
     @Inject
-    UserRepository users;
+    UserRepository userRepo;
 
     @Inject
     AuthenticationService auth;
 
     @Inject
-    UserService userService;
+    UserService users;
 
     /**
      * the user object as firebase knows it.
@@ -78,28 +78,22 @@ public class SignUp extends AppCompatActivity {
     @OnClick(R.id.register_btn)
     public void registerUsername(View v) {
         final String username = usernameField.getText().toString();
-
-
-        
-        users.where("username", username).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+        users.getUserByUsername(username).addOnSuccessListener(new OnSuccessListener<UserModel>() {
             @Override
-            public void onComplete(@NonNull Task<ModelInterface> task) {
-                if (task.isSuccessful()) {
+            public void onSuccess(UserModel userModel) {
+                //username already exists
+                if(userModel != null){
                     usernameField.setError("That username is already taken.");
                 } else {
-                    Exception except = task.getException();
-                    Log.d("Task Failed", except.toString());
+                    //create new user
                     UserModel m = new UserModel();
                     m.setUsername(username);
-                    users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                    users.createNewUser(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<UserModel>() {
                         @Override
-                        public void onSuccess(ModelInterface modelInterface) {
-                            UserModel m = (UserModel) modelInterface;
-                            Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
+                        public void onSuccess(UserModel userModel) {
                             auth.setUsername(username);
                             startActivity(new Intent(SignUp.this, MoodHistory.class));
                         }
-
                     });
                 }
             }

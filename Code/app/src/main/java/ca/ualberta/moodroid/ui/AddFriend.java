@@ -86,10 +86,8 @@ public class AddFriend extends AppCompatActivity {
     AuthenticationService auth;
 
     @Inject
-    FollowRequestRepository requests;
-
-    @Inject
     UserService users;
+
 
     /**
      * the code below builds the UI, and implements all of the logic that comes with it. As
