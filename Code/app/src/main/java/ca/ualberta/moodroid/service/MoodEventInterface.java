@@ -18,7 +18,7 @@ public interface MoodEventInterface {
      * @return my events
      */
     public Task<List<MoodEventModel>> getMyEvents();
-    
+
     /**
      * Get a list of all your mood events filtered by a mood
      *
@@ -29,6 +29,7 @@ public interface MoodEventInterface {
 
     /**
      * Get a single mood event by internal id
+     *
      * @param eventId the internal id
      * @return the single event
      */
@@ -53,5 +54,5 @@ public interface MoodEventInterface {
      *
      * @param moodEvent the mood event
      */
-    public void deleteEvent(MoodEventModel moodEvent);
+    public Task<Void> deleteEvent(MoodEventModel moodEvent);
 }
