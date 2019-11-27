@@ -61,6 +61,7 @@ import static android.view.View.GONE;
  */
 public class EditMoodDetail extends AddMoodDetail {
 
+    private ImageView img;
     /**
      * Initialize the mood event service
      */
@@ -124,17 +125,32 @@ public class EditMoodDetail extends AddMoodDetail {
 
                 // setup the mood model
                 setInitialMoodEvent(moodEventModel);
-
                 //set social situation
-                moodEventModel.getSituation();
+                String val = moodEventModel.getSituation();
+                if (val.equals("Alone")){social_situation.setSelection(1);}
+                else if (val.equals("One Other Person")){social_situation.setSelection(2);}
+                else if (val.equals("Two to Several People")){social_situation.setSelection(3); Log.d("THIS MEANS IT WORK", "ITWORK");}
+                else if (val.equals("Crowd")){social_situation.setSelection(4);}
                 //set location
-                moodEventModel.getLocation();
+                if (moodEventModel.getLocation() != null){
+                    double latt = moodEventModel.getLocation().getLatitude();
+                    double longt = moodEventModel.getLocation().getLongitude();
+                    String loc = String.valueOf(latt) + ", " + String.valueOf(longt);
+                    locationText.setText(loc);
+                }
                 //set reason
                 if (moodEventModel.getReasonText().length() > 0) {
                     reason_text.setText(moodEventModel.getReasonText());
                 }
                 if (moodEventModel.getReasonImageUrl() != null) {
-                    url = moodEventModel.getReasonImageUrl();
+                    try {
+                        Glide.with(EditMoodDetail.this)
+                                .load(moodEventModel.getReasonImageUrl())
+                                .into(img);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(EditMoodDetail.this, "Error: Image cannot be displayed. " + moodEventModel.getReasonImageUrl(), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
@@ -162,6 +178,8 @@ public class EditMoodDetail extends AddMoodDetail {
         addPhotoButton.setVisibility(View.VISIBLE);
         removeLocationButton.setVisibility(GONE);
         addLocationButton.setVisibility(View.VISIBLE);
+        img = findViewById(R.id.edit_photoView);
+
     }
 
     /**
