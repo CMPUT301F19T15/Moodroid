@@ -42,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     @Inject
-    UserRepository users;
-
-    @Inject
     UserService userService;
 
     @Inject
