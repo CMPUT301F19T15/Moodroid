@@ -87,7 +87,6 @@ public class FriendsMoods extends MoodHistory {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_moods);
         ContextGrabber.get().di().inject(FriendsMoods.this);
-//        moodEvents = new MoodEventService();
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 

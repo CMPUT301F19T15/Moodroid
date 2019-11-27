@@ -57,6 +57,6 @@ public interface UserInterface {
      * @param username the username
      * @return user by username
      */
-    public UserModel getUserByUsername(String username);
+    public Task<UserModel> getUserByUsername(String username);
 
 }

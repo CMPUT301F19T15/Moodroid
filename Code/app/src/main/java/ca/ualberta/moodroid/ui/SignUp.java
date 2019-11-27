@@ -27,6 +27,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.UserService;
 
 /**
  * This is an initial screen a user will encounter when they are creating a username/account.
@@ -42,6 +43,10 @@ public class SignUp extends AppCompatActivity {
 
     @Inject
     AuthenticationService auth;
+
+    @Inject
+    UserService userService;
+
     /**
      * the user object as firebase knows it.
      */
@@ -73,6 +78,9 @@ public class SignUp extends AppCompatActivity {
     @OnClick(R.id.register_btn)
     public void registerUsername(View v) {
         final String username = usernameField.getText().toString();
+
+
+        
         users.where("username", username).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
             @Override
             public void onComplete(@NonNull Task<ModelInterface> task) {

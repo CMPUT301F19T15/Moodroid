@@ -54,6 +54,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.MoodEventService;
 
 import static android.view.View.GONE;
 
@@ -109,12 +110,12 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The mood repository is activated below.
      */
-    @Inject
-    MoodEventRepository mood;
-
 
     @Inject
     AuthenticationService auth;
+
+    @Inject
+    MoodEventService moodEventService;
 
     /**
      * The mood event model is created below. This is essentially the frame for a mood event
@@ -448,10 +449,10 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setReasonImageUrl(url);
         moodEvent.setLocation(moodLocation);
 
-        mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+        moodEventService.createEvent(moodEvent).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
             @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                Log.d("EVENT/CREATE", "Created new mood event: " + modelInterface.getInternalId());
+            public void onSuccess(MoodEventModel moodEventModel) {
+                Log.d("EVENT/CREATE", "Created new mood event: " + moodEventModel.getInternalId());
                 startActivity(new Intent(AddMoodDetail.this, MoodHistory.class));
             }
         });

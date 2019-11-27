@@ -87,6 +87,9 @@ public class AddFriend extends AppCompatActivity {
     @Inject
     FollowRequestRepository requests;
 
+    @Inject
+    UserService users;
+
     /**
      * the code below builds the UI, and implements all of the logic that comes with it. As
      * stated above, this class is meant to give the user the option to add a friend by using that
@@ -128,15 +131,24 @@ public class AddFriend extends AppCompatActivity {
         Log.d("ADDUSER/OUT", "I am: " + me);
         final String name = this.usernameField.getText().toString();
 
-        // TODO: refactor to use the userService
-        new UserRepository().where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+//        // TODO: refactor to use the userService
+//        new UserRepository().where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+//            @Override
+//            public void onComplete(@NonNull Task<ModelInterface> task) {
+//                // We were able to find the user
+//                if (task.isSuccessful()) {
+//                    UserModel user = (UserModel) task.getResult();
+//                    Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
+
+
+
+        users.getUserByUsername(name).addOnSuccessListener(new OnSuccessListener<UserModel>() {
             @Override
-            public void onComplete(@NonNull Task<ModelInterface> task) {
-                // We were able to find the user
-                if (task.isSuccessful()) {
-                    UserModel user = (UserModel) task.getResult();
-                    Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
-                    new FollowRequestRepository().where("requesteeUsername", user.getUsername()).where("requesterUsername", me).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+            public void onSuccess(UserModel userModel) {
+                //We were able to find the user
+                if(userModel != null){
+                    Log.d("ADDUSER/QUERY", "Found the user: " + userModel.getUsername());
+                    new FollowRequestRepository().where("requesteeUsername", userModel.getUsername()).where("requesterUsername", me).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
                         @Override
                         public void onComplete(@NonNull Task<ModelInterface> task) {
                             if (task.isSuccessful()) {
