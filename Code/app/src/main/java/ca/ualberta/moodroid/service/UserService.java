@@ -231,6 +231,27 @@ public class UserService implements UserInterface {
                 });
         }
 
+
+        /**
+         * Find User by Id.
+         * @param userId
+         * @return
+         */
+        public Task<UserModel> getUserById(String userId){
+                return this.users.find(userId).continueWith(new Continuation<ModelInterface, UserModel>() {
+                        @Override
+                        public UserModel then(@NonNull Task<ModelInterface> task) throws Exception {
+                                UserModel user = null;
+                                if(task.isSuccessful()){
+                                        user = (UserModel) task.getResult();
+                                }
+                                Log.d("USER/FIND", "Not yet successful...");
+                                return user;
+                        }
+                });
+        }
+
+
         /**
          * Create new user.
          *

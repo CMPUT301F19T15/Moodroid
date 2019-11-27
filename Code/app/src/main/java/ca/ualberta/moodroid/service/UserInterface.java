@@ -73,6 +73,14 @@ public interface UserInterface {
      */
     public Task<UserModel> getUserByUsername(String username);
 
+
+    /**
+     * Find User by Id.
+     * @param userId
+     * @return
+     */
+    public Task<UserModel> getUserById(String userId);
+
     /**
      * Create new user.
      * @param user

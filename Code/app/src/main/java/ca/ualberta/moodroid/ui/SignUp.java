@@ -35,12 +35,6 @@ import ca.ualberta.moodroid.service.UserService;
 public class SignUp extends AppCompatActivity {
 
 
-    /**
-     * The repository that holds user data
-     */
-    @Inject
-    UserRepository userRepo;
-
     @Inject
     AuthenticationService auth;
 
