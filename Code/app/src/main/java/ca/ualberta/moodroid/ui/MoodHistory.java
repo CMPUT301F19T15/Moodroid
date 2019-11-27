@@ -58,7 +58,7 @@ import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 /**
  * Get the mood history for a logged in user
  */
-public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
+public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener, EditDeleteFragment.OnInputListener {
 
     private static final String TAG = "MoodHistory";
     /**
@@ -276,6 +276,17 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         }
     }
 
+    /**
+     * After the object is deleted in the fragment, lets update the display to show that its been deleted
+     *
+     * @param eventId
+     */
+    @Override
+    public void deleteCallback(String eventId) {
+        // https://stackoverflow.com/questions/8520808/how-to-remove-specific-object-from-arraylist-in-java
+        moodList.removeIf(t -> t.getInternalId() == eventId);
+        updateListView();
+    }
 
     /**
      * This indicates whether the user has interacted with the dropdown menu.

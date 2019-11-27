@@ -49,6 +49,12 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
     MoodEventService moodEvent;
 
 
+    public interface OnInputListener {
+        void deleteCallback(String eventId);
+    }
+
+    public OnInputListener onInputListener;
+
     /**
      * Create and display the dialog for mood event actions
      *
@@ -99,8 +105,7 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                                 moodEvent.deleteEvent(moodEventModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        //TODO: Need to update the list to show delete
-                                        ((MoodHistory) getActivity()).getMood();
+                                        onInputListener.deleteCallback(id);
                                     }
                                 });
                             }
@@ -108,5 +113,21 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
 
                     }
                 }).create();
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            /* this line is main difference for fragment to fragment communication & fragment to activity communication
+            fragment to fragment: onInputListener = (OnInputListener) getTargetFragment();
+            fragment to activity: onInputListener = (OnInputListener) getActivity();
+             */
+            onInputListener = (OnInputListener) getActivity();
+            Log.d("EDITDELETEFRAG", "onAttach: " + onInputListener);
+        } catch (ClassCastException e) {
+            Log.d("EDITDELETEFRAG", "onAttach: ClassCastException : " + e.getMessage());
+        }
     }
 }
