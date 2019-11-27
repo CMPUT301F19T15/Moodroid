@@ -204,20 +204,14 @@ public class AddFriend extends AppCompatActivity {
         request.setRequesterUsername(me);
         request.setState(FollowRequestModel.REQUESTED_STATE);
         request.setCreatedAt((String.valueOf((new
-
                 Date()).
-
                 getTime())));
-        requests.create(request).
-
-                addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ModelInterface> task) {
-                        if (task.isSuccessful()) {
-                            statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
-                            Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
-                        }
-                    }
-                });
+        users.createFollowRequest(request).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
+            @Override
+            public void onSuccess(FollowRequestModel followRequestModel) {
+                statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
+                Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
+            }
+        });
     }
 }

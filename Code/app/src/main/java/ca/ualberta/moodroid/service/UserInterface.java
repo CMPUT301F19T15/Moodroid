@@ -27,13 +27,22 @@ public interface UserInterface {
      */
     public Task<List<FollowRequestModel>> getAllFollowRequests();
 
+
+    /**
+     * Get a follow request by requestee username.
+     * @param username
+     * @return
+     */
+    public Task<FollowRequestModel> getFollowRequest(String username);
+
+
     /**
      * Create a new follow request for a specified user
      *
-     * @param user the user
+     * @param request the user
      * @return the follow request model
      */
-    public FollowRequestModel createFollowRequest(UserModel user);
+    public Task<FollowRequestModel> createFollowRequest(FollowRequestModel request);
 
     /**
      * Accept a follow request from another user
