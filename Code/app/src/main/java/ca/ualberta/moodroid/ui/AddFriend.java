@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.FormatFlagsConversionMismatchException;
 
 import javax.inject.Inject;
 
@@ -146,13 +147,13 @@ public class AddFriend extends AppCompatActivity {
             @Override
             public void onSuccess(UserModel userModel) {
                 //We were able to find the user
-                if(userModel != null){
+                if(userModel != null) {
                     Log.d("ADDUSER/QUERY", "Found the user: " + userModel.getUsername());
-                    new FollowRequestRepository().where("requesteeUsername", userModel.getUsername()).where("requesterUsername", me).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+                    users.getFollowRequest(userModel.getUsername()).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
                         @Override
-                        public void onComplete(@NonNull Task<ModelInterface> task) {
-                            if (task.isSuccessful()) {
-                                FollowRequestModel request = (FollowRequestModel) task.getResult();
+                        public void onSuccess(FollowRequestModel followRequestModel) {
+                            if (followRequestModel != null) {
+                                FollowRequestModel request = followRequestModel;
                                 // If a follow request was previously declined, let the another one be sent (but only update the existing one)
                                 if (request.getState().equals(FollowRequestModel.DENY_STATE)) {
                                     request.setState(FollowRequestModel.REQUESTED_STATE);
@@ -169,9 +170,8 @@ public class AddFriend extends AppCompatActivity {
                                 } else {
                                     // the request already exists - maybe notify the user that they already created one.
                                     statusField.setText("Your request has already been sent to " + name + ". The state of your request is: " + request.getState());
+                                    Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                                 }
-
-                                Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                             } else {
                                 //check if user is trying to follow themselves
                                 if (!me.equals(name)) {
@@ -183,7 +183,6 @@ public class AddFriend extends AppCompatActivity {
                                 else {
                                     statusField.setText("You cannot follow yourself.");
                                 }
-
                             }
                         }
                     });

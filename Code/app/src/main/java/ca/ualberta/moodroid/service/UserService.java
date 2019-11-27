@@ -75,13 +75,12 @@ public Task<List<FollowRequestModel>> getAllFollowRequests() {
          * @return
          */
         public Task<FollowRequestModel> getFollowRequest(String username){
-        return this.users.where("requesteeUsername", username).where("requesterUsername", this.auth.getUsername()).one().continueWith(new Continuation<ModelInterface, FollowRequestModel>() {
+        return this.requests.where("requesteeUsername", username).where("requesterUsername", this.auth.getUsername()).one().continueWith(new Continuation<ModelInterface, FollowRequestModel>() {
                 @Override
                 public FollowRequestModel then(@NonNull Task<ModelInterface> task) throws Exception {
                         FollowRequestModel followRequestModel = null;
                         if(task.isSuccessful()){
-                                ModelInterface m = task.getResult();
-                                followRequestModel = (FollowRequestModel) m;
+                                followRequestModel = (FollowRequestModel) task.getResult();
                         }
                         return followRequestModel;
 
