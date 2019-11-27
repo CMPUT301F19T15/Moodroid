@@ -1,5 +1,4 @@
-package ca
-        .ualberta.moodroid.ui;
+package ca.ualberta.moodroid.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
