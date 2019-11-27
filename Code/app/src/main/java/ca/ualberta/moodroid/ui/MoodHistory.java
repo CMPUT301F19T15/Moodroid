@@ -481,10 +481,19 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         //Intent intent = new Intent(MoodHistory.this, EditDeleteFragment.class);
         Bundle bundle = new Bundle();
         bundle.putString("eventId", moodEvent.getInternalId());
-        // TODO grab the mood info here
-        bundle.putString("emoji", "asdads");
         bundle.putString("mood_name", moodEvent.getMoodName());
-        bundle.putString("hex", "#343434");
+        MoodRepository moodRepository = new MoodRepository();
+        moodRepository.where("name", moodEvent.getMoodName()).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+            @Override
+            public void onSuccess(List<ModelInterface> modelInterfaces) {
+                for (ModelInterface m : modelInterfaces) {
+                    MoodModel s = (MoodModel) m;
+                    Log.d("RESULT/GET", s.getInternalId());
+                    bundle.putString("emoji", s.getEmoji());
+                    bundle.putString("hex", s.getColor());
+                }
+            }
+        });
 
 
         FragmentManager manager = getSupportFragmentManager();

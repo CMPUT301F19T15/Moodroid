@@ -91,7 +91,8 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d("RESULT/DELETE", "Model Deleted");
-                                        ((MoodHistory) getActivity()).getMood();
+                                        //TODO: currently this causes a crash
+                                        //((MoodHistory) getActivity()).getMood();
                                     }
                                 });
                             }

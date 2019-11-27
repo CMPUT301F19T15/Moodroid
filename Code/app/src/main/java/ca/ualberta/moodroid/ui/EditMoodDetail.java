@@ -61,7 +61,7 @@ import static android.view.View.GONE;
  */
 public class EditMoodDetail extends AddMoodDetail {
 
-    private ImageView img;
+    protected ImageView img;
     /**
      * Initialize the mood event service
      */
@@ -105,7 +105,7 @@ public class EditMoodDetail extends AddMoodDetail {
         initializeDialogs(emoji, mood_name, hex);
 
         // Set the design based on the mood
-        mood_img.setText(emoji);
+        mood_img.setText(intent.getExtras().getString("emoji"));
         mood_title.setText(mood_name);
         banner.setBackgroundColor(Color.parseColor(hex));
 
@@ -127,10 +127,17 @@ public class EditMoodDetail extends AddMoodDetail {
                 setInitialMoodEvent(moodEventModel);
                 //set social situation
                 String val = moodEventModel.getSituation();
-                if (val.equals("Alone")){social_situation.setSelection(1);}
-                else if (val.equals("One Other Person")){social_situation.setSelection(2);}
-                else if (val.equals("Two to Several People")){social_situation.setSelection(3); Log.d("THIS MEANS IT WORK", "ITWORK");}
-                else if (val.equals("Crowd")){social_situation.setSelection(4);}
+                if (!(val == null)) {
+                    if (val.equals("Alone")) {
+                        social_situation.setSelection(1);
+                    } else if (val.equals("One Other Person")) {
+                        social_situation.setSelection(2);
+                    } else if (val.equals("Two to Several People")) {
+                        social_situation.setSelection(3);
+                    } else if (val.equals("Crowd")) {
+                        social_situation.setSelection(4);
+                    }
+                }
                 //set location
                 if (moodEventModel.getLocation() != null){
                     double latt = moodEventModel.getLocation().getLatitude();
@@ -170,6 +177,7 @@ public class EditMoodDetail extends AddMoodDetail {
         reason_text.addTextChangedListener(textWatcher);
 
         // initializing the views that will be set from the last activity
+        img = findViewById(R.id.photoView);
         mood_img = findViewById(R.id.mood_img);
         mood_title = findViewById(R.id.mood_text);
         banner = findViewById(R.id.banner);
@@ -178,7 +186,6 @@ public class EditMoodDetail extends AddMoodDetail {
         addPhotoButton.setVisibility(View.VISIBLE);
         removeLocationButton.setVisibility(GONE);
         addLocationButton.setVisibility(View.VISIBLE);
-        img = findViewById(R.id.edit_photoView);
 
     }
 
@@ -280,10 +287,10 @@ public class EditMoodDetail extends AddMoodDetail {
     @OnClick(R.id.add_detail_confirm_btn)
     public void confirmClick() {
         //set moodEvent
-        moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
         moodEvent.setSituation(social_situation.getSelectedItem().toString());
         moodEvent.setMoodName(mood_title.getText().toString());
+        moodEvent.setLocation(moodLocation);
         moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
         moodEvent.setReasonImageUrl(url);
 
