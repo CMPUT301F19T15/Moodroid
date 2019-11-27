@@ -45,6 +45,11 @@ public interface UserInterface {
     public Task<FollowRequestModel> createFollowRequest(FollowRequestModel request);
 
     /**
+     * Update an existing follow request.
+     */
+    public Task<FollowRequestModel> updateFollowRequest(FollowRequestModel request);
+
+    /**
      * Accept a follow request from another user
      *
      * @param request the request

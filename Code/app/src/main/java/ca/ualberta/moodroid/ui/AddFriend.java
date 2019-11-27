@@ -131,18 +131,6 @@ public class AddFriend extends AppCompatActivity {
         statusField.setText("");
         Log.d("ADDUSER/OUT", "I am: " + me);
         final String name = this.usernameField.getText().toString();
-
-//        // TODO: refactor to use the userService
-//        new UserRepository().where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
-//            @Override
-//            public void onComplete(@NonNull Task<ModelInterface> task) {
-//                // We were able to find the user
-//                if (task.isSuccessful()) {
-//                    UserModel user = (UserModel) task.getResult();
-//                    Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
-
-
-
         users.getUserByUsername(name).addOnSuccessListener(new OnSuccessListener<UserModel>() {
             @Override
             public void onSuccess(UserModel userModel) {
@@ -160,11 +148,10 @@ public class AddFriend extends AppCompatActivity {
                                     // update the date
                                     request.setCreatedAt((String.valueOf((new Date()).getTime())));
                                     // Update the existing follow request, and notify the end user.
-                                    requests.update(request).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                                    users.updateFollowRequest(request).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
                                         @Override
-                                        public void onSuccess(ModelInterface modelInterface) {
+                                        public void onSuccess(FollowRequestModel followRequestModel) {
                                             statusField.setText("Your request was resent to " + name + ". It was previously declined.");
-
                                         }
                                     });
                                 } else {

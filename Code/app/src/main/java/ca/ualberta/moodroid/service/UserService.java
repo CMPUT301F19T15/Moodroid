@@ -136,7 +136,7 @@ public List<FollowRequestModel> then(@NonNull Task<List<ModelInterface>> task) t
         }
 
 /**
- * Not implemented
+ * Create a new follow request.
  *
  * @param request
  * @return
@@ -154,6 +154,31 @@ public Task<FollowRequestModel> createFollowRequest(FollowRequestModel request) 
         });
 
 }
+
+/**
+ * Update an existing follow request.
+ */
+public Task<FollowRequestModel> updateFollowRequest(FollowRequestModel request) {
+        return this.requests.update(request).continueWith(new Continuation<ModelInterface, FollowRequestModel>() {
+                @Override
+                public FollowRequestModel then(@NonNull Task<ModelInterface> task) throws Exception {
+                        if(task.isSuccessful()){
+                                return (FollowRequestModel) task.getResult();
+                        }
+                        Log.d("FOLLOWREQUESTMODEL/UPDATE", "Not yet successful...");
+                        return request;
+                }
+        });
+
+
+}
+
+//                                  requests.update(request).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+//                @Override
+//                public void onSuccess(ModelInterface modelInterface)
+
+
+
 
 /**
  * Accept a follow request
