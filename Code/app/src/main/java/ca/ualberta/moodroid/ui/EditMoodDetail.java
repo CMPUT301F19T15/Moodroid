@@ -209,6 +209,7 @@ public class EditMoodDetail extends AddMoodDetail {
         mood_title = findViewById(R.id.mood_text);
         banner = findViewById(R.id.banner);
         social_situation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, EditMoodDetail.situations));
+        confirmBtn.setText("Save changes");
     }
 
     /**
