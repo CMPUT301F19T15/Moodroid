@@ -56,6 +56,7 @@ import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
+import ca.ualberta.moodroid.service.StorageService;
 
 import static android.view.View.GONE;
 
@@ -71,10 +72,14 @@ public class EditMoodDetail extends AddMoodDetail {
     @Inject
     MoodEventService moodEvents;
 
-
     @Inject
     AuthenticationService auth;
 
+    @Inject
+    StorageService storageService;
+
+    protected FirebaseStorage storage;
+    protected StorageReference storageReference;
 
     /**
      * Setter for the event to be updated
@@ -178,11 +183,12 @@ public class EditMoodDetail extends AddMoodDetail {
                     url = moodEventModel.getReasonImageUrl();
                     removePhotoButton.setVisibility(View.VISIBLE);
                     addPhotoButton.setVisibility(GONE);
+                    hasPhoto = true;
 
                 } else {
                     removePhotoButton.setVisibility(GONE);
                     addPhotoButton.setVisibility(View.VISIBLE);
-
+                    hasPhoto = false;
                 }
 
             }
@@ -194,22 +200,15 @@ public class EditMoodDetail extends AddMoodDetail {
      * Initialize the text and edit views on the display here
      */
     protected void initializeViews() {
-        //initializing firebase storage
         // TODO use the storageService instead
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-
         //initializing TextWatcher to check for invalid reason text input
         reason_text.addTextChangedListener(textWatcher);
-
         // initializing the views that will be set from the last activity
         img = findViewById(R.id.photoView);
         mood_img = findViewById(R.id.mood_img);
         mood_title = findViewById(R.id.mood_text);
         banner = findViewById(R.id.banner);
         social_situation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, EditMoodDetail.situations));
-
-
     }
 
     /**
@@ -246,10 +245,11 @@ public class EditMoodDetail extends AddMoodDetail {
                 //choosing a new one
                 if (hasPhoto) {
                     //delete current photo before proceeding
-                    ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("DELETION/", "Photo deleted.");
+                            hasPhoto = false;
                         }
                     });
                 }
@@ -264,12 +264,17 @@ public class EditMoodDetail extends AddMoodDetail {
             @Override
             public void onClick(View view) {
                 //deletes the photo from Firestore and updates the imageView
-                ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("DELETION/", "Photo deleted.");
-                    }
-                });
+                if (hasPhoto) {
+                    //delete current photo before proceeding
+                    storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("DELETION/", "Photo deleted.");
+                            hasPhoto = false;
+
+                        }
+                    });
+                }
                 addPhotoButton.setVisibility(View.VISIBLE);
                 removePhotoButton.setVisibility(GONE);
                 //clear the imageView
@@ -315,22 +320,24 @@ public class EditMoodDetail extends AddMoodDetail {
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(auth.getUsername());
         moodEvent.setLocation(moodLocation);
-        moodEvent.setReasonImageUrl(url);
+        //don't set to null before clicking confirm or the photo will be deleted even when the user
+        //cancels the edit
+        if(!hasPhoto){
+            moodEvent.setReasonImageUrl(null);
+        } else {
+            moodEvent.setReasonImageUrl(url);
+        }
 
 
         //TODO not in the service
-        MoodEventRepository moodEventRepository = new MoodEventRepository();
-        moodEventRepository.update(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+        moodEvents.updateEvent(moodEvent).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
             @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                MoodEventModel m = (MoodEventModel) modelInterface;
-
-                Log.d("MOODEVENT/EDIT", "Updated reason: " + m.getReasonText());
+            public void onSuccess(MoodEventModel moodEventModel) {
+                Log.d("MOODEVENT/EDIT", "Updated reason: " + moodEventModel.getReasonText());
                 finish();
                 startActivity(new Intent(EditMoodDetail.this, MoodHistory.class));
             }
         });
-
     }
 }
 

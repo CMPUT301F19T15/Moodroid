@@ -47,7 +47,7 @@ public interface MoodEventInterface {
      *
      * @param moodEvent the mood event
      */
-    public void updateEvent(MoodEventModel moodEvent);
+    public Task<MoodEventModel> updateEvent(MoodEventModel moodEvent);
 
     /**
      * Delete a mood event for the current user. Be sure this person is allowed to actually delete the mood event.
