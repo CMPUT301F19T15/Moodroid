@@ -172,8 +172,8 @@ public class MoodEventService implements MoodEventInterface {
      *
      * @param moodEvent the mood event
      */
-    public void deleteEvent(MoodEventModel moodEvent) {
-        //this.events.delete(moodEvent);
+    public Task<Void> deleteEvent(MoodEventModel moodEvent) {
+        return this.events.delete(moodEvent);
     }
 
 

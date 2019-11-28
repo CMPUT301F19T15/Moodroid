@@ -191,7 +191,11 @@ abstract class BaseRepository implements RepositoryInterface {
         return this.collection.document(id).get().continueWith(new Continuation<DocumentSnapshot, ModelInterface>() {
             @Override
             public ModelInterface then(@NonNull Task<DocumentSnapshot> task) throws Exception {
-                return task.getResult().toObject(modelClass);
+                DocumentSnapshot doc = task.getResult();
+                ModelInterface m = doc.toObject(modelClass);
+                m.setInternalId(doc.getId());
+
+                return m;
             }
 
         });
@@ -265,7 +269,7 @@ abstract class BaseRepository implements RepositoryInterface {
      * @return
      */
     public Task<Void> delete(ModelInterface model) {
-        Log.d("REPO/DELETE", model.getInternalId());
+        //Log.d("REPO/DELETE", model.getInternalId());
         return this.collection.document(model.getInternalId()).delete();
     }
 

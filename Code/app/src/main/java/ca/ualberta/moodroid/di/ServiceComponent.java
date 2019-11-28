@@ -16,6 +16,7 @@ import ca.ualberta.moodroid.ui.AddMood;
 import ca.ualberta.moodroid.ui.AddMoodDetail;
 import ca.ualberta.moodroid.ui.BaseUIActivity;
 import ca.ualberta.moodroid.ui.EditDeleteFragment;
+import ca.ualberta.moodroid.ui.EditMoodDetail;
 import ca.ualberta.moodroid.ui.FollowListAdapter;
 import ca.ualberta.moodroid.ui.FriendMap;
 import ca.ualberta.moodroid.ui.FriendsMoods;
@@ -67,6 +68,8 @@ public interface ServiceComponent {
     void inject(AddMoodDetail addMoodDetail);
 
     void inject(EditDeleteFragment editDeleteFragment);
+
+    void inject(EditMoodDetail editMoodDetail);
 
     void inject(FollowListAdapter followListAdapter);
 

@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,8 +37,11 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
+import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
+
+import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
@@ -53,7 +58,7 @@ import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 /**
  * Get the mood history for a logged in user
  */
-public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
+public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener, EditDeleteFragment.OnInputListener {
 
     private static final String TAG = "MoodHistory";
     /**
@@ -138,7 +143,6 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * The progress bar.
      */
     private ProgressBar progressBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,7 +238,8 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
  */
     }
 
-    private void getMood() {
+    public void getMood() {
+
 
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();
@@ -271,6 +276,17 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         }
     }
 
+    /**
+     * After the object is deleted in the fragment, lets update the display to show that its been deleted
+     *
+     * @param eventId
+     */
+    @Override
+    public void deleteCallback(String eventId) {
+        // https://stackoverflow.com/questions/8520808/how-to-remove-specific-object-from-arraylist-in-java
+        moodList.removeIf(t -> t.getInternalId() == eventId);
+        updateListView();
+    }
 
     /**
      * This indicates whether the user has interacted with the dropdown menu.
@@ -465,7 +481,8 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      */
     @Override
     public void onListClick(int position) {
-        openEditDeleteDialog();
+
+        openEditDeleteDialog(position);
     }
 
     @Override
@@ -473,6 +490,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         if (moodList.size() != 0) {  //else, if click too fast: size = 0 and app crashes
             MoodEventModel moodEventModel = moodList.get(position);
             moodEventModel.getInternalId();
+
             intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
             intent.putExtra("eventId", moodEventModel.getInternalId());
             intent.putExtra("caller", MoodHistory.class.toString());
@@ -487,10 +505,37 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * where the user can decide on what they want to do with
      * the list item that has been clicked
      */
-    public void openEditDeleteDialog() {
+    public void openEditDeleteDialog(int position) {
 
-        EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
-        editDeleteFragment.show(getSupportFragmentManager(), "Options");
+        MoodEventModel moodEvent = moodList.get(position);
+        //Intent intent = new Intent(MoodHistory.this, EditDeleteFragment.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("eventId", moodEvent.getInternalId());
+        bundle.putString("mood_name", moodEvent.getMoodName());
+        // TODO not DI
+        MoodRepository moodRepository = new MoodRepository();
+        moodRepository.where("name", moodEvent.getMoodName()).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+            @Override
+            public void onSuccess(List<ModelInterface> modelInterfaces) {
+                for (ModelInterface m : modelInterfaces) {
+                    MoodModel s = (MoodModel) m;
+                    Log.d("RESULT/GET", s.getInternalId());
+                    bundle.putString("emoji", s.getEmoji());
+                    bundle.putString("hex", s.getColor());
+                }
+            }
+        });
+
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment frag = manager.findFragmentByTag("edit_delete_fragment");
+        if (frag != null) {
+            manager.beginTransaction().remove(frag).commit();
+        }
+        EditDeleteFragment editFrag = new EditDeleteFragment();
+        editFrag.setArguments(bundle);
+        editFrag.show(manager, "edit_delete_fragment");
+
     }
 
 
