@@ -381,7 +381,10 @@ public class EditMoodDetail extends AddMoodDetail {
         });
     }
 
-
+    /**
+     * override onBackPressed to prevent it from calling AddMoodDetail's onBackPressed which would
+     * delete the photo if the user cancels the edit
+     */
     @Override
     public void onBackPressed() {
         //if photo has changed
@@ -404,8 +407,6 @@ public class EditMoodDetail extends AddMoodDetail {
             }
         }
         finish();
-        //override onBackPressed to prevent it from calling AddMoodDetail's onBackPressed which would
-        //delete the photo if the user cancels the edit
     }
 }
 

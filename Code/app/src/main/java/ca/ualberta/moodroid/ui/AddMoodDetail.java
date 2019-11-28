@@ -25,10 +25,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
@@ -477,8 +479,6 @@ public class AddMoodDetail extends AppCompatActivity {
             }
             //upload photo to firestore
             uploadPhoto();
-            addPhotoButton.setVisibility(GONE);
-            removePhotoButton.setVisibility(View.VISIBLE);
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             lat = data.getStringExtra("lat");
             lon = data.getStringExtra("lon");
@@ -493,10 +493,8 @@ public class AddMoodDetail extends AppCompatActivity {
 
             addLocationButton.setVisibility(GONE);
             removeLocationButton.setVisibility(View.VISIBLE);
-
         }
     }
-
 
     /**
      * This uploads the photo the user picked from their library to the firebase storage.
@@ -517,12 +515,25 @@ public class AddMoodDetail extends AppCompatActivity {
                     storageService.getUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            urll = uri;
-                            url = urll.toString();
-                            //confirm upload to user
+                            if(uri != null){
+                                urll = uri;
+                                url = urll.toString();
+                                //confirm upload to user
+                                progressDialog.dismiss();
+                                Toast.makeText(AddMoodDetail.this, "Image saved. ", Toast.LENGTH_SHORT).show();
+                                hasPhoto = true;
+                                addPhotoButton.setVisibility(GONE);
+                                removePhotoButton.setVisibility(View.VISIBLE);
+                            } else {
+                                progressDialog.dismiss();
+                                Toast.makeText(AddMoodDetail.this, "Image could not be saved. ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(AddMoodDetail.this, "Image saved. ", Toast.LENGTH_SHORT).show();
-                            hasPhoto = true;
+                            Toast.makeText(AddMoodDetail.this, "Image could not be saved. ", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
