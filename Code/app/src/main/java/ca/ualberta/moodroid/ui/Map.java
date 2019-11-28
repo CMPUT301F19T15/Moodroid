@@ -322,10 +322,10 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             public void onSuccess(List<MoodEventModel> moodEventModels) {
                 Log.d("MOODMAP/GETEVENTS", "Got mood Events: " + moodEventModels.size());
                 mMap.clear();
-                for(MoodEventModel eventModel : moodEventModels){
+                for(MoodEventModel event : moodEventModels){
                     // setting the MoodEventModel to event so it then can be used to
                     // call the get location, emoji,....
-                    MoodEventModel event = (MoodEventModel) eventModel;
+//                    MoodEventModel event = (MoodEventModel) eventModel;
 
                     // just making sure it actually works
                     Log.d("MARKER", "NEW EVENT LOCATION: " + event.getLocation());
