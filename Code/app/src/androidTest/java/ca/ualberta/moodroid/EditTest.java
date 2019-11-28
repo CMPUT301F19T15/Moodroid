@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -19,9 +20,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.os.SystemClock.sleep;
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -29,11 +32,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class FollowSendTest {
+public class EditTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -44,7 +48,7 @@ public class FollowSendTest {
                     "android.permission.ACCESS_FINE_LOCATION");
 
     @Test
-    public void followSendTest() {
+    public void editTest() {
         ViewInteraction supportVectorDrawablesButton = onView(
                 allOf(withId(R.id.email_button), withText("Sign in with email"),
                         childAtPosition(
@@ -90,18 +94,8 @@ public class FollowSendTest {
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 4)));
+        sleep(1000);
         appCompatButton2.perform(scrollTo(), click());
-
-        ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.ic_friends),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.bottomnav),
-                                        0),
-                                2),
-                        isDisplayed()));
-        sleep(2000);
-        bottomNavigationItemView.perform(click());
 
         ViewInteraction appCompatImageButton = onView(
                 allOf(withId(R.id.toolbar_button_left),
@@ -114,85 +108,160 @@ public class FollowSendTest {
         sleep(1000);
         appCompatImageButton.perform(click());
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.username),
+        ViewInteraction appCompatButton3 = onView(
+                allOf(withId(R.id.Annoyed), withText("\uD83D\uDE12"),
                         childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
+                                allOf(withId(R.id.wheel),
                                         childAtPosition(
-                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        sleep(1000);
+        appCompatButton3.perform(click());
+
+        ViewInteraction appCompatButton4 = onView(
+                allOf(withId(R.id.centerButton), withText("\uD83D\uDE12"),
+                        childAtPosition(
+                                allOf(withId(R.id.wheel),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                0)),
+                                0),
+                        isDisplayed()));
+        appCompatButton4.perform(click());
+
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.mood_detail_reason),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        1),
+                                0)));
+        appCompatEditText.perform(scrollTo(), replaceText("yes"), closeSoftKeyboard());
+
+        ViewInteraction appCompatButton5 = onView(
+                allOf(withId(R.id.add_detail_confirm_btn), withText("Add To History"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        4),
+                                0)));
+        appCompatButton5.perform(scrollTo(), click());
+
+        ViewInteraction cardView = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.mood_list_view),
+                                childAtPosition(
+                                        withId(R.id.body),
+                                        1)),
+                        0),
+                        isDisplayed()));
+        sleep(1000);
+        cardView.perform(longClick());
+
+
+        ViewInteraction appCompatButton6 = onView(
+                allOf(withId(android.R.id.button1), withText("Edit"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                3)));
+        sleep(1000);
+        appCompatButton6.perform(scrollTo(), click());
+
+        ViewInteraction appCompatButton7 = onView(
+                allOf(withId(R.id.add_location_button), withText("add location"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        0),
+                                1)));
+        appCompatButton7.perform(scrollTo(), click());
+
+        ViewInteraction button = onView(
+                allOf(withId(R.id.addLocationBtn), withText("Add Location"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        sleep(1000);
+        button.perform(click());
+
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.social_situation),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        3),
+                                1)));
+        appCompatSpinner.perform(scrollTo(), click());
+
+        DataInteraction appCompatCheckedTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(4);
+        sleep(1000);
+        appCompatCheckedTextView.perform(click());
+
+        ViewInteraction appCompatButton8 = onView(
+                allOf(withId(R.id.add_detail_confirm_btn), withText("Add To History"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        4),
+                                0)));
+        appCompatButton8.perform(scrollTo(), click());
+
+        ViewInteraction cardView3 = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.mood_list_view),
+                                childAtPosition(
+                                        withId(R.id.body),
+                                        1)),
+                        0),
+                        isDisplayed()));
+        sleep(1000);
+        cardView3.perform(click());
+
+        ViewInteraction appCompatImageButton3 = onView(
+                allOf(withId(R.id.detail_view_back_button),
+                        childAtPosition(
+                                allOf(withId(R.id.banner),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.LinearLayout")),
                                                 0)),
                                 2),
                         isDisplayed()));
         sleep(1000);
-        appCompatEditText.perform(replaceText("test"), closeSoftKeyboard());
+        appCompatImageButton3.perform(click());
 
-        ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.send), withText("Send"),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
-                                                0)),
-                                3),
+        ViewInteraction cardView10 = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.mood_list_view),
+                                childAtPosition(
+                                        withId(R.id.body),
+                                        1)),
+                        0),
                         isDisplayed()));
-        appCompatButton3.perform(click());
+        sleep(1000);
+        cardView10.perform(longClick());
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.username), withText("test"),
+        ViewInteraction appCompatButton11 = onView(
+                allOf(withId(android.R.id.button3), withText("Delete"),
                         childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("intent"));
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                0)));
+        sleep(1000);
+        appCompatButton11.perform(scrollTo(), click());
 
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.username), withText("intent"),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatEditText3.perform(closeSoftKeyboard());
-
-        ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.send), withText("Send"),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        appCompatButton4.perform(click());
-
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.username), withText("intent"),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatEditText4.perform(replaceText(""));
-
-        ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.username),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatEditText5.perform(closeSoftKeyboard());
-
-        ViewInteraction bottomNavigationItemView2 = onView(
+        ViewInteraction bottomNavigationItemView = onView(
                 allOf(withId(R.id.ic_profile),
                         childAtPosition(
                                 childAtPosition(
@@ -201,7 +270,7 @@ public class FollowSendTest {
                                 3),
                         isDisplayed()));
         sleep(1000);
-        bottomNavigationItemView2.perform(click());
+        bottomNavigationItemView.perform(click());
 
         ViewInteraction appCompatButton9 = onView(
                 allOf(withId(R.id.logout_button), withText("Sign Out"),

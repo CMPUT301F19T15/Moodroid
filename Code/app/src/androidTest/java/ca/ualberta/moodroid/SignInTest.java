@@ -72,6 +72,7 @@ public class SignInTest {
                                                 withClassName(is("android.widget.ScrollView")),
                                                 0)),
                                 2)));
+        sleep(1000);
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction textInputEditText2 = onView(
@@ -90,6 +91,7 @@ public class SignInTest {
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 4)));
+        sleep(1000);
         appCompatButton2.perform(scrollTo(), click());
 
         ViewInteraction bottomNavigationItemView = onView(
@@ -102,6 +104,19 @@ public class SignInTest {
                         isDisplayed()));
         sleep(2000);
         bottomNavigationItemView.perform(click());
+
+
+        ViewInteraction appCompatButton9 = onView(
+                allOf(withId(R.id.logout_button), withText("Sign Out"),
+                        childAtPosition(
+                                allOf(withId(R.id.relativeLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
+                                                0)),
+                                2),
+                        isDisplayed()));
+        sleep(1000);
+        appCompatButton9.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
