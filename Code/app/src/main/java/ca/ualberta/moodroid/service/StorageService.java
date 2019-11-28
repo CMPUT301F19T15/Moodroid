@@ -33,17 +33,6 @@ public class StorageService implements StorageInterface {
         this.reference = storage.getReference();
     }
 
-
-//    /**
-//     * Get the storage path by url.
-//     * @param url
-//     * @return
-//     */
-//    public String getStoragePath(String url){
-//        return storage.getReferenceFromUrl(url).getPath();
-//    }
-
-
     /**
      * Get the storage reference by url.
      * @param url
@@ -52,15 +41,6 @@ public class StorageService implements StorageInterface {
     public StorageReference getStorageReference(String url){
         return storage.getReferenceFromUrl(url);
     }
-
-
-//    public StorageReference getReference() {
-//        return reference;
-//    }
-
-//    public void setReference(StorageReference reference) {
-//        this.reference = reference;
-//    }
 
     /**
      * Delete an item in the storage by Storage reference.
@@ -75,20 +55,6 @@ public class StorageService implements StorageInterface {
             }
         });
     }
-
-//    /**
-//     * Delete an item in the storage using the current reference.
-//     * @return
-//     */
-//    public Task<Void> deleteItem(){
-//        return this.reference.delete().continueWith(new Continuation<Void, Void>() {
-//            @Override
-//            public Void then(@NonNull Task<Void> task) throws Exception {
-//                Log.d("DELETION/", "Photo deleted.");
-//                return null;
-//            }
-//        });
-//    }
 
     /**
      * This allows files to be added to the storage.

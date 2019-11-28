@@ -141,30 +141,6 @@ public class BaseUIActivity extends AppCompatActivity {
         });
 
 
-
-//        FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", auth.getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    Log.e("NOTIFICATION/COUNT", e.getMessage());
-//                }
-//                if (queryDocumentSnapshots != null) {
-//                    Log.d("NOTIFICATION/UPDATE", "new data. Count=" + queryDocumentSnapshots.size());
-//                    if (queryDocumentSnapshots.size() == 0) {
-//                        if (badge != null) {
-//                            badge.hide(true);
-//                        }
-//                    } else {
-//                        if (badge != null) {
-//                            badge.hide(false);
-//                        }
-//                        setNotificationCount(queryDocumentSnapshots.size());
-//                    }
-//                }
-//
-//            }
-//        });
-
         MenuItem menuItem = menu.getItem(pageID);
         menuItem.setChecked(true);
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

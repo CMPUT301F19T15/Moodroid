@@ -34,32 +34,13 @@ public interface StorageInterface {
      * @return
      */
     public Task<Void> delete();
-//
-//
-//
-
-
-
-
-
-
-//    /**
-//     * Get the storage path by url.
-//     * @param url
-//     * @return
-//     */
-//    public String getStoragePath(String url);
-
+    
     /**
      * Get the storage reference by url.
      * @param url
      * @return
      */
     public StorageReference getStorageReference(String url);
-
-//    public StorageReference getReference();
-
-//    public void setReference(StorageReference reference);
 
     /**
      * Delete an item in the storage by Storage reference.
@@ -68,9 +49,4 @@ public interface StorageInterface {
      */
     public Task<Void> deleteByReference(StorageReference ref);
 
-//    /**
-//     * Delete an item in the storage using the current reference.
-//     * @return
-//     */
-//    public Task<Void> deleteItem();
 }
