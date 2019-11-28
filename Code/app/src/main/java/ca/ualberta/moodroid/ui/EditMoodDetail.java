@@ -352,7 +352,7 @@ public class EditMoodDetail extends AddMoodDetail {
         } else {
             moodEvent.setReasonImageUrl(url);
             //if the photo != the original photo, it's now safe to delete the original photo
-            if (!initialPhotoReference.equals(storageService.getStorageReference(url))) {
+            if ((initialPhotoReference != null) && (!initialPhotoReference.equals(storageService.getStorageReference(url)))) {
                 storageService.deleteByReference(initialPhotoReference).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

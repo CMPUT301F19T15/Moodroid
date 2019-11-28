@@ -52,6 +52,8 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
     @Inject
     StorageService storageService;
 
+    StorageReference ref;
+
     public interface OnInputListener {
         void deleteCallback(String eventId);
     }
@@ -105,7 +107,10 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                         moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
                             @Override
                             public void onSuccess(MoodEventModel moodEventModel) {
-                                StorageReference ref = storageService.getStorageReference(moodEventModel.getReasonImageUrl());
+                                ref = null;
+                                if(moodEventModel.getReasonImageUrl() != null) {
+                                    ref = storageService.getStorageReference(moodEventModel.getReasonImageUrl());
+                                }
                                 moodEvent.deleteEvent(moodEventModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
