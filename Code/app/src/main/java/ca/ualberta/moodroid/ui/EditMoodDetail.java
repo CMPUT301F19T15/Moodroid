@@ -275,7 +275,14 @@ public class EditMoodDetail extends AddMoodDetail {
                 if (hasPhoto) {
                     //delete current photo before proceeding
                     //if the photo == the original photo, do not delete yet in case the user cancels the edit
-                    if(!initialPhotoReference.equals(storageService.getStorageReference(url)) ) {
+                    if((initialPhotoReference != null) && !initialPhotoReference.equals(storageService.getStorageReference(url)) ) {
+                        storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("DELETION/", "Photo deleted.");
+                            }
+                        });
+                    } else if (initialPhotoReference == null){    //if original == null and now has photo
                         storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -377,6 +384,25 @@ public class EditMoodDetail extends AddMoodDetail {
 
     @Override
     public void onBackPressed() {
+        //if photo has changed
+        if(hasPhoto) {
+            if (initialPhotoReference != null && !initialPhotoReference.equals(storageService.getStorageReference(url))) {
+                storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DELETION/", "Photo deleted.");
+                        hasPhoto = false;
+                    }
+                });
+            } else if (initialPhotoReference == null) {    //if original == null and now has photo
+                storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DELETION/", "Photo deleted.");
+                    }
+                });
+            }
+        }
         finish();
         //override onBackPressed to prevent it from calling AddMoodDetail's onBackPressed which would
         //delete the photo if the user cancels the edit
