@@ -296,6 +296,31 @@ public class CreateDeleteTest {
                                 0)));
         sleep(1000);
         appCompatButton11.perform(scrollTo(), click());
+
+
+        ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(R.id.ic_profile),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.bottomnav),
+                                        0),
+                                3),
+                        isDisplayed()));
+        sleep(2000);
+        bottomNavigationItemView.perform(click());
+
+
+        ViewInteraction appCompatButton91 = onView(
+                allOf(withId(R.id.logout_button), withText("Sign Out"),
+                        childAtPosition(
+                                allOf(withId(R.id.relativeLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
+                                                0)),
+                                2),
+                        isDisplayed()));
+        sleep(1000);
+        appCompatButton91.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
