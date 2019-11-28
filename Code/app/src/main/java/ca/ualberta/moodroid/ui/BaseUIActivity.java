@@ -26,6 +26,7 @@ import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.UserService;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
@@ -61,6 +62,9 @@ public class BaseUIActivity extends AppCompatActivity {
 
     @Inject
     AuthenticationService auth;
+
+    @Inject
+    UserService users;
 
     protected BottomNavigationViewEx bottomNavigationViewEx;
 
@@ -112,7 +116,8 @@ public class BaseUIActivity extends AppCompatActivity {
         final AppCompatActivity me = this.getMe();
         Menu menu = bottomNavigationViewEx.getMenu();
 
-        FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", auth.getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+        users.getFollowRequestsReference(FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -134,6 +139,31 @@ public class BaseUIActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+//        FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", auth.getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                if (e != null) {
+//                    Log.e("NOTIFICATION/COUNT", e.getMessage());
+//                }
+//                if (queryDocumentSnapshots != null) {
+//                    Log.d("NOTIFICATION/UPDATE", "new data. Count=" + queryDocumentSnapshots.size());
+//                    if (queryDocumentSnapshots.size() == 0) {
+//                        if (badge != null) {
+//                            badge.hide(true);
+//                        }
+//                    } else {
+//                        if (badge != null) {
+//                            badge.hide(false);
+//                        }
+//                        setNotificationCount(queryDocumentSnapshots.size());
+//                    }
+//                }
+//
+//            }
+//        });
 
         MenuItem menuItem = menu.getItem(pageID);
         menuItem.setChecked(true);

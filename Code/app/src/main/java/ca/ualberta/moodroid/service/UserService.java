@@ -6,7 +6,12 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +72,15 @@ public class UserService implements UserInterface {
                                 return data;
                         }
                 });
+        }
+
+        /**
+         * Get a document reference for pending follow requests.
+         * @param state
+         * @return
+         */
+        public Query getFollowRequestsReference(String state){
+                return FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", auth.getUsername()).whereEqualTo("state", state);
         }
 
         /**
@@ -173,11 +187,6 @@ public class UserService implements UserInterface {
 
 
         }
-
-//                                  requests.update(request).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
-//                @Override
-//                public void onSuccess(ModelInterface modelInterface)
-
 
         /**
          * Accept a follow request

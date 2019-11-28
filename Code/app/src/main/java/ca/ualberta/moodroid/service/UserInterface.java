@@ -1,6 +1,7 @@
 package ca.ualberta.moodroid.service;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
@@ -27,6 +28,13 @@ public interface UserInterface {
      */
     public Task<List<FollowRequestModel>> getAllFollowRequests();
 
+
+    /**
+     * Get a document reference for pending follow requests.
+     * @param state
+     * @return
+     */
+    public Query getFollowRequestsReference(String state);
 
     /**
      * Get a follow request by requestee username.
