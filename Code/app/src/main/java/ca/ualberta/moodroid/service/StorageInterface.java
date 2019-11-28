@@ -34,7 +34,7 @@ public interface StorageInterface {
      * @return
      */
     public Task<Void> delete();
-    
+
     /**
      * Get the storage reference by url.
      * @param url

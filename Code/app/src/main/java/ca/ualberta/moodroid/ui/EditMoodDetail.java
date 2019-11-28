@@ -382,8 +382,9 @@ public class EditMoodDetail extends AddMoodDetail {
     }
 
     /**
-     * override onBackPressed to prevent it from calling AddMoodDetail's onBackPressed which would
-     * delete the photo if the user cancels the edit
+     * Overrides onBackPressed to prevent it from calling AddMoodDetail's onBackPressed which would
+     * delete the current photo if the user presses the back button. Also makes sure no new photo gets stored in Firestore
+     * if the user presses the back button.
      */
     @Override
     public void onBackPressed() {
