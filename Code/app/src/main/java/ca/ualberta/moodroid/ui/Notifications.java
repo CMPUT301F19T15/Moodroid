@@ -54,7 +54,6 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
 
 
     private static final int ACTIVITY_NUM = 0;
-
     private RecyclerView moodListRecyclerView;
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
