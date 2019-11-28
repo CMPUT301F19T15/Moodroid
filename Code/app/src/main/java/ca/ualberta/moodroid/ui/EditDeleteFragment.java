@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
+import ca.ualberta.moodroid.service.StorageService;
 
 import static android.graphics.Color.parseColor;
 
@@ -47,6 +49,8 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
     @Inject
     MoodEventService moodEvent;
 
+    @Inject
+    StorageService storageService;
 
     public interface OnInputListener {
         void deleteCallback(String eventId);
@@ -101,15 +105,25 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                         moodEvent.getEventWithId(id).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
                             @Override
                             public void onSuccess(MoodEventModel moodEventModel) {
+                                StorageReference ref = storageService.getStorageReference(moodEventModel.getReasonImageUrl());
                                 moodEvent.deleteEvent(moodEventModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        onInputListener.deleteCallback(id);
+                                        if (ref != null) {
+                                            storageService.deleteByReference(ref).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d("FRAGMENT/DELETEPHOTO", "Photo deleted.");
+                                                    onInputListener.deleteCallback(id);
+                                                }
+                                            });
+                                        } else {
+                                            onInputListener.deleteCallback(id);
+                                        }
                                     }
                                 });
                             }
                         });
-
                     }
                 }).create();
     }

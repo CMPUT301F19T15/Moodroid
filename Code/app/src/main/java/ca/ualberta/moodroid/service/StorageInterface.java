@@ -3,6 +3,7 @@ package ca.ualberta.moodroid.service;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
@@ -33,4 +34,43 @@ public interface StorageInterface {
      * @return
      */
     public Task<Void> delete();
+//
+//
+//
+
+
+
+
+
+
+//    /**
+//     * Get the storage path by url.
+//     * @param url
+//     * @return
+//     */
+//    public String getStoragePath(String url);
+
+    /**
+     * Get the storage reference by url.
+     * @param url
+     * @return
+     */
+    public StorageReference getStorageReference(String url);
+
+//    public StorageReference getReference();
+
+//    public void setReference(StorageReference reference);
+
+    /**
+     * Delete an item in the storage by Storage reference.
+     * @param ref
+     * @return
+     */
+    public Task<Void> deleteByReference(StorageReference ref);
+
+//    /**
+//     * Delete an item in the storage using the current reference.
+//     * @return
+//     */
+//    public Task<Void> deleteItem();
 }
