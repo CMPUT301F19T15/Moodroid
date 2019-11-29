@@ -8,12 +8,12 @@ import android.view.ViewParent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -34,16 +33,18 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LoginTest2 {
+public class SignInTest {
 
-    /*
-        This test works, like loginTest, but again it needs sleep to function, kind of like a person
-     */
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    @Rule
+    public GrantPermissionRule mGrantPermissionRule =
+            GrantPermissionRule.grant(
+                    "android.permission.ACCESS_FINE_LOCATION");
+
     @Test
-    public void loginTest2() {
+    public void signInTest() {
         ViewInteraction supportVectorDrawablesButton = onView(
                 allOf(withId(R.id.email_button), withText("Sign in with email"),
                         childAtPosition(
@@ -61,7 +62,7 @@ public class LoginTest2 {
                                         withId(R.id.email_layout),
                                         0),
                                 0)));
-        textInputEditText.perform(scrollTo(), replaceText("test123@test.ca"), closeSoftKeyboard());
+        textInputEditText.perform(scrollTo(), replaceText("intent@test.ca"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button_next), withText("Next"),
@@ -71,6 +72,7 @@ public class LoginTest2 {
                                                 withClassName(is("android.widget.ScrollView")),
                                                 0)),
                                 2)));
+        sleep(1000);
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction textInputEditText2 = onView(
@@ -89,6 +91,7 @@ public class LoginTest2 {
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 4)));
+        sleep(1000);
         appCompatButton2.perform(scrollTo(), click());
 
         ViewInteraction bottomNavigationItemView = onView(
@@ -99,20 +102,21 @@ public class LoginTest2 {
                                         0),
                                 3),
                         isDisplayed()));
-        //sleep so we don't crash
-        sleep(1000);
+        sleep(2000);
         bottomNavigationItemView.perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.profile_user_name_text_view), withText("test2"),
+
+        ViewInteraction appCompatButton9 = onView(
+                allOf(withId(R.id.logout_button), withText("Sign Out"),
                         childAtPosition(
                                 allOf(withId(R.id.relativeLayout),
                                         childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
+                                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
                                                 0)),
-                                1),
+                                2),
                         isDisplayed()));
-        textView.check(matches(withText("test2")));
+        sleep(1000);
+        appCompatButton9.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

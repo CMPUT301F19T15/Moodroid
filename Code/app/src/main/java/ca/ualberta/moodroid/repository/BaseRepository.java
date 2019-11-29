@@ -193,6 +193,10 @@ abstract class BaseRepository implements RepositoryInterface {
             public ModelInterface then(@NonNull Task<DocumentSnapshot> task) throws Exception {
                 DocumentSnapshot doc = task.getResult();
                 ModelInterface m = doc.toObject(modelClass);
+                //causes a crash if we try to set interalid on a null object
+                if (m == null){
+                    return m;
+                }
                 m.setInternalId(doc.getId());
 
                 return m;
