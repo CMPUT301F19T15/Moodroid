@@ -14,24 +14,37 @@ import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
+import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
+import ca.ualberta.moodroid.repository.MoodRepository;
+import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
+
 import static ca.ualberta.moodroid.ui.Constants.ERROR_DIALOG_REQUEST;
 import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -46,7 +59,7 @@ import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
  * This is the main page the user will see after logging into the app. the user
  * will always be brought to this page first when the app is run.
  */
-public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener {
+public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener, EditDeleteFragment.OnInputListener {
 
     private static final String TAG = "MoodHistory";
     /**
@@ -55,12 +68,21 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * one button for adding a new mood event
      * another for filtering the mood list by a certain mood
      */
-// variables needed
+    @Inject
     MoodEventService moodEvents;
+
     /**
      * The Moods.
      */
+    @Inject
     MoodService moods;
+
+    /**
+     * The Auth.
+     */
+    @Inject
+    AuthenticationService auth;
+
     private int ACTIVITY_NUM = 1;
     private Intent intent;
     /**
@@ -129,16 +151,12 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      */
     private ProgressBar progressBar;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood_history);
-        moodEvents = new MoodEventService();
-        moods = new MoodService();
+        ContextGrabber.get().di().inject(MoodHistory.this);
+//        moodEvents = new MoodEventService();
         ButterKnife.bind(this);
 
         //set progress bar to visible until listview is ready to display items
@@ -180,7 +198,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             @Override
             public void onSuccess(List<MoodModel> moodModels) {
                 spinnerMoods = moodModels;
-                for(MoodModel mood : spinnerMoods){
+                for (MoodModel mood : spinnerMoods) {
                     arrayListMoodNames.add(mood.getName());
                     arrayListEmojis.add(mood.getEmoji());
                 }
@@ -200,9 +218,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (isInteracting) {
-                    if(i == 0){
+                    if (i == 0) {
                         filterMood = null;                      //first item = no filter
-                    } else{
+                    } else {
                         filterMood = spinnerMoodNames[i];
                     }
                     getMood();
@@ -226,12 +244,17 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
  * This gets all mood events to be displayed and updates the list view.
  */
     }
-    private void getMood(){
+
+    /**
+     * Gets mood.
+     */
+    public void getMood() {
+
 
         //Recycler List View with all mood events of the user
         moodList = new ArrayList<>();
 
-        if(filterMood == null){
+        if (filterMood == null) {
             moodEvents.getMyEvents().addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                 @Override
                 public void onSuccess(List<MoodEventModel> moodEventModels) {
@@ -255,14 +278,25 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
                 public void onSuccess(List<MoodEventModel> moodEventModels) {
 
                     Log.d("MOODHISTORY/GET", "Got mood Events: " + moodEventModels.size());
-                            moodList.addAll(moodEventModels);
-                            reverseSort();
-                            updateListView();
+                    moodList.addAll(moodEventModels);
+                    reverseSort();
+                    updateListView();
                 }
             });
         }
     }
 
+    /**
+     * After the object is deleted in the fragment, lets update the display to show that its been deleted
+     *
+     * @param eventId
+     */
+    @Override
+    public void deleteCallback(String eventId) {
+        // https://stackoverflow.com/questions/8520808/how-to-remove-specific-object-from-arraylist-in-java
+        moodList.removeIf(t -> t.getInternalId() == eventId);
+        updateListView();
+    }
 
     /**
      * This indicates whether the user has interacted with the dropdown menu.
@@ -275,11 +309,12 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
     /**
      * check the map services
+     *
      * @return
      */
-    private boolean checkMapServices(){
-        if(isServicesOK()){
-            if(isMapsEnabled()){
+    private boolean checkMapServices() {
+        if (isServicesOK()) {
+            if (isMapsEnabled()) {
                 return true;
             }
         }
@@ -307,12 +342,13 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * see if gps is enabled for the device
      * if yes returns true
      * if no it will call message
-     * @return
+     *
+     * @return boolean
      */
-    public boolean isMapsEnabled(){
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+    public boolean isMapsEnabled() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
             return false;
         }
@@ -321,7 +357,6 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
     /**
      * ask for location permission
-     *
      */
     private void getLocationPermission() {
         /*
@@ -345,24 +380,24 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * sees if device can use google services
      * if not able then it will prompt user to install
      * if useable it will return true
-     * @return
+     *
+     * @return boolean
      */
-    public boolean isServicesOK(){
+    public boolean isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MoodHistory.this);
 
-        if(available == ConnectionResult.SUCCESS){
+        if (available == ConnectionResult.SUCCESS) {
             //everything is fine and the user can make map requests
             Log.d(TAG, "isServicesOK: Google Play Services is working");
             return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //an error occured but we can resolve it
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MoodHistory.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }else{
+        } else {
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
@@ -370,6 +405,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
     /**
      * the result
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -392,6 +428,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
 
     /**
      * continue with the app
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -402,10 +439,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
         Log.d(TAG, "onActivityResult: called.");
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
+                if (mLocationPermissionGranted) {
                     getMood();
-                }
-                else{
+                } else {
                     getLocationPermission();
                 }
             }
@@ -455,14 +491,16 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      */
     @Override
     public void onListClick(int position) {
-        openEditDeleteDialog();
+
+        openEditDeleteDialog(position);
     }
 
     @Override
     public void onShortClick(int position) {
-        if(moodList.size() != 0) {  //else, if click too fast: size = 0 and app crashes
+        if (moodList.size() != 0) {  //else, if click too fast: size = 0 and app crashes
             MoodEventModel moodEventModel = moodList.get(position);
             moodEventModel.getInternalId();
+
             intent = new Intent(MoodHistory.this, ViewMoodDetail.class);
             intent.putExtra("eventId", moodEventModel.getInternalId());
             intent.putExtra("caller", MoodHistory.class.toString());
@@ -476,11 +514,40 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * this is to start the new edit deletefragment
      * where the user can decide on what they want to do with
      * the list item that has been clicked
+     *
+     * @param position the position
      */
-    public void openEditDeleteDialog() {
+    public void openEditDeleteDialog(int position) {
 
-        EditDeleteFragment editDeleteFragment = new EditDeleteFragment();
-        editDeleteFragment.show(getSupportFragmentManager(), "Options");
+        MoodEventModel moodEvent = moodList.get(position);
+        //Intent intent = new Intent(MoodHistory.this, EditDeleteFragment.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("eventId", moodEvent.getInternalId());
+        bundle.putString("mood_name", moodEvent.getMoodName());
+        // TODO not DI
+        MoodRepository moodRepository = new MoodRepository();
+        moodRepository.where("name", moodEvent.getMoodName()).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
+            @Override
+            public void onSuccess(List<ModelInterface> modelInterfaces) {
+                for (ModelInterface m : modelInterfaces) {
+                    MoodModel s = (MoodModel) m;
+                    Log.d("RESULT/GET", s.getInternalId());
+                    bundle.putString("emoji", s.getEmoji());
+                    bundle.putString("hex", s.getColor());
+                }
+            }
+        });
+
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment frag = manager.findFragmentByTag("edit_delete_fragment");
+        if (frag != null) {
+            manager.beginTransaction().remove(frag).commit();
+        }
+        EditDeleteFragment editFrag = new EditDeleteFragment();
+        editFrag.setArguments(bundle);
+        editFrag.show(manager, "edit_delete_fragment");
+
     }
 
 
@@ -488,21 +555,17 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * on resume get moods
      */
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         bottomNavigationView(ACTIVITY_NUM);
-        if(checkMapServices()){
-            if(mLocationPermissionGranted){
+        if (checkMapServices()) {
+            if (mLocationPermissionGranted) {
                 getMood();
-            }
-            else{
+            } else {
                 getLocationPermission();
             }
         }
     }
-
-
-
 
 
 }

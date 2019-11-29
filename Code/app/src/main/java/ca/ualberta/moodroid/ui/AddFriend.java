@@ -1,8 +1,5 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,24 +8,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Calendar;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.Date;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
-import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
@@ -44,14 +38,8 @@ public class AddFriend extends AppCompatActivity {
     Intent intent;
 
     /**
-     * The repository that stores all request related data.
-     */
-    FollowRequestRepository requests;
-
-    /**
      * String data that stores the users username
      */
-// TODO: Get my username and wait until it is grabbed
     String me;
 
     /**
@@ -83,6 +71,20 @@ public class AddFriend extends AppCompatActivity {
     @BindView(R.id.instruction)
     TextView statusField;
 
+
+    /**
+     * The Auth.
+     */
+    @Inject
+    AuthenticationService auth;
+
+    /**
+     * The Users.
+     */
+    @Inject
+    UserService users;
+
+
     /**
      * the code below builds the UI, and implements all of the logic that comes with it. As
      * stated above, this class is meant to give the user the option to add a friend by using that
@@ -93,9 +95,9 @@ public class AddFriend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        ContextGrabber.get().di().inject(AddFriend.this);
         ButterKnife.bind(this);
-        this.requests = new FollowRequestRepository();
-        this.me = AuthenticationService.getInstance().getUsername();
+        this.me = auth.getUsername();
 
         toolBarButtonLeft = findViewById(R.id.toolbar_button_left);
         toolBarTextView = findViewById(R.id.toolbar_text_center);
@@ -108,6 +110,7 @@ public class AddFriend extends AppCompatActivity {
             public void onClick(View view) {
                 //navigate to MoodMap Activity
                 intent = new Intent(AddFriend.this, FriendsMoods.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -125,39 +128,34 @@ public class AddFriend extends AppCompatActivity {
         statusField.setText("");
         Log.d("ADDUSER/OUT", "I am: " + me);
         final String name = this.usernameField.getText().toString();
-
-        // TODO: refactor to use the userService
-        new UserRepository().where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+        users.getUserByUsername(name).addOnSuccessListener(new OnSuccessListener<UserModel>() {
             @Override
-            public void onComplete(@NonNull Task<ModelInterface> task) {
-                // We were able to find the user
-                if (task.isSuccessful()) {
-                    UserModel user = (UserModel) task.getResult();
-                    Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
-                    new FollowRequestRepository().where("requesteeUsername", user.getUsername()).where("requesterUsername", me).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+            public void onSuccess(UserModel userModel) {
+                //We were able to find the user
+                if(userModel != null) {
+                    Log.d("ADDUSER/QUERY", "Found the user: " + userModel.getUsername());
+                    users.getFollowRequest(userModel.getUsername()).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
                         @Override
-                        public void onComplete(@NonNull Task<ModelInterface> task) {
-                            if (task.isSuccessful()) {
-                                FollowRequestModel request = (FollowRequestModel) task.getResult();
+                        public void onSuccess(FollowRequestModel followRequestModel) {
+                            if (followRequestModel != null) {
+                                FollowRequestModel request = followRequestModel;
                                 // If a follow request was previously declined, let the another one be sent (but only update the existing one)
                                 if (request.getState().equals(FollowRequestModel.DENY_STATE)) {
                                     request.setState(FollowRequestModel.REQUESTED_STATE);
                                     // update the date
                                     request.setCreatedAt((String.valueOf((new Date()).getTime())));
                                     // Update the existing follow request, and notify the end user.
-                                    requests.update(request).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                                    users.updateFollowRequest(request).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
                                         @Override
-                                        public void onSuccess(ModelInterface modelInterface) {
+                                        public void onSuccess(FollowRequestModel followRequestModel) {
                                             statusField.setText("Your request was resent to " + name + ". It was previously declined.");
-
                                         }
                                     });
                                 } else {
                                     // the request already exists - maybe notify the user that they already created one.
                                     statusField.setText("Your request has already been sent to " + name + ". The state of your request is: " + request.getState());
+                                    Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                                 }
-
-                                Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                             } else {
                                 //check if user is trying to follow themselves
                                 if (!me.equals(name)) {
@@ -169,7 +167,6 @@ public class AddFriend extends AppCompatActivity {
                                 else {
                                     statusField.setText("You cannot follow yourself.");
                                 }
-
                             }
                         }
                     });
@@ -185,7 +182,8 @@ public class AddFriend extends AppCompatActivity {
     /**
      * This sends the request and notifies the user that the request has been
      * sent. the request pends approval.
-     * @param name
+     *
+     * @param name the name
      */
     protected void sendRequest(String name) {
 
@@ -194,20 +192,14 @@ public class AddFriend extends AppCompatActivity {
         request.setRequesterUsername(me);
         request.setState(FollowRequestModel.REQUESTED_STATE);
         request.setCreatedAt((String.valueOf((new
-
                 Date()).
-
                 getTime())));
-        requests.create(request).
-
-                addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ModelInterface> task) {
-                        if (task.isSuccessful()) {
-                            statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
-                            Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
-                        }
-                    }
-                });
+        users.createFollowRequest(request).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
+            @Override
+            public void onSuccess(FollowRequestModel followRequestModel) {
+                statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
+                Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
+            }
+        });
     }
 }

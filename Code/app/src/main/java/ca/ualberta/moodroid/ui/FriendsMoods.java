@@ -1,34 +1,25 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.content.Intent;
-import android.icu.util.Freezable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.auth.User;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
@@ -46,11 +37,15 @@ public class FriendsMoods extends MoodHistory {
     /**
      * the user service item that represents the users who have moods displayed.
      */
+    @Inject
     UserService users;
     /**
      * The mood event items that display the details of the moods from said users.
      */
+    @Inject
     MoodEventService moodEvents;
+
+
     private int ACTIVITY_NUM = 2;
     /**
      * An intent item, this item starts the AddFriend activity which is only reachable from this
@@ -63,6 +58,9 @@ public class FriendsMoods extends MoodHistory {
      */
     ArrayList<MoodEventModel> events;
 
+    /**
+     * The Current users.
+     */
     int currentUsers = 0;
 
     /**
@@ -79,19 +77,16 @@ public class FriendsMoods extends MoodHistory {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_moods);
-        users = new UserService();
-        moodEvents = new MoodEventService();
+        ContextGrabber.get().di().inject(FriendsMoods.this);
         allMoods = new ArrayList<>();
         events = new ArrayList<>();
 
-
-        
 
         //set progress bar to visible until listview is ready to display items
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-     
+
         bottomNavigationView(ACTIVITY_NUM);
         ButterKnife.bind(this);
         this.setTitle("Friends Mood");
@@ -162,6 +157,11 @@ public class FriendsMoods extends MoodHistory {
         this.reverseSort(this.events);
     }
 
+    /**
+     * Reverse sort.
+     *
+     * @param events the events
+     */
     protected void reverseSort(List<MoodEventModel> events) {
         Collections.sort(events, new Comparator<MoodEventModel>() {
             @Override
@@ -210,12 +210,11 @@ public class FriendsMoods extends MoodHistory {
 
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         bottomNavigationView(ACTIVITY_NUM);
 
     }
-
 
 
 }

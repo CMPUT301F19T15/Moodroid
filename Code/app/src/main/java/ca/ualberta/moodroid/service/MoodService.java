@@ -4,23 +4,21 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodRepository;
-import ca.ualberta.moodroid.repository.UserRepository;
 
 /**
  * A simple way to get moods throughout the application
  */
+@Singleton
 public class MoodService implements MoodInterface {
 
     /**
@@ -30,10 +28,13 @@ public class MoodService implements MoodInterface {
 
     /**
      * Initialize the mood repository
+     *
+     * @param moods the moods
      */
-    public MoodService() {
+    @Inject
+    public MoodService(MoodRepository moods) {
 
-        this.moods = new MoodRepository();
+        this.moods = moods;
     }
 
     /**

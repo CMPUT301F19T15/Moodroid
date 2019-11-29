@@ -31,18 +31,41 @@ import com.google.maps.android.ui.IconGenerator;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
 
 /**
  * The type Map.
  */
 public class Map extends FragmentActivity implements OnMapReadyCallback {
+
+
+    /**
+     * The Auth.
+     */
+    @Inject
+    AuthenticationService auth;
+
+
+    /**
+     * The Mood service.
+     */
+    @Inject
+    MoodService moodService;
+
+
+    /**
+     * The Mood event service.
+     */
+    @Inject
+    MoodEventService moodEventService;
 
     /**
      * Map activity where it creates the map with the
@@ -58,7 +81,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * - if time then add clusters
      */
     public Map() {
-
     }
 
     /**
@@ -87,6 +109,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * The Tool bar text.
      */
     String toolBarText;
+    /**
+     * The Intent.
+     */
     protected Intent intent;
 
     /**
@@ -100,6 +125,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     String bestProvider;
 
 
+    /**
+     * The Moods.
+     */
     List<MoodModel> moods;
 
 
@@ -127,9 +155,10 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContextGrabber.get().di().inject(Map.this);
 
         // gets the username of the user and saves it to the string to use later
-        myUserName = AuthenticationService.getInstance().getUsername();
+        myUserName = auth.getUsername();
 
 
         // setting the view to the mood maps view
@@ -161,6 +190,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 //navigate to back to profile activity
                 intent = new Intent(Map.this, Profile.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -265,7 +295,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             }
         }
 
-        new MoodService().getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
+        moodService.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
             @Override
             public void onSuccess(List<MoodModel> moodModels) {
                 moods = moodModels;
@@ -298,24 +328,16 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
 
-        // creates new moodeventrepository to then be used to get all the even mood models
-        MoodEventRepository moodEvents = new MoodEventRepository();
-
-
         // get all model interfaces (moodeventModel) then change it to a moodeventModel and get the location
-        moodEvents.where("username", myUserName).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
-
+        moodEventService.getMyEvents().addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
             @Override
-            public void onSuccess(List<ModelInterface> modelInterfaces) {
-
+            public void onSuccess(List<MoodEventModel> moodEventModels) {
+                Log.d("MOODMAP/GETEVENTS", "Got mood Events: " + moodEventModels.size());
                 mMap.clear();
-
-                // for loop to loop through all of the MoodEventModels
-                for (ModelInterface m : modelInterfaces) {
-
+                for(MoodEventModel event : moodEventModels){
                     // setting the MoodEventModel to event so it then can be used to
                     // call the get location, emoji,....
-                    MoodEventModel event = (MoodEventModel) m;
+//                    MoodEventModel event = (MoodEventModel) eventModel;
 
                     // just making sure it actually works
                     Log.d("MARKER", "NEW EVENT LOCATION: " + event.getLocation());
@@ -352,11 +374,11 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * - make it look better
      * - maybe add an icon generator class to do that
      *
-     * @param iconFactory
-     * @param text
-     * @param position
-     * @param dateTime
-     * @param socialSit
+     * @param iconFactory the icon factory
+     * @param text        the text
+     * @param position    the position
+     * @param dateTime    the date time
+     * @param socialSit   the social sit
      */
     protected void addIcon(IconGenerator iconFactory, String text, LatLng position, String dateTime, String socialSit) {
 
@@ -374,6 +396,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * <p>
      * TO DO
      * - make the initial camera view the current location of user
+     *
+     * @param latLng the lat lng
      */
     public void setCameraView(LatLng latLng) {
 

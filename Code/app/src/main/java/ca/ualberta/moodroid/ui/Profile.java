@@ -8,17 +8,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.service.AuthenticationService;
-import ca.ualberta.moodroid.service.MoodEventService;
-import ca.ualberta.moodroid.service.ValidationService;
 
 /**
  * This class creates the Profile activity, which can be navigated to from the main bottom
@@ -27,12 +27,6 @@ import ca.ualberta.moodroid.service.ValidationService;
  */
 public class Profile extends BaseUIActivity {
 
-    MoodEventService moodEvents;
-    /**
-     * This is a validation item that is used to handle user related actions like logging in
-     * and out.
-     */
-    ValidationService validation;
 
     private int ACTIVITY_NUM = 3;
 
@@ -57,12 +51,19 @@ public class Profile extends BaseUIActivity {
     @BindView(R.id.logout_button)
     Button logOutButton;
 
+    /**
+     * The Auth.
+     */
+    @Inject
+    AuthenticationService auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+        ContextGrabber.get().di().inject(Profile.this);
 
         //call to bottom navigation bar listener
         bottomNavigationView(ACTIVITY_NUM);
@@ -70,7 +71,7 @@ public class Profile extends BaseUIActivity {
 
         toolBarButtonRight.setImageResource(R.drawable.ic_menu_map_foreground);
         toolBarButtonLeft.setVisibility(View.INVISIBLE);
-        myUserName = AuthenticationService.getInstance().getUsername();
+        myUserName = auth.getUsername();
         userNameView.setText(myUserName);
 
         /**
@@ -80,24 +81,36 @@ public class Profile extends BaseUIActivity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                AuthUI.getInstance()
-                        .signOut(Profile.this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                /**
-                                 * Ensure we clear the username so they really are logged out
-                                 */
-                                AuthenticationService.getInstance().clearUsername();
-                                //finish all open activities & go to Sign In Screen (MainActivity)
-                                finish();
-                                Intent intent = new Intent(Profile.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        });
+                auth.logOut(getApplicationContext()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //finish all open activities & go to Sign In Screen (MainActivity)
+                        finish();
+                        Intent intent = new Intent(Profile.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         });
+
+
+//                AuthUI.getInstance()
+//                        .signOut(Profile.this)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                /**
+//                                 * Ensure we clear the username so they really are logged out
+//                                 */
+//                                auth.clearUsername();
+//                                //finish all open activities & go to Sign In Screen (MainActivity)
+//                                finish();
+//                                Intent intent = new Intent(Profile.this, MainActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//            }
+//        });
 
         /**
          * When the user clicks the map icon, this will start the MoodMap activity.
@@ -113,15 +126,11 @@ public class Profile extends BaseUIActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         bottomNavigationView(ACTIVITY_NUM);
 
     }
-
-
-
-
 
 
 }

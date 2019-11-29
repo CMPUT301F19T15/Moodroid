@@ -2,7 +2,7 @@ package ca.ualberta.moodroid.model;
 
 /**
  * Base model used for operations with the repository
- *
+ * <p>
  * This is an abstract class that extends to other types of models that make up the
  * bulk of the repo. Implements ModelInterface which forces any model type to have an internal ID.
  */

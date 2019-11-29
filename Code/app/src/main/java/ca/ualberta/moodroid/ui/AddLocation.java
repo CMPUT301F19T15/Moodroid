@@ -53,7 +53,6 @@ import ca.ualberta.moodroid.R;
  * sets up  the UI for the location tasks that are implemented. This file is the main java
  * source for the users mood locations that are represented on the map
  */
-
 public class AddLocation extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "Addlocation";

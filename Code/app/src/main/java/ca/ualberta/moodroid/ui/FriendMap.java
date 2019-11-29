@@ -13,10 +13,12 @@ import com.google.maps.android.ui.IconGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.UserService;
 
@@ -47,6 +49,19 @@ public class FriendMap extends Map {
      */
     private static final String TAG = "Friend maps activity";
 
+    /**
+     * The Users.
+     */
+    @Inject
+    UserService users;
+
+
+    /**
+     * The Events.
+     */
+    @Inject
+    MoodEventService events;
+
 
     /**
      * New instance map.
@@ -72,6 +87,7 @@ public class FriendMap extends Map {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContextGrabber.get().di().inject(FriendMap.this);
 
         toolBarText = "Friends Moods";
         toolBarTextView.setText(toolBarText);
@@ -86,6 +102,7 @@ public class FriendMap extends Map {
             public void onClick(View view) {
                 //navigate to back to profile activity
                 intent = new Intent(FriendMap.this, FriendsMoods.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -116,7 +133,6 @@ public class FriendMap extends Map {
     }
 
 
-
     /**
      * this is to add the map markers to the map
      * <p>
@@ -139,20 +155,15 @@ public class FriendMap extends Map {
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
 
-        // creates new moodeventrepository to then be used to get all the even mood models
-        MoodEventRepository moodEvents = new MoodEventRepository();
-
-
-        new UserService().getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+        users.getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 mMap.clear();
                 ArrayList<Task<List<MoodEventModel>>> taskList = new ArrayList<>();
                 final int totalUsers = followRequestModels.size();
-                final MoodEventService eventsvc = new MoodEventService();
-                for (FollowRequestModel user : followRequestModels){
+                for (FollowRequestModel user : followRequestModels) {
                     Log.d("FRIENDSMOOD/FRIEND", "Got friend: " + user.getRequesteeUsername());
-                    eventsvc.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
+                    events.getEventsForUser(user.getRequesteeUsername()).addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
                         @Override
                         public void onSuccess(List<MoodEventModel> moodEventModels) {
                             for (MoodEventModel event : moodEventModels) {

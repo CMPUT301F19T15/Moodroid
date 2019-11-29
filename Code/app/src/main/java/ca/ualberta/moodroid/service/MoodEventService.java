@@ -4,10 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -16,18 +13,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.RepositoryInterface;
 
 /**
  * This service allows us to get many different mood event information that's important to us.
  * It uses the authentication interface and the mood event repo to operate
  */
+@Singleton
 public class MoodEventService implements MoodEventInterface {
 
 
@@ -40,16 +34,16 @@ public class MoodEventService implements MoodEventInterface {
      */
     private MoodEventRepository events;
 
-
-    private UserService requests;
-
     /**
      * Initiate all required services
+     *
+     * @param auth   the auth
+     * @param events the events
      */
-    public MoodEventService() {
-        this.auth = AuthenticationService.getInstance();
-        this.events = new MoodEventRepository();
-        this.requests = new UserService();
+    @Inject
+    public MoodEventService(AuthenticationService auth, MoodEventRepository events) {
+        this.auth = auth;
+        this.events = events;
     }
 
     /**
@@ -58,7 +52,7 @@ public class MoodEventService implements MoodEventInterface {
      * @return my events
      */
     public Task<List<MoodEventModel>> getMyEvents() {
-        return this.getEventsForUser(AuthenticationService.getInstance().getUsername());
+        return this.getEventsForUser(auth.getUsername());
 
     }
 
@@ -92,6 +86,7 @@ public class MoodEventService implements MoodEventInterface {
 
     /**
      * Get a specific mood event by internal id.
+     *
      * @param eventId the internal id
      * @return the mood event model
      */
@@ -100,7 +95,7 @@ public class MoodEventService implements MoodEventInterface {
             @Override
             public MoodEventModel then(@NonNull Task<ModelInterface> task) throws Exception {
                 MoodEventModel eventModel = null;
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     ModelInterface m = task.getResult();
                     eventModel = (MoodEventModel) m;
                     Log.d("MOODEVENT", "Task was successful");
@@ -112,14 +107,15 @@ public class MoodEventService implements MoodEventInterface {
             }
         });
     }
-    
+
     /**
      * Get all mood events for a user, filtered by a single mood.
+     *
      * @param moodName the mood name
      * @return the events
      */
     public Task<List<MoodEventModel>> getMyEvents(String moodName) {
-        return this.events.where("username", AuthenticationService.getInstance().getUsername()).where("moodName", moodName).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
+        return this.events.where("username", auth.getUsername()).where("moodName", moodName).get().continueWith(new Continuation<List<ModelInterface>, List<MoodEventModel>>() {
             @Override
             public List<MoodEventModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {
                 List<MoodEventModel> results = new ArrayList<MoodEventModel>();
@@ -163,8 +159,17 @@ public class MoodEventService implements MoodEventInterface {
      *
      * @param moodEvent the mood event
      */
-    public void updateEvent(MoodEventModel moodEvent) {
-//        this.events.update(moodEvent);
+    public Task<MoodEventModel> updateEvent(MoodEventModel moodEvent) {
+        return this.events.update(moodEvent).continueWith(new Continuation<ModelInterface, MoodEventModel>() {
+            @Override
+            public MoodEventModel then(@NonNull Task<ModelInterface> task) throws Exception {
+                if (task.isSuccessful()) {
+                    return (MoodEventModel) task.getResult();
+                }
+                Log.d("MOODEVENT/UPDATE", "Not yet successful....");
+                return moodEvent;
+            }
+        });
     }
 
     /**
@@ -172,8 +177,8 @@ public class MoodEventService implements MoodEventInterface {
      *
      * @param moodEvent the mood event
      */
-    public void deleteEvent(MoodEventModel moodEvent) {
-        //this.events.delete(moodEvent);
+    public Task<Void> deleteEvent(MoodEventModel moodEvent) {
+        return this.events.delete(moodEvent);
     }
 
 

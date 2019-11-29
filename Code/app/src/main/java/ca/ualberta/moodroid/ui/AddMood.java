@@ -15,6 +15,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.service.MoodService;
@@ -26,7 +29,6 @@ import ca.ualberta.moodroid.service.MoodService;
  * mood selection, the user will tap the mood in the center and be brought to the AddMoodDetail
  * activity.
  */
-
 public class AddMood extends AppCompatActivity {
 
 
@@ -54,6 +56,7 @@ public class AddMood extends AppCompatActivity {
     /**
      * The mood Service.
      */
+    @Inject
     MoodService moodService;
 
     /**
@@ -71,6 +74,7 @@ public class AddMood extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_mood);
+        ContextGrabber.get().di().inject(AddMood.this);
 
         /**
          * change color of the status bar
@@ -100,7 +104,6 @@ public class AddMood extends AppCompatActivity {
          */
 
         //get mood models
-        moodService = new MoodService();
         allMoods = new ArrayList<>();
         moodService.getAllMoods().addOnSuccessListener(new OnSuccessListener<List<MoodModel>>() {
             @Override
@@ -108,7 +111,7 @@ public class AddMood extends AppCompatActivity {
                 List<MoodModel> m = moodModels;
                 allMoods.addAll(m);
                 for (MoodModel moodModel : moodModels) {
-                    switch (moodModel.getName()){
+                    switch (moodModel.getName()) {
                         case "Annoyed":
                             annoyed_button.setText(moodModel.getEmoji());
                             break;
@@ -187,6 +190,7 @@ public class AddMood extends AppCompatActivity {
                     intent.putExtra("emoji", getMoodEmoji(centerMood));
                     intent.putExtra("mood_name", centerMood);
                     intent.putExtra("hex", getMoodColor(centerMood));
+                    finish();
                     startActivity(intent);
                 }
 
@@ -198,6 +202,7 @@ public class AddMood extends AppCompatActivity {
 
     /**
      * Return the correct emoji corresponding to the moodName.
+     *
      * @param moodName
      * @return emoji String
      */
@@ -212,6 +217,7 @@ public class AddMood extends AppCompatActivity {
 
     /**
      * Return the correct color for the mood.
+     *
      * @param moodName
      * @return color String
      */

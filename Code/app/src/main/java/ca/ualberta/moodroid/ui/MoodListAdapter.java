@@ -1,39 +1,24 @@
 package ca.ualberta.moodroid.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import org.w3c.dom.Text;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodRepository;
-import ca.ualberta.moodroid.service.MoodEventService;
 
 /**
  * This is a custom adapter meant for displaying moods according to the assignment spec. It takes
@@ -44,7 +29,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     /**
      * The mood events and their unique data for display.
      */
-    MoodEventService moodEvents;
     private List<MoodModel> moods;
     private Boolean showUsername;
     /**
@@ -82,7 +66,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
          * Same as an onClickListener but for items in a custom array display.
          */
         OnListListener onListListener;
-        
+
         /**
          * Instantiates a new View holder.
          *
@@ -130,7 +114,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     public MoodListAdapter(ArrayList<MoodEventModel> moodList, List<MoodModel> moods, Boolean showUsername, OnListListener onListListener) {
         this.moodList = moodList;
         this.showUsername = showUsername;
-        context = context;
         this.moods = moods;
         this.mOnListListener = onListListener;
 
@@ -157,6 +140,12 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
          * @param position the position
          */
         void onListClick(int position);
+
+        /**
+         * On short click.
+         *
+         * @param position the position
+         */
         void onShortClick(int position);
     }
 

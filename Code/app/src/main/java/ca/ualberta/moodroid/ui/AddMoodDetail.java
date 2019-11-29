@@ -25,16 +25,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
@@ -43,14 +42,17 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.MoodEventService;
+import ca.ualberta.moodroid.service.StorageService;
 
 import static android.view.View.GONE;
 
@@ -59,57 +61,64 @@ import static android.view.View.GONE;
  * always associated with a particular mood) they are brought to this activity where they then fill
  * out the moods details. More information about what those details are below.
  */
-
 public class AddMoodDetail extends AppCompatActivity {
 
     /**
      * The imageView.
      */
-    private TextView mood_img;
+    protected TextView mood_img;
 
     /**
      * The mood title for the banner.
      */
-    private TextView mood_title;
+    protected TextView mood_title;
 
     /**
      * The banner.
      */
-    private RelativeLayout banner;
+    protected RelativeLayout banner;
 
     /**
-
      * The URI file path to the library photo .
      */
-    private Uri filePath;
+    protected Uri filePath;
 
     /**
      * The url for the photo as a String.
      */
-    private String url;
+    protected String url;
 
     /**
      * A boolean. True indicates that a photo has been uploaded.
      */
-    private boolean hasPhoto;
+    protected boolean hasPhoto;
 
     /**
      * The Firestore Uri for the photo.
      */
-    private Uri urll;
+    protected Uri urll;
 
     /**
      * The firebase storage references.
      */
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
 
     /**
      * The mood repository is activated below.
      */
-// creating the mood repo
-    final MoodEventRepository mood = new MoodEventRepository();
+    @Inject
+    AuthenticationService auth;
 
+    /**
+     * The Mood event service.
+     */
+    @Inject
+    MoodEventService moodEventService;
+
+    /**
+     * The Storage service.
+     */
+    @Inject
+    StorageService storageService;
     /**
      * The mood event model is created below. This is essentially the frame for a mood event
      * it is an object that stores all details filled out by the user in this activity, and
@@ -162,8 +171,11 @@ public class AddMoodDetail extends AppCompatActivity {
      * location text
      */
     @BindView(R.id.mood_detail_location)
-    protected  TextView locationText;
+    protected TextView locationText;
 
+    /**
+     * The Mood location.
+     */
     protected GeoPoint moodLocation;
 
 
@@ -189,13 +201,8 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The Reason image.
      */
-     @BindView(R.id.photoView)
-     protected ImageView photoView;
-
-    /**
-     * The Firestore storage reference.
-     */
-    StorageReference ref;
+    @BindView(R.id.photoView)
+    protected ImageView photoView;
 
     /**
      * UI element, a tool used for picking dates. More specifically, used for picking the
@@ -215,13 +222,19 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * new intent
      */
-    private Intent intent;
+    protected Intent intent;
 
     /**
      * The location's latitude and longitude.
      */
     String lat;
+    /**
+     * The Lon.
+     */
     String lon;
+    /**
+     * The Lat lng.
+     */
     String latLng;
 
     /**
@@ -238,13 +251,10 @@ public class AddMoodDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_mood_detail);
         ButterKnife.bind(this);
+        ContextGrabber.get().di().inject(AddMoodDetail.this);
 
         this.date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(new Date()));
         this.time.setText(new SimpleDateFormat("HH:mm", Locale.US).format(new Date()));
-
-        //initializing firebase storage
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
 
         //initializing TextWatcher to check for invalid reason text input
         reason_text.addTextChangedListener(textWatcher);
@@ -315,12 +325,13 @@ public class AddMoodDetail extends AppCompatActivity {
             public void onClick(View view) {
                 //if a photo has previously been selected, delete that photo from Firestore before
                 //choosing a new one
-                if(hasPhoto){
+                if (hasPhoto) {
                     //delete current photo before proceeding
-                    ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d("DELETION/","Photo deleted.");
+                            Log.d("DELETION/", "Photo deleted.");
+                            hasPhoto = false;
                         }
                     });
                 }
@@ -335,19 +346,19 @@ public class AddMoodDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //deletes the photo from Firestore and updates the imageView
-                ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("DELETION/", "Photo deleted.");
+                        hasPhoto = false;
+                        addPhotoButton.setVisibility(View.VISIBLE);
+                        removePhotoButton.setVisibility(GONE);
+                        //clear the imageView
+                        photoView.setImageResource(0);
                     }
                 });
-                addPhotoButton.setVisibility(View.VISIBLE);
-                removePhotoButton.setVisibility(GONE);
-                //clear the imageView
-                photoView.setImageResource(0);
-
             }
-        });
+            });
 
         addLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -434,20 +445,21 @@ public class AddMoodDetail extends AppCompatActivity {
         moodEvent.setDatetime(this.getDateString() + " " + this.getTimeString());
         moodEvent.setReasonText(reason_text.getText().toString());
         //social situation is optional
-        if(social_situation.getSelectedItemPosition() == 0){  //position 0 = none selected
+        if (social_situation.getSelectedItemPosition() == 0) {  //position 0 = none selected
             moodEvent.setSituation(null);
         } else {
             moodEvent.setSituation(social_situation.getSelectedItem().toString());
         }
         moodEvent.setMoodName(mood_title.getText().toString());
-        moodEvent.setUsername(AuthenticationService.getInstance().getUsername());
+        moodEvent.setUsername(auth.getUsername());
         moodEvent.setReasonImageUrl(url);
         moodEvent.setLocation(moodLocation);
 
-        mood.create(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+        moodEventService.createEvent(moodEvent).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
             @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                Log.d("EVENT/CREATE", "Created new mood event: " + modelInterface.getInternalId());
+            public void onSuccess(MoodEventModel moodEventModel) {
+                Log.d("EVENT/CREATE", "Created new mood event: " + moodEventModel.getInternalId());
+                finish();
                 startActivity(new Intent(AddMoodDetail.this, MoodHistory.class));
             }
         });
@@ -457,7 +469,7 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * After choosing a photo from the library, this displays the image in the photoView field,
      * and saves the path to the photo in the filePath variable.
-     *
+     * <p>
      * After adding a location this will display remove location button
      * and get rid of add location button
      * it will also turn the lat and lon to a geopoint
@@ -479,15 +491,12 @@ public class AddMoodDetail extends AppCompatActivity {
             }
             //upload photo to firestore
             uploadPhoto();
-            addPhotoButton.setVisibility(GONE);
-            removePhotoButton.setVisibility(View.VISIBLE);
-        }
-        else if(requestCode == 2 && resultCode == RESULT_OK){
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
             lat = data.getStringExtra("lat");
             lon = data.getStringExtra("lon");
             //Toast.makeText(this, "lat is " + lat + "lon is " + lon, Toast.LENGTH_SHORT).show();    ////delete this :)
             //latLng = data.getStringExtra("latlng");
-            String loc = lat + ","+ lon;
+            String loc = lat + "," + lon;
             locationText.setText(loc);
 
             Double lati = Double.parseDouble(lat);
@@ -496,46 +505,61 @@ public class AddMoodDetail extends AppCompatActivity {
 
             addLocationButton.setVisibility(GONE);
             removeLocationButton.setVisibility(View.VISIBLE);
-
         }
     }
-
 
     /**
      * This uploads the photo the user picked from their library to the firebase storage.
      */
-    private void uploadPhoto() {
+    protected void uploadPhoto() {
         if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
             //create random name starting with user's internal id
-            ref = storageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + UUID.randomUUID().toString());
+
             //add file to Firebase storage, get url
-            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            String random = UUID.randomUUID().toString();
+            storageService.addFile(FirebaseAuth.getInstance().getCurrentUser().getUid() + random, filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    storageService.getUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            urll = uri;             //Uri
-                            url = urll.toString();  //convert to string
-                            //confirm upload to user
+                            if(uri != null){
+                                urll = uri;
+                                url = urll.toString();
+                                //confirm upload to user
+                                progressDialog.dismiss();
+                                Toast.makeText(AddMoodDetail.this, "Image saved. ", Toast.LENGTH_SHORT).show();
+                                hasPhoto = true;
+                                addPhotoButton.setVisibility(GONE);
+                                removePhotoButton.setVisibility(View.VISIBLE);
+                            } else {
+                                progressDialog.dismiss();
+                                Toast.makeText(AddMoodDetail.this, "Image could not be saved. ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(AddMoodDetail.this, "Image saved. ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddMoodDetail.this, "Image could not be saved. ", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
-            })
+            });
+//On Progress listener not working anymore
                     //show upload progress on the screen
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
-                    });
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+//                                    .getTotalByteCount());
+//                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+//                        }
+//                    });
         }
 
     }
@@ -547,19 +571,22 @@ public class AddMoodDetail extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(hasPhoto){
-            ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        if (hasPhoto) {
+            storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d("DELETION/", "Photo deleted.");
+                    hasPhoto = false;
                 }
             });
         }
     }
 
+
     /**
      * Checks for valid input for the reason_text field. If more than 3 words are entered, it will
      * disable the confirm button.
+     *
      * @param charSequence
      * @param i
      * @param i1

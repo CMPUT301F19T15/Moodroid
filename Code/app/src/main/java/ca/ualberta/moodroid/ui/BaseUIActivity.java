@@ -5,36 +5,27 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import javax.inject.Inject;
 
 import butterknife.BindView;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
-import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
-import ca.ualberta.moodroid.service.MoodEventService;
+import ca.ualberta.moodroid.service.UserService;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
@@ -68,9 +59,33 @@ public class BaseUIActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_text_center)
     TextView toolBarTextView;
 
+    /**
+     * The Auth.
+     */
+    @Inject
+    AuthenticationService auth;
+
+    /**
+     * The Users.
+     */
+    @Inject
+    UserService users;
+
+    /**
+     * The Bottom navigation view ex.
+     */
     protected BottomNavigationViewEx bottomNavigationViewEx;
 
+    /**
+     * The Badge.
+     */
     protected Badge badge;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
 
     /**
@@ -104,8 +119,12 @@ public class BaseUIActivity extends AppCompatActivity {
     /**
      * Setup the bottom navigation bar view and navigation
      * This sets the bottom nav bar that is used in our 4 main activities.
+     *
+     * @param pageID the page id
      */
     protected void bottomNavigationView(int pageID) {
+        ContextGrabber.get().di().inject(BaseUIActivity.this);
+
         //set up bottom navigation bar...go to corresponding activity
         bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomnav);
         final AppCompatActivity me = this.getMe();
@@ -115,7 +134,7 @@ public class BaseUIActivity extends AppCompatActivity {
          * the block below updates the nav bar visually if there are any notifications that
          * have come in for the user to check
          */
-        FirebaseFirestore.getInstance().collection("followRequest").whereEqualTo("requesteeUsername", AuthenticationService.getInstance().getUsername()).whereEqualTo("state", FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        users.getFollowRequestsReference(FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -137,6 +156,8 @@ public class BaseUIActivity extends AppCompatActivity {
 
             }
         });
+
+
         /**
          * This block below is the main logic for the nav bars function, it uses a switch
          * that detects the tap from the user on any of the main 4 pages, and switches to
@@ -168,6 +189,11 @@ public class BaseUIActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets notification count.
+     *
+     * @param count the count
+     */
     protected void setNotificationCount(int count) {
         if (badge == null) {
             badge = new QBadgeView(this)

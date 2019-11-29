@@ -1,39 +1,24 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
-import ca.ualberta.moodroid.model.ModelInterface;
-import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.model.UserModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
-import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
 /**
@@ -46,9 +31,11 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
     /**
      * The Users.
      */
+    @Inject
     UserService users;
-    private static final int ACTIVITY_NUM = 0;
 
+
+    private static final int ACTIVITY_NUM = 0;
     private RecyclerView moodListRecyclerView;
     private RecyclerView.Adapter moodListAdapter;
     private RecyclerView.LayoutManager moodListLayoutManager; //aligns items in list
@@ -62,15 +49,15 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+        ContextGrabber.get().di().inject(Notifications.this);
 
         ButterKnife.bind(this);
         this.setTitle("Notifications");
         bottomNavigationView(ACTIVITY_NUM);
 
-        users = new UserService();
         requestList = new ArrayList<>();
 
-        new UserService().getAllFollowRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+        users.getAllFollowRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 Log.d("NOTIFICATIONS/GET", "Got follow requests: " + followRequestModels.size());
@@ -80,7 +67,7 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
                 }
             }
         });
-        new UserService().getAllFollowingRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
+        users.getAllFollowingRequests().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {
                 Log.d("NOTIFICATIONS/GET", "Got following requests: " + followRequestModels.size());
@@ -105,7 +92,7 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
         moodListRecyclerView = findViewById(R.id.notification_list_view);
         moodListRecyclerView.setHasFixedSize(true);
         moodListLayoutManager = new LinearLayoutManager(Notifications.this);
-        moodListAdapter = new FollowListAdapter(requestList, users, Notifications.this);
+        moodListAdapter = new FollowListAdapter(requestList, Notifications.this);
         moodListRecyclerView.setLayoutManager(moodListLayoutManager);
         moodListRecyclerView.setAdapter(moodListAdapter);
     }
@@ -116,9 +103,8 @@ public class Notifications extends BaseUIActivity implements FollowListAdapter.O
     }
 
 
-
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         bottomNavigationView(ACTIVITY_NUM);
 

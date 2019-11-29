@@ -31,7 +31,6 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.service.GeolocationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 
 /**
@@ -53,10 +52,6 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
      * The Mood events.
      */
     MoodEventService moodEvents;
-    /**
-     * The Geolocation. Helps pinpoint the current location on the map.
-     */
-    GeolocationService geolocation;
 
     private GoogleMap mMap;
     /**
@@ -81,12 +76,10 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
     /**
      * Instantiates a new Mood map.
      *
-     * @param moodEventService   the mood event service
-     * @param geolocationService the geolocation service
+     * @param moodEventService the mood event service
      */
-    public MoodMap(MoodEventService moodEventService, GeolocationService geolocationService) {
+    public MoodMap(MoodEventService moodEventService) {
         this.moodEvents = moodEventService;
-        this.geolocation = geolocationService;
     }
 
     /**
@@ -126,6 +119,7 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 //navigate to back to profile activity
                 intent = new Intent(MoodMap.this, Profile.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -187,8 +181,7 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
-
-    private void addMapMarkers(){
+    private void addMapMarkers() {
 
         final IconGenerator iconFactory = new IconGenerator(this);
         MoodEventRepository moodEvents = new MoodEventRepository();
@@ -196,13 +189,13 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
         moodEvents.where("username", "nguy").get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
             @Override
             public void onSuccess(List<ModelInterface> modelInterfaces) {
-                for(ModelInterface m: modelInterfaces) {
+                for (ModelInterface m : modelInterfaces) {
                     MoodEventModel event = (MoodEventModel) m;
-                    Log.d("MARKER", "NEW EVENT LOCATION: "+event.getLocation());
-                    if(event.getMoodName().equals("Mad")) {
+                    Log.d("MARKER", "NEW EVENT LOCATION: " + event.getLocation());
+                    if (event.getMoodName().equals("Mad")) {
                         addIcon(iconFactory, "\uD83D\uDE21", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
                     }
-                    if(event.getMoodName().equals("Sad")) {
+                    if (event.getMoodName().equals("Sad")) {
                         addIcon(iconFactory, "\uD83D\uDE2D", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
                     }
                     addIcon(iconFactory, "\uD83D\uDE2D", new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude()));
@@ -222,12 +215,12 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
-    private void setCameraView(){
+    private void setCameraView() {
         // Set a boundary to start
 
-        CameraUpdate center=
+        CameraUpdate center =
                 CameraUpdateFactory.newLatLng(new LatLng(53.525687, -113.125607));
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(7);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(7);
 
         mMap.moveCamera(center);
         mMap.animateCamera(zoom);

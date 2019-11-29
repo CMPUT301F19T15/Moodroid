@@ -79,7 +79,7 @@ abstract class BaseRepository implements RepositoryInterface {
     /**
      * grabs the current query from the database so the information can be used later
      *
-     * @return query
+     * @return query query
      */
     protected Query getQuery() {
         if (this.query == null) {
@@ -89,6 +89,11 @@ abstract class BaseRepository implements RepositoryInterface {
         return this.query;
     }
 
+    /**
+     * Gets query and reset.
+     *
+     * @return the query and reset
+     */
     protected Query getQueryAndReset() {
         Query q = this.getQuery();
         this.reset();
@@ -184,14 +189,22 @@ abstract class BaseRepository implements RepositoryInterface {
      * Find a specific document by it's ID
      *
      * @param id the id
-     * @return task
+     * @return task task
      */
     public Task<ModelInterface> find(String id) {
         final Class<ModelInterface> modelClass = this.getModelClass();
         return this.collection.document(id).get().continueWith(new Continuation<DocumentSnapshot, ModelInterface>() {
             @Override
             public ModelInterface then(@NonNull Task<DocumentSnapshot> task) throws Exception {
-                return task.getResult().toObject(modelClass);
+                DocumentSnapshot doc = task.getResult();
+                ModelInterface m = doc.toObject(modelClass);
+                //causes a crash if we try to set interalid on a null object
+                if (m == null){
+                    return m;
+                }
+                m.setInternalId(doc.getId());
+
+                return m;
             }
 
         });
@@ -245,7 +258,7 @@ abstract class BaseRepository implements RepositoryInterface {
      *
      * @param model the model
      * @param docId the doc id
-     * @return task
+     * @return task task
      */
     public Task<ModelInterface> create(final ModelInterface model, final String docId) {
         return this.collection.document(docId).set(model)
@@ -265,7 +278,7 @@ abstract class BaseRepository implements RepositoryInterface {
      * @return
      */
     public Task<Void> delete(ModelInterface model) {
-        Log.d("REPO/DELETE", model.getInternalId());
+        //Log.d("REPO/DELETE", model.getInternalId());
         return this.collection.document(model.getInternalId()).delete();
     }
 
