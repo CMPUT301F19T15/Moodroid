@@ -1,5 +1,6 @@
 package ca.ualberta.moodroid.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -80,24 +81,36 @@ public class Profile extends BaseUIActivity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                AuthUI.getInstance()
-                        .signOut(Profile.this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                /**
-                                 * Ensure we clear the username so they really are logged out
-                                 */
-                                auth.clearUsername();
-                                //finish all open activities & go to Sign In Screen (MainActivity)
-                                finish();
-                                Intent intent = new Intent(Profile.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        });
+                auth.logOut(getApplicationContext()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //finish all open activities & go to Sign In Screen (MainActivity)
+                        finish();
+                        Intent intent = new Intent(Profile.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         });
+
+
+//                AuthUI.getInstance()
+//                        .signOut(Profile.this)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                /**
+//                                 * Ensure we clear the username so they really are logged out
+//                                 */
+//                                auth.clearUsername();
+//                                //finish all open activities & go to Sign In Screen (MainActivity)
+//                                finish();
+//                                Intent intent = new Intent(Profile.this, MainActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//            }
+//        });
 
         /**
          * When the user clicks the map icon, this will start the MoodMap activity.

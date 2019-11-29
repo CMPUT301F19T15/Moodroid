@@ -127,17 +127,6 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //pass content view in
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.follow_notification_content, parent, false);
-        //view.setOnLongClickListener(new View.OnLongClickListener() {
-        //    @Override
-        //    public boolean onLongClick(View view) {
-        ///////////////////////////////////////////////
-////////////////////////////////go to fragment....delete from db using moodEventService.deleteEvent
-        ////////////////////////////////////////////////////
-        //        openEditDeleteDialog();
-        //        return false;
-        //    }
-        //});
-
 
         ViewHolder viewHolder = new ViewHolder(view, mOnListListener);
         return viewHolder;

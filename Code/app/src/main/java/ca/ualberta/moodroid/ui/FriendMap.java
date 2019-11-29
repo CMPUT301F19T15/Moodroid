@@ -150,10 +150,6 @@ public class FriendMap extends Map {
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
 
-        // creates new moodeventrepository to then be used to get all the even mood models
-        MoodEventRepository moodEvents = new MoodEventRepository();
-
-
         users.getAllUsersIFollow().addOnSuccessListener(new OnSuccessListener<List<FollowRequestModel>>() {
             @Override
             public void onSuccess(List<FollowRequestModel> followRequestModels) {

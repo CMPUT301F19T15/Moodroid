@@ -163,8 +163,17 @@ public class MoodEventService implements MoodEventInterface {
      *
      * @param moodEvent the mood event
      */
-    public void updateEvent(MoodEventModel moodEvent) {
-//        this.events.update(moodEvent);
+    public Task<MoodEventModel> updateEvent(MoodEventModel moodEvent) {
+        return this.events.update(moodEvent).continueWith(new Continuation<ModelInterface, MoodEventModel>() {
+            @Override
+            public MoodEventModel then(@NonNull Task<ModelInterface> task) throws Exception {
+                if (task.isSuccessful()) {
+                    return (MoodEventModel) task.getResult();
+                }
+                Log.d("MOODEVENT/UPDATE", "Not yet successful....");
+                return moodEvent;
+            }
+        });
     }
 
     /**

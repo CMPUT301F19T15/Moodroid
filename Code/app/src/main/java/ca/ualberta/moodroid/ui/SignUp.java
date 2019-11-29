@@ -27,6 +27,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.UserService;
 
 /**
  * This is an initial screen a user will encounter when they are creating a username/account.
@@ -34,14 +35,12 @@ import ca.ualberta.moodroid.service.AuthenticationService;
 public class SignUp extends AppCompatActivity {
 
 
-    /**
-     * The repository that holds user data
-     */
-    @Inject
-    UserRepository users;
-
     @Inject
     AuthenticationService auth;
+
+    @Inject
+    UserService users;
+
     /**
      * the user object as firebase knows it.
      */
@@ -73,26 +72,23 @@ public class SignUp extends AppCompatActivity {
     @OnClick(R.id.register_btn)
     public void registerUsername(View v) {
         final String username = usernameField.getText().toString();
-        users.where("username", username).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+        users.getUserByUsername(username).addOnSuccessListener(new OnSuccessListener<UserModel>() {
             @Override
-            public void onComplete(@NonNull Task<ModelInterface> task) {
-                if (task.isSuccessful()) {
+            public void onSuccess(UserModel userModel) {
+                //username already exists
+                if(userModel != null){
                     usernameField.setError("That username is already taken.");
                 } else {
-                    Exception except = task.getException();
-                    Log.d("Task Failed", except.toString());
+                    //create new user
                     UserModel m = new UserModel();
                     m.setUsername(username);
-                    users.create(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                    users.createNewUser(m, user.getUid()).addOnSuccessListener(new OnSuccessListener<UserModel>() {
                         @Override
-                        public void onSuccess(ModelInterface modelInterface) {
-                            UserModel m = (UserModel) modelInterface;
-                            Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
+                        public void onSuccess(UserModel userModel) {
                             auth.setUsername(username);
                             finish();
                             startActivity(new Intent(SignUp.this, MoodHistory.class));
                         }
-
                     });
                 }
             }

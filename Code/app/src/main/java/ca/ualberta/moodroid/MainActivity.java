@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +29,7 @@ import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
 import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.UserService;
 import ca.ualberta.moodroid.ui.MoodHistory;
 import ca.ualberta.moodroid.ui.SignUp;
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     @Inject
-    UserRepository users;
+    UserService userService;
 
     @Inject
     AuthenticationService auth;
@@ -118,13 +120,13 @@ public class MainActivity extends AppCompatActivity {
                 // Successfully signed in
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 Log.d("AUTH", "Sign-in Successful" + user.getDisplayName());
-                users.find(user.getUid()).addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+
+                userService.getUserById(user.getUid()).addOnSuccessListener(new OnSuccessListener<UserModel>() {
                     @Override
-                    public void onComplete(@NonNull Task<ModelInterface> task) {
-                        UserModel m = (UserModel) task.getResult();
-                        if (m != null) {
-                            auth.setUsername(m.getUsername());
-                            Log.d("AUTH", "User lookup Successful" + m.getUsername() + user.getUid());
+                    public void onSuccess(UserModel userModel) {
+                        if (userModel != null) {
+                            auth.setUsername(userModel.getUsername());
+                            Log.d("AUTH", "User lookup Successful" + userModel.getUsername() + user.getUid());
                             startActivity(new Intent(MainActivity.this, MoodHistory.class));
                         } else {
                             startActivity(new Intent(MainActivity.this, SignUp.class));

@@ -41,6 +41,7 @@ import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
+import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
 
 /**
@@ -55,6 +56,10 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     @Inject
     MoodService moodService;
+
+
+    @Inject
+    MoodEventService moodEventService;
 
     /**
      * Map activity where it creates the map with the
@@ -312,24 +317,16 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         // creating new icon generator
         final IconGenerator iconFactory = new IconGenerator(this);
 
-        // creates new moodeventrepository to then be used to get all the even mood models
-        MoodEventRepository moodEvents = new MoodEventRepository();
-
-
         // get all model interfaces (moodeventModel) then change it to a moodeventModel and get the location
-        moodEvents.where("username", myUserName).get().addOnSuccessListener(new OnSuccessListener<List<ModelInterface>>() {
-
+        moodEventService.getMyEvents().addOnSuccessListener(new OnSuccessListener<List<MoodEventModel>>() {
             @Override
-            public void onSuccess(List<ModelInterface> modelInterfaces) {
-
+            public void onSuccess(List<MoodEventModel> moodEventModels) {
+                Log.d("MOODMAP/GETEVENTS", "Got mood Events: " + moodEventModels.size());
                 mMap.clear();
-
-                // for loop to loop through all of the MoodEventModels
-                for (ModelInterface m : modelInterfaces) {
-
+                for(MoodEventModel event : moodEventModels){
                     // setting the MoodEventModel to event so it then can be used to
                     // call the get location, emoji,....
-                    MoodEventModel event = (MoodEventModel) m;
+//                    MoodEventModel event = (MoodEventModel) eventModel;
 
                     // just making sure it actually works
                     Log.d("MARKER", "NEW EVENT LOCATION: " + event.getLocation());

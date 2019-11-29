@@ -6,7 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +20,7 @@ import javax.inject.Singleton;
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.repository.UserRepository;
+import ca.ualberta.moodroid.ui.Profile;
 
 /**
  * Singleton pattern to get a user's username
@@ -105,6 +108,21 @@ public class AuthenticationService implements AuthenticationInterface {
         return ContextGrabber.get().getSharedPreferences("ca.ualberta.moodroid.PREFERENCE_FILE", Context.MODE_PRIVATE);
     }
 
+
+    /**
+     * Log the user out.
+     * @param context
+     * @return
+     */
+
+    public Task<Void> logOut(Context context){
+        return AuthUI.getInstance().signOut(context).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                clearUsername();
+            }
+        });
+    }
 
 }
 

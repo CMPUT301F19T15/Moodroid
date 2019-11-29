@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.FormatFlagsConversionMismatchException;
 
 import javax.inject.Inject;
 
@@ -85,7 +86,8 @@ public class AddFriend extends AppCompatActivity {
     AuthenticationService auth;
 
     @Inject
-    FollowRequestRepository requests;
+    UserService users;
+
 
     /**
      * the code below builds the UI, and implements all of the logic that comes with it. As
@@ -128,39 +130,34 @@ public class AddFriend extends AppCompatActivity {
         statusField.setText("");
         Log.d("ADDUSER/OUT", "I am: " + me);
         final String name = this.usernameField.getText().toString();
-
-        // TODO: refactor to use the userService
-        new UserRepository().where("username", name).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+        users.getUserByUsername(name).addOnSuccessListener(new OnSuccessListener<UserModel>() {
             @Override
-            public void onComplete(@NonNull Task<ModelInterface> task) {
-                // We were able to find the user
-                if (task.isSuccessful()) {
-                    UserModel user = (UserModel) task.getResult();
-                    Log.d("ADDUSER/QUERY", "Found the user: " + user.getUsername());
-                    new FollowRequestRepository().where("requesteeUsername", user.getUsername()).where("requesterUsername", me).one().addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
+            public void onSuccess(UserModel userModel) {
+                //We were able to find the user
+                if(userModel != null) {
+                    Log.d("ADDUSER/QUERY", "Found the user: " + userModel.getUsername());
+                    users.getFollowRequest(userModel.getUsername()).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
                         @Override
-                        public void onComplete(@NonNull Task<ModelInterface> task) {
-                            if (task.isSuccessful()) {
-                                FollowRequestModel request = (FollowRequestModel) task.getResult();
+                        public void onSuccess(FollowRequestModel followRequestModel) {
+                            if (followRequestModel != null) {
+                                FollowRequestModel request = followRequestModel;
                                 // If a follow request was previously declined, let the another one be sent (but only update the existing one)
                                 if (request.getState().equals(FollowRequestModel.DENY_STATE)) {
                                     request.setState(FollowRequestModel.REQUESTED_STATE);
                                     // update the date
                                     request.setCreatedAt((String.valueOf((new Date()).getTime())));
                                     // Update the existing follow request, and notify the end user.
-                                    requests.update(request).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+                                    users.updateFollowRequest(request).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
                                         @Override
-                                        public void onSuccess(ModelInterface modelInterface) {
+                                        public void onSuccess(FollowRequestModel followRequestModel) {
                                             statusField.setText("Your request was resent to " + name + ". It was previously declined.");
-
                                         }
                                     });
                                 } else {
                                     // the request already exists - maybe notify the user that they already created one.
                                     statusField.setText("Your request has already been sent to " + name + ". The state of your request is: " + request.getState());
+                                    Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                                 }
-
-                                Log.d("ADDUSER/REQUEST", "Request already exists, state: " + request.getState());
                             } else {
                                 //check if user is trying to follow themselves
                                 if (!me.equals(name)) {
@@ -172,7 +169,6 @@ public class AddFriend extends AppCompatActivity {
                                 else {
                                     statusField.setText("You cannot follow yourself.");
                                 }
-
                             }
                         }
                     });
@@ -193,20 +189,14 @@ public class AddFriend extends AppCompatActivity {
         request.setRequesterUsername(me);
         request.setState(FollowRequestModel.REQUESTED_STATE);
         request.setCreatedAt((String.valueOf((new
-
                 Date()).
-
                 getTime())));
-        requests.create(request).
-
-                addOnCompleteListener(new OnCompleteListener<ModelInterface>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ModelInterface> task) {
-                        if (task.isSuccessful()) {
-                            statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
-                            Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
-                        }
-                    }
-                });
+        users.createFollowRequest(request).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
+            @Override
+            public void onSuccess(FollowRequestModel followRequestModel) {
+                statusField.setText("Your request has been sent to " + name + ". Please wait for their approval.");
+                Log.d("ADDUSER/CREATEREQUEST", "Request Created!");
+            }
+        });
     }
 }

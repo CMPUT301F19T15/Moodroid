@@ -56,6 +56,7 @@ import ca.ualberta.moodroid.model.MoodModel;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
+import ca.ualberta.moodroid.service.StorageService;
 
 import static android.view.View.GONE;
 
@@ -71,10 +72,16 @@ public class EditMoodDetail extends AddMoodDetail {
     @Inject
     MoodEventService moodEvents;
 
-
     @Inject
     AuthenticationService auth;
 
+    @Inject
+    StorageService storageService;
+
+    StorageReference initialPhotoReference;
+
+    protected FirebaseStorage storage;
+    protected StorageReference storageReference;
 
     /**
      * Setter for the event to be updated
@@ -178,11 +185,15 @@ public class EditMoodDetail extends AddMoodDetail {
                     url = moodEventModel.getReasonImageUrl();
                     removePhotoButton.setVisibility(View.VISIBLE);
                     addPhotoButton.setVisibility(GONE);
+                    hasPhoto = true;
+                    initialPhotoReference = storageService.getStorageReference(url);
+
 
                 } else {
                     removePhotoButton.setVisibility(GONE);
                     addPhotoButton.setVisibility(View.VISIBLE);
-
+                    hasPhoto = false;
+                    initialPhotoReference = null;
                 }
 
             }
@@ -194,22 +205,16 @@ public class EditMoodDetail extends AddMoodDetail {
      * Initialize the text and edit views on the display here
      */
     protected void initializeViews() {
-        //initializing firebase storage
         // TODO use the storageService instead
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-
         //initializing TextWatcher to check for invalid reason text input
         reason_text.addTextChangedListener(textWatcher);
-
         // initializing the views that will be set from the last activity
         img = findViewById(R.id.photoView);
         mood_img = findViewById(R.id.mood_img);
         mood_title = findViewById(R.id.mood_text);
         banner = findViewById(R.id.banner);
         social_situation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, EditMoodDetail.situations));
-
-
+        confirmBtn.setText("Save changes");
     }
 
     /**
@@ -244,14 +249,17 @@ public class EditMoodDetail extends AddMoodDetail {
             public void onClick(View view) {
                 //if a photo has previously been selected, delete that photo from Firestore before
                 //choosing a new one
+                //if this is the original photo, don't delete it until the user clicks "save changes"
                 if (hasPhoto) {
-                    //delete current photo before proceeding
-                    ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("DELETION/", "Photo deleted.");
-                        }
-                    });
+                    //if the photo == the original photo, do not delete yet in case the user cancels the edit
+                    if(!initialPhotoReference.equals(storageService.getStorageReference(url)) ) {
+                        storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("DELETION/", "Photo deleted.");
+                            }
+                        });
+                    }
                 }
                 Intent intent = new Intent();
                 intent.setType("image/*");
@@ -264,17 +272,30 @@ public class EditMoodDetail extends AddMoodDetail {
             @Override
             public void onClick(View view) {
                 //deletes the photo from Firestore and updates the imageView
-                ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("DELETION/", "Photo deleted.");
+                if (hasPhoto) {
+                    //delete current photo before proceeding
+                    //if the photo == the original photo, do not delete yet in case the user cancels the edit
+                    if((initialPhotoReference != null) && !initialPhotoReference.equals(storageService.getStorageReference(url)) ) {
+                        storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("DELETION/", "Photo deleted.");
+                            }
+                        });
+                    } else if (initialPhotoReference == null){    //if original == null and now has photo
+                        storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("DELETION/", "Photo deleted.");
+                            }
+                        });
                     }
-                });
+                }
                 addPhotoButton.setVisibility(View.VISIBLE);
                 removePhotoButton.setVisibility(GONE);
                 //clear the imageView
                 photoView.setImageResource(0);
-
+                hasPhoto = false;
             }
         });
 
@@ -311,26 +332,82 @@ public class EditMoodDetail extends AddMoodDetail {
     public void confirmClick() {
         //set moodEvent
         moodEvent.setReasonText(reason_text.getText().toString());
-        moodEvent.setSituation(social_situation.getSelectedItem().toString());
+//        moodEvent.setSituation(social_situation.getSelectedItem().toString());
+        //social situation is optional
+        if (social_situation.getSelectedItemPosition() == 0) {  //position 0 = none selected
+            moodEvent.setSituation(null);
+        } else {
+            moodEvent.setSituation(social_situation.getSelectedItem().toString());
+        }
         moodEvent.setMoodName(mood_title.getText().toString());
         moodEvent.setUsername(auth.getUsername());
         moodEvent.setLocation(moodLocation);
-        moodEvent.setReasonImageUrl(url);
+        //don't set to null before clicking confirm or the photo will be deleted even when the user
+        //cancels the edit
+        if(!hasPhoto) {
+            moodEvent.setReasonImageUrl(null);
+            if (initialPhotoReference != null) {
+                storageService.deleteByReference(initialPhotoReference).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DELETION/", "Photo deleted.");
+                        hasPhoto = false;
+                    }
+                });
+            }
 
+        } else {
+            moodEvent.setReasonImageUrl(url);
+            //if the photo != the original photo, it's now safe to delete the original photo
+            if ((initialPhotoReference != null) && (!initialPhotoReference.equals(storageService.getStorageReference(url)))) {
+                storageService.deleteByReference(initialPhotoReference).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DELETION/", "Photo deleted.");
+                        hasPhoto = false;
+                    }
+                });
+            }
+        }
 
         //TODO not in the service
-        MoodEventRepository moodEventRepository = new MoodEventRepository();
-        moodEventRepository.update(moodEvent).addOnSuccessListener(new OnSuccessListener<ModelInterface>() {
+        moodEvents.updateEvent(moodEvent).addOnSuccessListener(new OnSuccessListener<MoodEventModel>() {
             @Override
-            public void onSuccess(ModelInterface modelInterface) {
-                MoodEventModel m = (MoodEventModel) modelInterface;
-
-                Log.d("MOODEVENT/EDIT", "Updated reason: " + m.getReasonText());
+            public void onSuccess(MoodEventModel moodEventModel) {
+                Log.d("MOODEVENT/EDIT", "Updated reason: " + moodEventModel.getReasonText());
                 finish();
                 startActivity(new Intent(EditMoodDetail.this, MoodHistory.class));
             }
         });
+    }
 
+    /**
+     * Overrides onBackPressed to prevent it from calling AddMoodDetail's onBackPressed which would
+     * delete the current photo if the user presses the back button. Also makes sure no new photo gets stored in Firestore
+     * if the user presses the back button.
+     */
+    @Override
+    public void onBackPressed() {
+        //if photo has changed
+        if(hasPhoto) {
+            if (initialPhotoReference != null && !initialPhotoReference.equals(storageService.getStorageReference(url))) {
+                storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DELETION/", "Photo deleted.");
+                        hasPhoto = false;
+                    }
+                });
+            } else if (initialPhotoReference == null) {    //if original == null and now has photo
+                storageService.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DELETION/", "Photo deleted.");
+                    }
+                });
+            }
+        }
+        finish();
     }
 }
 

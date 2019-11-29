@@ -44,7 +44,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     /**
      * The mood events and their unique data for display.
      */
-    MoodEventService moodEvents;
     private List<MoodModel> moods;
     private Boolean showUsername;
     /**
@@ -130,7 +129,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.ViewHo
     public MoodListAdapter(ArrayList<MoodEventModel> moodList, List<MoodModel> moods, Boolean showUsername, OnListListener onListListener) {
         this.moodList = moodList;
         this.showUsername = showUsername;
-        context = context;
         this.moods = moods;
         this.mOnListListener = onListListener;
 
