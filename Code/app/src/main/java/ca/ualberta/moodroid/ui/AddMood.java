@@ -191,6 +191,7 @@ public class AddMood extends AppCompatActivity {
                     intent.putExtra("emoji", getMoodEmoji(centerMood));
                     intent.putExtra("mood_name", centerMood);
                     intent.putExtra("hex", getMoodColor(centerMood));
+                    finish();
                     startActivity(intent);
                 }
 

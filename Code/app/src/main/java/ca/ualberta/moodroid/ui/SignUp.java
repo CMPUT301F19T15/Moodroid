@@ -86,6 +86,7 @@ public class SignUp extends AppCompatActivity {
                         @Override
                         public void onSuccess(UserModel userModel) {
                             auth.setUsername(username);
+                            finish();
                             startActivity(new Intent(SignUp.this, MoodHistory.class));
                         }
                     });

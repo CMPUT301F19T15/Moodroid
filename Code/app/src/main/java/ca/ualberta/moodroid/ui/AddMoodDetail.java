@@ -448,6 +448,7 @@ public class AddMoodDetail extends AppCompatActivity {
             @Override
             public void onSuccess(MoodEventModel moodEventModel) {
                 Log.d("EVENT/CREATE", "Created new mood event: " + moodEventModel.getInternalId());
+                finish();
                 startActivity(new Intent(AddMoodDetail.this, MoodHistory.class));
             }
         });

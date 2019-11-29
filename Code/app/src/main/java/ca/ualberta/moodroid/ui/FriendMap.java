@@ -97,6 +97,7 @@ public class FriendMap extends Map {
             public void onClick(View view) {
                 //navigate to back to profile activity
                 intent = new Intent(FriendMap.this, FriendsMoods.class);
+                finish();
                 startActivity(intent);
             }
         });
