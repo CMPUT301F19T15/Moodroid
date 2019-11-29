@@ -1,27 +1,15 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.content.Intent;
-import android.icu.util.Freezable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.auth.User;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,6 +58,9 @@ public class FriendsMoods extends MoodHistory {
      */
     ArrayList<MoodEventModel> events;
 
+    /**
+     * The Current users.
+     */
     int currentUsers = 0;
 
     /**
@@ -166,6 +157,11 @@ public class FriendsMoods extends MoodHistory {
         this.reverseSort(this.events);
     }
 
+    /**
+     * Reverse sort.
+     *
+     * @param events the events
+     */
     protected void reverseSort(List<MoodEventModel> events) {
         Collections.sort(events, new Comparator<MoodEventModel>() {
             @Override

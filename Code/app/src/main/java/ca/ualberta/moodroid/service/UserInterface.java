@@ -10,6 +10,7 @@ import ca.ualberta.moodroid.model.UserModel;
 
 /**
  * The interface User interface.
+ * Implemented in UserService
  */
 public interface UserInterface {
 
@@ -31,15 +32,17 @@ public interface UserInterface {
 
     /**
      * Get a document reference for pending follow requests.
-     * @param state
-     * @return
+     *
+     * @param state the state
+     * @return follow requests reference
      */
     public Query getFollowRequestsReference(String state);
 
     /**
      * Get a follow request by requestee username.
-     * @param username
-     * @return
+     *
+     * @param username the username
+     * @return follow request
      */
     public Task<FollowRequestModel> getFollowRequest(String username);
 
@@ -54,6 +57,9 @@ public interface UserInterface {
 
     /**
      * Update an existing follow request.
+     *
+     * @param request the request
+     * @return the task
      */
     public Task<FollowRequestModel> updateFollowRequest(FollowRequestModel request);
 
@@ -84,16 +90,18 @@ public interface UserInterface {
 
     /**
      * Find User by Id.
-     * @param userId
-     * @return
+     *
+     * @param userId the user id
+     * @return user by id
      */
     public Task<UserModel> getUserById(String userId);
 
     /**
      * Create new user.
-     * @param user
-     * @param userId
-     * @return
+     *
+     * @param user   the user
+     * @param userId the user id
+     * @return task
      */
     public Task<UserModel> createNewUser(UserModel user, String userId);
 

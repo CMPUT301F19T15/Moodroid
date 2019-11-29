@@ -1,8 +1,5 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +8,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Calendar;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.Date;
-import java.util.FormatFlagsConversionMismatchException;
 
 import javax.inject.Inject;
 
@@ -29,10 +22,7 @@ import butterknife.OnClick;
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
-import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
@@ -82,9 +72,15 @@ public class AddFriend extends AppCompatActivity {
     TextView statusField;
 
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 
+    /**
+     * The Users.
+     */
     @Inject
     UserService users;
 
@@ -122,6 +118,8 @@ public class AddFriend extends AppCompatActivity {
 
     /**
      * When the send button is clicked, attempt to follow the user.
+     * This creates a request from our app and when the "send" button is tapped it will send
+     * a friend request.
      *
      * @param view the view
      */
@@ -181,7 +179,12 @@ public class AddFriend extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * This sends the request and notifies the user that the request has been
+     * sent. the request pends approval.
+     *
+     * @param name the name
+     */
     protected void sendRequest(String name) {
 
         FollowRequestModel request = new FollowRequestModel();

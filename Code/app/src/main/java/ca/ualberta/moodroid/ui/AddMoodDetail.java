@@ -34,9 +34,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
@@ -52,9 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.StorageService;
@@ -66,7 +61,6 @@ import static android.view.View.GONE;
  * always associated with a particular mood) they are brought to this activity where they then fill
  * out the moods details. More information about what those details are below.
  */
-
 public class AddMoodDetail extends AppCompatActivity {
 
     /**
@@ -111,13 +105,18 @@ public class AddMoodDetail extends AppCompatActivity {
     /**
      * The mood repository is activated below.
      */
-
     @Inject
     AuthenticationService auth;
 
+    /**
+     * The Mood event service.
+     */
     @Inject
     MoodEventService moodEventService;
 
+    /**
+     * The Storage service.
+     */
     @Inject
     StorageService storageService;
     /**
@@ -174,6 +173,9 @@ public class AddMoodDetail extends AppCompatActivity {
     @BindView(R.id.mood_detail_location)
     protected TextView locationText;
 
+    /**
+     * The Mood location.
+     */
     protected GeoPoint moodLocation;
 
 
@@ -226,7 +228,13 @@ public class AddMoodDetail extends AppCompatActivity {
      * The location's latitude and longitude.
      */
     String lat;
+    /**
+     * The Lon.
+     */
     String lon;
+    /**
+     * The Lat lng.
+     */
     String latLng;
 
     /**
@@ -289,7 +297,10 @@ public class AddMoodDetail extends AppCompatActivity {
             window.setStatusBarColor(Color.parseColor(hex));
         }
 
-
+        /**
+         * below are the listeners that the user will interact with to set all of the specific
+         * details of their mood event.
+         */
         dateDialog = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {

@@ -1,9 +1,7 @@
 package ca.ualberta.moodroid.di;
 
 
-import ca.ualberta.moodroid.service.MoodEventService;
 import dagger.Module;
-import dagger.Provides;
 
 /**
  * The type Service module.

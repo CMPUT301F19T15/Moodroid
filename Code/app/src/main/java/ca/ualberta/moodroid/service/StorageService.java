@@ -17,7 +17,6 @@ import javax.inject.Singleton;
 /**
  * The storage service allows access to the storage in order to save, access and delete files.
  */
-
 @Singleton
 public class StorageService implements StorageInterface {
 
@@ -27,6 +26,9 @@ public class StorageService implements StorageInterface {
     private FirebaseStorage storage;
     private StorageReference reference;
 
+    /**
+     * Instantiates a new Storage service.
+     */
     @Inject
     public StorageService() {
         this.storage = FirebaseStorage.getInstance();

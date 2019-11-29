@@ -1,7 +1,5 @@
 package ca.ualberta.moodroid.model;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**

@@ -5,59 +5,68 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.StorageService;
 
-import static android.graphics.Color.parseColor;
-
 /**
+ * the function of this class is to create a simple fragment that appears after the user taps
+ * a mood event in their list, which allows the user to choose to either edit or delete
+ * a mood event.
+ * <p>
  * a fragment for editing data
  */
 public class EditDeleteFragment extends AppCompatDialogFragment {
 
 
+    /**
+     * The Mood event.
+     */
     @Inject
     MoodEventService moodEvent;
 
+    /**
+     * The Storage service.
+     */
     @Inject
     StorageService storageService;
 
+    /**
+     * The Ref.
+     */
     StorageReference ref;
 
+    /**
+     * The interface On input listener.
+     */
     public interface OnInputListener {
+        /**
+         * Delete callback.
+         *
+         * @param eventId the event id
+         */
         void deleteCallback(String eventId);
     }
 
+    /**
+     * The On input listener.
+     */
     public OnInputListener onInputListener;
 
     /**
@@ -108,7 +117,7 @@ public class EditDeleteFragment extends AppCompatDialogFragment {
                             @Override
                             public void onSuccess(MoodEventModel moodEventModel) {
                                 ref = null;
-                                if(moodEventModel.getReasonImageUrl() != null) {
+                                if (moodEventModel.getReasonImageUrl() != null) {
                                     ref = storageService.getStorageReference(moodEventModel.getReasonImageUrl());
                                 }
                                 moodEvent.deleteEvent(moodEventModel).addOnSuccessListener(new OnSuccessListener<Void>() {

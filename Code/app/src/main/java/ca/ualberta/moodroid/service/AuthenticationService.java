@@ -7,20 +7,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ca.ualberta.moodroid.ContextGrabber;
-import ca.ualberta.moodroid.model.ModelInterface;
-import ca.ualberta.moodroid.repository.UserRepository;
-import ca.ualberta.moodroid.ui.Profile;
 
 /**
  * Singleton pattern to get a user's username

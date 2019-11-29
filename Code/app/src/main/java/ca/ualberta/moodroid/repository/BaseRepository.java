@@ -79,7 +79,7 @@ abstract class BaseRepository implements RepositoryInterface {
     /**
      * grabs the current query from the database so the information can be used later
      *
-     * @return query
+     * @return query query
      */
     protected Query getQuery() {
         if (this.query == null) {
@@ -89,6 +89,11 @@ abstract class BaseRepository implements RepositoryInterface {
         return this.query;
     }
 
+    /**
+     * Gets query and reset.
+     *
+     * @return the query and reset
+     */
     protected Query getQueryAndReset() {
         Query q = this.getQuery();
         this.reset();
@@ -184,7 +189,7 @@ abstract class BaseRepository implements RepositoryInterface {
      * Find a specific document by it's ID
      *
      * @param id the id
-     * @return task
+     * @return task task
      */
     public Task<ModelInterface> find(String id) {
         final Class<ModelInterface> modelClass = this.getModelClass();
@@ -253,7 +258,7 @@ abstract class BaseRepository implements RepositoryInterface {
      *
      * @param model the model
      * @param docId the doc id
-     * @return task
+     * @return task task
      */
     public Task<ModelInterface> create(final ModelInterface model, final String docId) {
         return this.collection.document(docId).set(model)

@@ -4,15 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +33,14 @@ public class UserService implements UserInterface {
         private FollowRequestRepository requests;
         private UserRepository users;
 
-        /**
-         * Initialize all required services
-         */
-        @Inject
+    /**
+     * Initialize all required services
+     *
+     * @param auth     the auth
+     * @param requests the requests
+     * @param users    the users
+     */
+    @Inject
         public UserService(AuthenticationService auth, FollowRequestRepository requests, UserRepository users) {
                 this.auth = auth;
                 this.requests = requests;
@@ -107,12 +106,12 @@ public class UserService implements UserInterface {
         }
 
 
-        /**
-         * Get all requests I sent out to see the status
-         *
-         * @return
-         */
-        public Task<List<FollowRequestModel>> getAllFollowingRequests() {
+    /**
+     * Get all requests I sent out to see the status
+     *
+     * @return all following requests
+     */
+    public Task<List<FollowRequestModel>> getAllFollowingRequests() {
                 Log.d("USERSERVICE/FOLLOWING", "Username=" + this.auth.getUsername());
                 return this.requests.where("requesterUsername", this.auth.getUsername()).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
                         @Override
@@ -130,12 +129,12 @@ public class UserService implements UserInterface {
                 });
         }
 
-        /**
-         * Return a list of follow requests of the users that the signed in user currently follows
-         *
-         * @return all users i follow
-         */
-        public Task<List<FollowRequestModel>> getAllUsersIFollow() {
+    /**
+     * Return a list of follow requests of the users that the signed in user currently follows
+     *
+     * @return all users i follow
+     */
+    public Task<List<FollowRequestModel>> getAllUsersIFollow() {
                 return this.requests.where("requesterUsername", this.auth.getUsername()).where("state", FollowRequestModel.ACCEPT_STATE).get().continueWith(new Continuation<List<ModelInterface>, List<FollowRequestModel>>() {
                         @Override
                         public List<FollowRequestModel> then(@NonNull Task<List<ModelInterface>> task) throws Exception {

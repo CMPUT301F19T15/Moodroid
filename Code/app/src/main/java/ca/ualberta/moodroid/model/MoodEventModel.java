@@ -1,7 +1,5 @@
 package ca.ualberta.moodroid.model;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;

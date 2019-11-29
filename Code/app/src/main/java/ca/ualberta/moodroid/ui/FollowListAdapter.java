@@ -17,14 +17,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.FollowRequestModel;
-import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
@@ -41,6 +39,9 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     @Inject
     UserService userService;
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 
@@ -72,6 +73,9 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
          */
         public Button acceptButton;
 
+        /**
+         * The Date text.
+         */
         public TextView dateText;
 
         /**
@@ -79,6 +83,9 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
          * a listener for a button.
          */
         public ImageView background;
+        /**
+         * The On list listener.
+         */
         FollowListAdapter.OnListListener onListListener;
 
 

@@ -8,6 +8,7 @@ import ca.ualberta.moodroid.model.MoodModel;
 
 /**
  * The interface Mood interface.
+ * Implemented in MoodService
  */
 public interface MoodInterface {
 
@@ -20,7 +21,8 @@ public interface MoodInterface {
 
     /**
      * Get a single mood model by mood name
-     * @param moodName
+     *
+     * @param moodName the mood name
      * @return mood model
      */
     public Task<MoodModel> getMood(String moodName);

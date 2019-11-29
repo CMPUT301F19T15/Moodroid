@@ -2,7 +2,6 @@ package ca.ualberta.moodroid.model;
 
 /**
  * Simple model linking a username to firebase auth UID
- *
  */
 public class UserModel extends BaseModel {
 

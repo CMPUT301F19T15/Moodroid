@@ -4,10 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -16,13 +13,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.FollowRequestRepository;
 import ca.ualberta.moodroid.repository.MoodEventRepository;
-import ca.ualberta.moodroid.repository.RepositoryInterface;
 
 /**
  * This service allows us to get many different mood event information that's important to us.
@@ -43,6 +36,9 @@ public class MoodEventService implements MoodEventInterface {
 
     /**
      * Initiate all required services
+     *
+     * @param auth   the auth
+     * @param events the events
      */
     @Inject
     public MoodEventService(AuthenticationService auth, MoodEventRepository events) {

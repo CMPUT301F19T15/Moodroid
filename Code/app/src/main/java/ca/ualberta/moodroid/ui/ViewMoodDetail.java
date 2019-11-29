@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 
-
 import javax.inject.Inject;
 
 import ca.ualberta.moodroid.ContextGrabber;
@@ -31,6 +30,9 @@ import ca.ualberta.moodroid.service.MoodService;
 
 import static android.graphics.Color.parseColor;
 
+/**
+ * The type View mood detail.
+ */
 public class ViewMoodDetail extends BaseUIActivity {
 /**
  * This activity lets the user view all available details of a specific mood event.
@@ -45,6 +47,9 @@ public class ViewMoodDetail extends BaseUIActivity {
     MoodEventService eventService;
 
 
+    /**
+     * The Moods.
+     */
     @Inject
     MoodService moods;
 

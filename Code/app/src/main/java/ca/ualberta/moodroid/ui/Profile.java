@@ -1,6 +1,5 @@
 package ca.ualberta.moodroid.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -21,7 +19,6 @@ import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.service.AuthenticationService;
-import ca.ualberta.moodroid.service.MoodEventService;
 
 /**
  * This class creates the Profile activity, which can be navigated to from the main bottom
@@ -54,6 +51,9 @@ public class Profile extends BaseUIActivity {
     @BindView(R.id.logout_button)
     Button logOutButton;
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 
