@@ -32,14 +32,11 @@ import com.google.maps.android.ui.IconGenerator;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
@@ -167,7 +164,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         // set the tool bar to the certain pictures and texts
         toolBarTextView.setText(toolBarText);
         toolBarButtonLeft.setImageResource(R.drawable.ic_keyboard_arrow_left_black_24dp);
-        toolBarButtonRight.setImageResource(R.drawable.ic_compare_arrows_black_24dp);
 
 
         /**
@@ -184,27 +180,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        /**
-         *
-         * when the user clicks on the tool bar right button it will
-         * add all of their friends moods to the map
-         * or navigate to another page where it has all
-         * of the users moods and their friends moods
-         *
-         * need to decide on whats best
-         *
-         */
-        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // navigate to the map with all my moods and all friends moods
-                //
-                //
-                // ADD HERE
-                //
-                //
-            }
-        });
 
 
     }
