@@ -112,6 +112,7 @@ public class AddFriend extends AppCompatActivity {
             public void onClick(View view) {
                 //navigate to MoodMap Activity
                 intent = new Intent(AddFriend.this, FriendsMoods.class);
+                finish();
                 startActivity(intent);
             }
         });

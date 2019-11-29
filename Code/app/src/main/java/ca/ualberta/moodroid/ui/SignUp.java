@@ -89,6 +89,7 @@ public class SignUp extends AppCompatActivity {
                             UserModel m = (UserModel) modelInterface;
                             Log.d("AUTH", "User Creation successful!" + m.getUsername() + user.getUid());
                             auth.setUsername(username);
+                            finish();
                             startActivity(new Intent(SignUp.this, MoodHistory.class));
                         }
 
