@@ -174,6 +174,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 //navigate to back to profile activity
                 intent = new Intent(Map.this, Profile.class);
+                finish();
                 startActivity(intent);
             }
         });

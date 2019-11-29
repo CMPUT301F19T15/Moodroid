@@ -119,6 +119,7 @@ public class MoodMap extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 //navigate to back to profile activity
                 intent = new Intent(MoodMap.this, Profile.class);
+                finish();
                 startActivity(intent);
             }
         });
