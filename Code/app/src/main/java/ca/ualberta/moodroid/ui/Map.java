@@ -178,7 +178,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         // set the tool bar to the certain pictures and texts
         toolBarTextView.setText(toolBarText);
         toolBarButtonLeft.setImageResource(R.drawable.ic_keyboard_arrow_left_black_24dp);
-        toolBarButtonRight.setImageResource(R.drawable.ic_compare_arrows_black_24dp);
 
 
         /**
@@ -195,27 +194,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        /**
-         *
-         * when the user clicks on the tool bar right button it will
-         * add all of their friends moods to the map
-         * or navigate to another page where it has all
-         * of the users moods and their friends moods
-         *
-         * need to decide on whats best
-         *
-         */
-        toolBarButtonRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // navigate to the map with all my moods and all friends moods
-                //
-                //
-                // ADD HERE
-                //
-                //
-            }
-        });
 
 
     }
