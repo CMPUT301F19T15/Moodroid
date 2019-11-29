@@ -132,7 +132,7 @@ public class AddFriend extends AppCompatActivity {
             @Override
             public void onSuccess(UserModel userModel) {
                 //We were able to find the user
-                if(userModel != null) {
+                if(userModel != null && userModel.getUsername() != "") {
                     Log.d("ADDUSER/QUERY", "Found the user: " + userModel.getUsername());
                     users.getFollowRequest(userModel.getUsername()).addOnSuccessListener(new OnSuccessListener<FollowRequestModel>() {
                         @Override
