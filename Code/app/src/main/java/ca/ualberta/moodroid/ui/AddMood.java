@@ -29,7 +29,6 @@ import ca.ualberta.moodroid.service.MoodService;
  * mood selection, the user will tap the mood in the center and be brought to the AddMoodDetail
  * activity.
  */
-
 public class AddMood extends AppCompatActivity {
 
 

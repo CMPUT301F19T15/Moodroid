@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Task;
 
 /**
  * The interface Authentication interface.
+ * implemented in AuthenticationService
  */
 public interface AuthenticationInterface {
 
@@ -25,8 +26,9 @@ public interface AuthenticationInterface {
 
     /**
      * Log the user out.
-     * @param context
-     * @return
+     *
+     * @param context the context
+     * @return task
      */
     public Task<Void> logOut(Context context);
 

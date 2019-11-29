@@ -32,14 +32,11 @@ import com.google.maps.android.ui.IconGenerator;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.MoodService;
@@ -50,14 +47,23 @@ import ca.ualberta.moodroid.service.MoodService;
 public class Map extends FragmentActivity implements OnMapReadyCallback {
 
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 
 
+    /**
+     * The Mood service.
+     */
     @Inject
     MoodService moodService;
 
 
+    /**
+     * The Mood event service.
+     */
     @Inject
     MoodEventService moodEventService;
 
@@ -74,7 +80,6 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * to take the user to view all of the mood details for that mood
      * - if time then add clusters
      */
-
     public Map() {
     }
 
@@ -104,6 +109,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * The Tool bar text.
      */
     String toolBarText;
+    /**
+     * The Intent.
+     */
     protected Intent intent;
 
     /**
@@ -117,6 +125,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     String bestProvider;
 
 
+    /**
+     * The Moods.
+     */
     List<MoodModel> moods;
 
 
@@ -363,11 +374,11 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * - make it look better
      * - maybe add an icon generator class to do that
      *
-     * @param iconFactory
-     * @param text
-     * @param position
-     * @param dateTime
-     * @param socialSit
+     * @param iconFactory the icon factory
+     * @param text        the text
+     * @param position    the position
+     * @param dateTime    the date time
+     * @param socialSit   the social sit
      */
     protected void addIcon(IconGenerator iconFactory, String text, LatLng position, String dateTime, String socialSit) {
 
@@ -385,6 +396,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
      * <p>
      * TO DO
      * - make the initial camera view the current location of user
+     *
+     * @param latLng the lat lng
      */
     public void setCameraView(LatLng latLng) {
 

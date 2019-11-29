@@ -40,7 +40,6 @@ import ca.ualberta.moodroid.R;
 import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-
 import ca.ualberta.moodroid.repository.MoodRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.MoodEventService;
@@ -57,6 +56,8 @@ import static ca.ualberta.moodroid.ui.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 /**
  * Get the mood history for a logged in user
+ * This is the main page the user will see after logging into the app. the user
+ * will always be brought to this page first when the app is run.
  */
 public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnListListener, EditDeleteFragment.OnInputListener {
 
@@ -70,9 +71,15 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
     @Inject
     MoodEventService moodEvents;
 
+    /**
+     * The Moods.
+     */
     @Inject
     MoodService moods;
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 
@@ -238,6 +245,9 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
  */
     }
 
+    /**
+     * Gets mood.
+     */
     public void getMood() {
 
 
@@ -333,7 +343,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * if yes returns true
      * if no it will call message
      *
-     * @return
+     * @return boolean
      */
     public boolean isMapsEnabled() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -371,7 +381,7 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * if not able then it will prompt user to install
      * if useable it will return true
      *
-     * @return
+     * @return boolean
      */
     public boolean isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
@@ -504,6 +514,8 @@ public class MoodHistory extends BaseUIActivity implements MoodListAdapter.OnLis
      * this is to start the new edit deletefragment
      * where the user can decide on what they want to do with
      * the list item that has been clicked
+     *
+     * @param position the position
      */
     public void openEditDeleteDialog(int position) {
 

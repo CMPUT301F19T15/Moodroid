@@ -25,9 +25,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
-import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 import ca.ualberta.moodroid.ui.MoodHistory;
@@ -41,9 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+    /**
+     * The User service.
+     */
     @Inject
     UserService userService;
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 

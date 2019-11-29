@@ -19,7 +19,6 @@ import ca.ualberta.moodroid.ContextGrabber;
 import ca.ualberta.moodroid.model.FollowRequestModel;
 import ca.ualberta.moodroid.model.MoodEventModel;
 import ca.ualberta.moodroid.model.MoodModel;
-import ca.ualberta.moodroid.repository.MoodEventRepository;
 import ca.ualberta.moodroid.service.MoodEventService;
 import ca.ualberta.moodroid.service.UserService;
 
@@ -50,10 +49,16 @@ public class FriendMap extends Map {
      */
     private static final String TAG = "Friend maps activity";
 
+    /**
+     * The Users.
+     */
     @Inject
     UserService users;
 
 
+    /**
+     * The Events.
+     */
     @Inject
     MoodEventService events;
 

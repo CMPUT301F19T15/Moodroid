@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -60,14 +59,26 @@ public class BaseUIActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_text_center)
     TextView toolBarTextView;
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 
+    /**
+     * The Users.
+     */
     @Inject
     UserService users;
 
+    /**
+     * The Bottom navigation view ex.
+     */
     protected BottomNavigationViewEx bottomNavigationViewEx;
 
+    /**
+     * The Badge.
+     */
     protected Badge badge;
 
 
@@ -107,6 +118,9 @@ public class BaseUIActivity extends AppCompatActivity {
 
     /**
      * Setup the bottom navigation bar view and navigation
+     * This sets the bottom nav bar that is used in our 4 main activities.
+     *
+     * @param pageID the page id
      */
     protected void bottomNavigationView(int pageID) {
         ContextGrabber.get().di().inject(BaseUIActivity.this);
@@ -116,7 +130,10 @@ public class BaseUIActivity extends AppCompatActivity {
         final AppCompatActivity me = this.getMe();
         Menu menu = bottomNavigationViewEx.getMenu();
 
-
+        /**
+         * the block below updates the nav bar visually if there are any notifications that
+         * have come in for the user to check
+         */
         users.getFollowRequestsReference(FollowRequestModel.REQUESTED_STATE).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -141,6 +158,13 @@ public class BaseUIActivity extends AppCompatActivity {
         });
 
 
+        /**
+         * This block below is the main logic for the nav bars function, it uses a switch
+         * that detects the tap from the user on any of the main 4 pages, and switches to
+         * the correct activity, each icon on the nav bar reflects the correct page the app
+         * is displaying, and the bar also functions correctly visually if the user uses the back
+         * button.
+         */
         MenuItem menuItem = menu.getItem(pageID);
         menuItem.setChecked(true);
         bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -165,6 +189,11 @@ public class BaseUIActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets notification count.
+     *
+     * @param count the count
+     */
     protected void setNotificationCount(int count) {
         if (badge == null) {
             badge = new QBadgeView(this)

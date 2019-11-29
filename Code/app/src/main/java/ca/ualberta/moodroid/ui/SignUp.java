@@ -1,17 +1,13 @@
 package ca.ualberta.moodroid.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -21,11 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ca.ualberta.moodroid.ContextGrabber;
-import ca.ualberta.moodroid.MainActivity;
 import ca.ualberta.moodroid.R;
-import ca.ualberta.moodroid.model.ModelInterface;
 import ca.ualberta.moodroid.model.UserModel;
-import ca.ualberta.moodroid.repository.UserRepository;
 import ca.ualberta.moodroid.service.AuthenticationService;
 import ca.ualberta.moodroid.service.UserService;
 
@@ -35,9 +28,15 @@ import ca.ualberta.moodroid.service.UserService;
 public class SignUp extends AppCompatActivity {
 
 
+    /**
+     * The Auth.
+     */
     @Inject
     AuthenticationService auth;
 
+    /**
+     * The Users.
+     */
     @Inject
     UserService users;
 

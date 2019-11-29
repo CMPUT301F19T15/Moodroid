@@ -5,10 +5,10 @@ import com.google.android.gms.tasks.Task;
 import java.util.List;
 
 import ca.ualberta.moodroid.model.MoodEventModel;
-import ca.ualberta.moodroid.model.MoodModel;
 
 /**
  * We may want to eventually have a filter for geolocation.
+ * implemented in MoodEventService
  */
 public interface MoodEventInterface {
 
@@ -39,6 +39,7 @@ public interface MoodEventInterface {
      * Create a new mood event for the current user
      *
      * @param moodEvent the mood event
+     * @return the task
      */
     public Task<MoodEventModel> createEvent(MoodEventModel moodEvent);
 
@@ -46,6 +47,7 @@ public interface MoodEventInterface {
      * Update an existing mood event for the current user
      *
      * @param moodEvent the mood event
+     * @return the task
      */
     public Task<MoodEventModel> updateEvent(MoodEventModel moodEvent);
 
@@ -53,6 +55,7 @@ public interface MoodEventInterface {
      * Delete a mood event for the current user. Be sure this person is allowed to actually delete the mood event.
      *
      * @param moodEvent the mood event
+     * @return the task
      */
     public Task<Void> deleteEvent(MoodEventModel moodEvent);
 }

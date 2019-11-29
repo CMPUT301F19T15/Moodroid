@@ -2,17 +2,16 @@ package ca.ualberta.moodroid.model;
 
 /**
  * Simple implementation of the mood object. These mood objects currently include our 6 moods:
- *
-     * Happy
-     * Angry
-     * Sad
-     * Sick
-     * Sacred
-     * Annoyed
- *
+ * <p>
+ * Happy
+ * Angry
+ * Sad
+ * Sick
+ * Sacred
+ * Annoyed
+ * <p>
  * This class will define the attributes that are associated and carried throughout the entire
  * app for each mood
- *
  */
 public class MoodModel extends BaseModel {
 

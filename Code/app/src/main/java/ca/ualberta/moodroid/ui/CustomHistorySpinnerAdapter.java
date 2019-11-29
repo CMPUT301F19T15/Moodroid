@@ -10,16 +10,34 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
-
 import ca.ualberta.moodroid.R;
 
+/**
+ * This class implements a custom list for our moods to be presentable to the user, it
+ * uses an array adapter type function to make the spinner match our applications UI
+ */
 public class CustomHistorySpinnerAdapter extends ArrayAdapter {
 
+    /**
+     * The Emojis.
+     */
     String[] emojis;
+    /**
+     * The Mood names.
+     */
     String[] moodNames;
+    /**
+     * The Context.
+     */
     Context context;
 
+    /**
+     * Instantiates a new Custom history spinner adapter.
+     *
+     * @param context   the context
+     * @param emojis    the emojis
+     * @param moodNames the mood names
+     */
     public CustomHistorySpinnerAdapter(@NonNull Context context, String[] emojis, String[] moodNames) {
         super(context, R.layout.history_filter_spinner_row);
         this.emojis = emojis;
@@ -78,9 +96,17 @@ public class CustomHistorySpinnerAdapter extends ArrayAdapter {
     }
 
 
-
+    /**
+     * The type View holder.
+     */
     public static class ViewHolder{
+        /**
+         * The Mood text.
+         */
         TextView moodText;
+        /**
+         * The Emoji text.
+         */
         TextView emojiText;
 
     }
