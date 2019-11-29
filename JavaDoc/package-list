@@ -1,8 +1,7 @@
 ca.ualberta.moodroid
-ca.ualberta.moodroid.di
-ca.ualberta.moodroid.exception
-ca.ualberta.moodroid.exception.repository
-ca.ualberta.moodroid.model
-ca.ualberta.moodroid.repository
-ca.ualberta.moodroid.service
-ca.ualberta.moodroid.ui
+ca.ualberta.moodroid.ui.gallery
+ca.ualberta.moodroid.ui.home
+ca.ualberta.moodroid.ui.send
+ca.ualberta.moodroid.ui.share
+ca.ualberta.moodroid.ui.slideshow
+ca.ualberta.moodroid.ui.tools
